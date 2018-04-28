@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1081232145663",
+    "firebase_url": "https://lostpetz-255a1.firebaseio.com",
+    "project_id": "lostpetz-255a1",
+    "storage_bucket": "lostpetz-255a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081232145663:android:03aa0f941461e207",
+        "android_client_info": {
+          "package_name": "com.example.enduser.lostpetz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081232145663-5ce5o85nhli8t1ok7upi57molg8of1dp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.enduser.lostpetz",
+            "certificate_hash": "122424c14590809f1161b013dcfc8153752fa94d"
+          }
+        },
+        {
+          "client_id": "1081232145663-6re0ad1fk2355rj2j12onhhshruogkhj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRxJcLYSeZvGJgZcHNfEfa5u_GKSmB0oE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081232145663-6re0ad1fk2355rj2j12onhhshruogkhj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

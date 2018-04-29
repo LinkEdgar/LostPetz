@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.enduser.lostpetz.MessagingActivity">
 
+    <!--TODO replace this with a quick summary of the lost pet -->
     <TextView
         android:text="Yeet!"
         android:id="@+id/test_display_textview"
@@ -15,14 +16,17 @@
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/test_display_textview"
+        android:layout_above="@+id/messenger_message_console"
         android:id="@+id/messaging_recycler_view"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    
+    <!--TODO Replace the src of the images for the message console-->
     <LinearLayout
-        android:elevation="4dp"
+        android:id="@+id/messenger_message_console"
+        android:elevation="8dp"
         android:layout_margin="4dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
@@ -30,14 +34,21 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:src="@mipmap/ic_launcher_round"
+            android:id="@+id/messenger_image_gallery"
             tools:src="@mipmap/ic_launcher_round"
             android:layout_width="48dp"
             android:layout_height="48dp" />
         <EditText
+            android:inputType="textMultiLine"
+            android:id="@+id/messenger_user_input_text"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content" />
         <ImageView
+            android:id="@+id/messenger_send_message_button"
+            android:onClick="testMessageClass"
+            android:src="@mipmap/ic_launcher_round"
             tools:src="@mipmap/ic_launcher_round"
             android:layout_width="48dp"
             android:layout_height="48dp" />

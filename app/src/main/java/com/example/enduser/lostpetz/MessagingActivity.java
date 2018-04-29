@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -17,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MessagingActivity extends AppCompatActivity {
 
@@ -25,11 +27,15 @@ public class MessagingActivity extends AppCompatActivity {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private ChildEventListener mChildListener;
+    private ValueEventListener mValueEventListener;
 
     //Test textview to connect with the database
     /* TODO replace testTextView with pet summer layout */
     private TextView testTextView;
     private EditText mUserTextInput;
+
+    //hashset used to eliminate double messages
+    private HashSet<String> messageHashset;
 
     //RecyclerView
     private ArrayList<Message> mMessageArray;
@@ -58,26 +64,31 @@ public class MessagingActivity extends AppCompatActivity {
         mAdapter = new MessageAdapter(mMessageArray);
 
         mRecylerView.setAdapter(mAdapter);
+        mRecylerView.hasFixedSize();
 
         mLayoutManager = new LinearLayoutManager(this);
 
         mRecylerView.setLayoutManager(mLayoutManager);
 
-
-
-
+        messageHashset = new HashSet<>();
 
         mChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String snapshotKey = dataSnapshot.getKey();
+                if(!messageHashset.contains(snapshotKey)) {
+                    messageHashset.add(snapshotKey);
+                    Message receivedMessage = dataSnapshot.getValue(Message.class);
+                    Log.e("Message Test", " " + receivedMessage.getMessage() + "  " + dataSnapshot);
+                    //textTextView.setText(receivedMessage.getMessage());
 
-
-                Message receivedMessage = dataSnapshot.getValue(Message.class);
-                Log.e("Message Test"," "+ receivedMessage.getMessage()+"  "+ dataSnapshot);
-                //textTextView.setText(receivedMessage.getMessage());
-
-                mMessageArray.add(receivedMessage);
-                mAdapter.notifyDataSetChanged();
+                    mMessageArray.add(receivedMessage);
+                    mAdapter.notifyDataSetChanged();
+                }
+                else{
+                    //FOR TESTING ONLY
+                    Log.e("hashset", "Already in the set");
+                }
             }
 
             @Override
@@ -101,22 +112,22 @@ public class MessagingActivity extends AppCompatActivity {
             }
         };
 
-        //TODO --> test queries and how to only get the last x amount
-        mRef.limitToLast(3).addChildEventListener(mChildListener);
-
-
-
-
-
+        /*
+        Not sure --> if it will be efficient to load all of the children as that may be too much for the app
+         */
+        mRef.addChildEventListener(mChildListener);
     }
-    /*TODO --> Replace with the real send message method*/
-    public void testMessageClass(View view){
+
+    public void sendMessage(View view){
+        //TODO eventually change the null values
         String textToSend = mUserTextInput.getText().toString().trim();
-        Message messageToSend = new Message("Anonymous",textToSend,null,null);
-        if(textToSend != null){
+        if(textToSend != null && textToSend.length() > 0){
+            Message messageToSend = new Message("Anonymous", textToSend, null, null);
             mRef.push().setValue(messageToSend);
+            mUserTextInput.setText("");
+            mRecylerView.smoothScrollToPosition(mMessageArray.size());
+
         }
-        mUserTextInput.setText("");
     }
 
     @Override

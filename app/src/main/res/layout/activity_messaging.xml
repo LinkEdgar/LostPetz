@@ -47,7 +47,7 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/messenger_send_message_button"
-            android:onClick="testMessageClass"
+            android:onClick="sendMessage"
             android:src="@mipmap/ic_launcher_round"
             tools:src="@mipmap/ic_launcher_round"
             android:layout_width="48dp"

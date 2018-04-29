@@ -1,0 +1,6 @@
+/* This branch is created to make the instant messaging 
+component of this application. The application will be using firebase's realtime database.git 
+
+
+
+*/

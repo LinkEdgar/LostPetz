@@ -30,7 +30,7 @@ public class MessagingActivity extends AppCompatActivity {
         mRef = mDatabase.getReference("Messages");
 
         //View Referencing
-        textTextView = (TextView) findViewById(R.id.test_display_textview);
+        textTextView = findViewById(R.id.test_display_textview);
 
         mRef.addValueEventListener(new ValueEventListener() {
             @Override

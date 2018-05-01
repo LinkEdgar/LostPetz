@@ -34,17 +34,43 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:onClick="selectImageFromGallery"
             android:src="@mipmap/ic_launcher_round"
             android:id="@+id/messenger_image_gallery"
             tools:src="@mipmap/ic_launcher_round"
             android:layout_width="48dp"
             android:layout_height="48dp" />
-        <EditText
-            android:inputType="textMultiLine"
-            android:id="@+id/messenger_user_input_text"
+        <FrameLayout
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageButton
+                    android:visibility="gone"
+                    android:layout_toRightOf="@+id/messenger_image_to_send"
+                    android:layout_alignParentTop="true"
+                    android:id="@+id/messenger_cancel_image_selection"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp" />
+                <ImageView
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    android:padding="6dp"
+                    tools:src="@mipmap/ic_launcher_round"
+                    android:id="@+id/messenger_image_to_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp" />
+                <EditText
+                    android:inputType="textMultiLine"
+                    android:id="@+id/messenger_user_input_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+        </FrameLayout>
+
         <ImageView
             android:id="@+id/messenger_send_message_button"
             android:onClick="sendMessage"

@@ -2,6 +2,7 @@ package com.example.enduser.lostpetz;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,12 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,7 +44,7 @@ public class MessagingActivity extends AppCompatActivity {
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private ChildEventListener mChildListener;
-    private ValueEventListener mValueEventListener;
+    private FirebaseStorage mStorage;
 
     //Test textview to connect with the database
     /* TODO replace testTextView with pet summary layout */
@@ -48,7 +55,7 @@ public class MessagingActivity extends AppCompatActivity {
     private HashSet<String> messageHashset;
 
     //Message console
-    private Uri imageUri;
+    private Uri mImageUri;
     private ImageView mImageToSend;
     private EditText mTextToSend;
     private ImageButton mImageCanceButton;
@@ -72,6 +79,7 @@ public class MessagingActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         //TODO add static class to add strings for firebase
         mRef = mDatabase.getReference().child("Messages");
+        mStorage = FirebaseStorage.getInstance();
 
 
         //View Referencing
@@ -113,7 +121,7 @@ public class MessagingActivity extends AppCompatActivity {
                     //textTextView.setText(receivedMessage.getMessage());
 
                     mMessageArray.add(receivedMessage);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.notifyItemInserted(mMessageArray.size());
                 }
                 else{
                     //FOR TESTING ONLY
@@ -165,7 +173,9 @@ public class MessagingActivity extends AppCompatActivity {
             }
         }
         else{
-            String pictureUrl = uploadSelectedImage();
+            uploadSelectedImage(mImageUri);
+            /*
+            String pictureUrl = uploadSelectedImage(mImageUri);
             Message pictureMessageToSend = new Message(
                     "Username",
                     null,
@@ -175,6 +185,7 @@ public class MessagingActivity extends AppCompatActivity {
             mRef.push().setValue(pictureMessageToSend);
             mRecylerView.smoothScrollToPosition(mMessageArray.size());
             isPictureMessage = false;
+            */
         }
     }
 
@@ -191,8 +202,8 @@ public class MessagingActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RC_PICK_IMAGE && resultCode == RESULT_OK
                 && null != data){
-            imageUri = data.getData();
-            setImageToConsole(imageUri);
+            mImageUri = data.getData();
+            setImageToConsole(mImageUri);
 
         }
     }
@@ -219,7 +230,7 @@ public class MessagingActivity extends AppCompatActivity {
         mUserTextInput.setVisibility(View.VISIBLE);
         mImageCanceButton.setVisibility(View.GONE);
         mImageToSend.setVisibility(View.GONE);
-        imageUri = null;
+        mImageUri = null;
     }
 
     /*
@@ -243,8 +254,39 @@ public class MessagingActivity extends AppCompatActivity {
     Uploads the user selected image to to storage and returns the string
     for the download url
      */
-    private String uploadSelectedImage(){
-    //TODO implement this
-        return "ImageUrl";
+    private void uploadSelectedImage(Uri imageUri){
+    //TODO add progress bar for upload
+        Uri file = imageUri;
+        UploadTask uploadTask = mStorage.getReference("Images/"+ imageUri.getLastPathSegment()).putFile(file);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //todo log error
+            }
+        }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                //todo change UI
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                sendPictureMessage(taskSnapshot.getDownloadUrl().toString());
+                Toast.makeText(MessagingActivity.this, "Image upload successful", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendPictureMessage(String pictureUrl){
+        Message pictureMessageToSend = new Message(
+                "Username",
+                null,
+                pictureUrl,
+                null);
+        cancelImageSelection();
+        mRef.push().setValue(pictureMessageToSend);
+        mRecylerView.smoothScrollToPosition(mMessageArray.size());
+        isPictureMessage = false;
     }
 }

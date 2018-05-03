@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 /**
@@ -67,6 +69,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.mMessage.setVisibility(View.GONE);
             holder.mPictureMessage.setVisibility(View.VISIBLE);
             //TODO load image here
+            Glide.with(holder.mPictureMessage).load(message.getPhotoUrl()).into(holder.mPictureMessage);
         }
 
     }

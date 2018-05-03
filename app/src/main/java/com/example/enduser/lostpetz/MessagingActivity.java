@@ -3,11 +3,14 @@ package com.example.enduser.lostpetz;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -38,7 +41,7 @@ import java.util.HashSet;
     send pictures. This includes the two image buttons, gallery and send, as well as the
     corresponding UI.
  */
-public class MessagingActivity extends AppCompatActivity {
+public class MessagingActivity extends AppCompatActivity implements MessageAdapter.onPitureClicked{
 
 
     //Firebase instance variables
@@ -58,7 +61,6 @@ public class MessagingActivity extends AppCompatActivity {
     //Message console
     private Uri mImageUri;
     private ImageView mImageToSend;
-    private EditText mTextToSend;
     private ImageButton mImageCanceButton;
     private boolean isPictureMessage = false;
     private ProgressBar mUploadProgressbar;
@@ -86,7 +88,6 @@ public class MessagingActivity extends AppCompatActivity {
         //View Referencing
         testTextView = findViewById(R.id.test_display_textview);
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
-        mTextToSend = findViewById(R.id.messenger_user_input_text);
         mImageToSend = findViewById(R.id.messenger_image_to_send);
         mUploadProgressbar = findViewById(R.id.messenger_upload_progressbar);
         mImageCanceButton = findViewById(R.id.messenger_cancel_image_selection);
@@ -102,6 +103,7 @@ public class MessagingActivity extends AppCompatActivity {
         mMessageArray = new ArrayList<>();
 
         mAdapter = new MessageAdapter(mMessageArray);
+        mAdapter.setOnClick(this);
 
         mRecylerView.setAdapter(mAdapter);
         mRecylerView.setHasFixedSize(true);
@@ -122,11 +124,6 @@ public class MessagingActivity extends AppCompatActivity {
                     mMessageArray.add(receivedMessage);
                     mAdapter.notifyItemInserted(mMessageArray.size());
                     mRecylerView.smoothScrollToPosition(mMessageArray.size());
-                    Log.e("Hashset contetns", " "+ messageHashset);
-                }
-                else{
-                    //FOR TESTING ONLY
-                    Log.e("hashset", "Already in the set");
                 }
             }
 
@@ -166,7 +163,7 @@ public class MessagingActivity extends AppCompatActivity {
         if(!isPictureMessage) {
             //TODO eventually change the null values
             String textToSend = mUserTextInput.getText().toString().trim();
-            if (textToSend != null && textToSend.length() > 0) {
+            if (textToSend.length() > 0) {
                 Message messageToSend = new Message("Anonymous", textToSend, null, null);
                 mRef.push().setValue(messageToSend);
                 mUserTextInput.setText("");
@@ -208,7 +205,7 @@ public class MessagingActivity extends AppCompatActivity {
     message console
      */
     public void setImageToConsole(Uri uri){
-        mTextToSend.setVisibility(View.GONE);
+        mUserTextInput.setVisibility(View.GONE);
         mImageToSend.setVisibility(View.VISIBLE);
         mImageToSend.setImageResource(R.mipmap.ic_launcher);
         mImageCanceButton.setVisibility(View.VISIBLE);
@@ -250,8 +247,7 @@ public class MessagingActivity extends AppCompatActivity {
     for the download url
      */
     private void uploadSelectedImage(Uri imageUri){
-        Uri file = imageUri;
-        UploadTask uploadTask = mStorage.getReference("Images/"+ imageUri.getLastPathSegment()).putFile(file);
+        UploadTask uploadTask = mStorage.getReference("Images/"+ imageUri.getLastPathSegment()).putFile(imageUri);
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -288,5 +284,15 @@ public class MessagingActivity extends AppCompatActivity {
                 null);
         mRef.push().setValue(pictureMessageToSend);
         mRecylerView.smoothScrollToPosition(mMessageArray.size());
+    }
+    /*
+    This method will display a fullscreen version of the image sent in
+    the messenger
+     */
+
+    @Override
+    public void onPictureClicked() {
+        FullScreenDialog dialogFragment = new FullScreenDialog();
+        dialogFragment.show(getSupportFragmentManager(),"Fragment");
     }
 }

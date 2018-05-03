@@ -22,6 +22,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private ArrayList<Message> mMessageList;
 
+    private onPitureClicked onClick;
+
+    public interface onPitureClicked{
+        void onPictureClicked();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         //TODO add support for pictures messages
         public TextView mUserName;
@@ -70,6 +76,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.mPictureMessage.setVisibility(View.VISIBLE);
             //TODO load image here
             Glide.with(holder.mPictureMessage).load(message.getPhotoUrl()).into(holder.mPictureMessage);
+            holder.mPictureMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onClick.onPictureClicked();
+                }
+            });
         }
 
     }
@@ -99,5 +111,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    public void setOnClick(onPitureClicked onClick){
+        this.onClick = onClick;
     }
 }

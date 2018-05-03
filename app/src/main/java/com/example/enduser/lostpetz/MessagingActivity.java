@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class MessagingActivity extends AppCompatActivity {
     private EditText mTextToSend;
     private ImageButton mImageCanceButton;
     private boolean isPictureMessage = false;
+    private ProgressBar mUploadProgressbar;
 
     //RecyclerView
     private ArrayList<Message> mMessageArray;
@@ -86,6 +88,7 @@ public class MessagingActivity extends AppCompatActivity {
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
         mTextToSend = findViewById(R.id.messenger_user_input_text);
         mImageToSend = findViewById(R.id.messenger_image_to_send);
+        mUploadProgressbar = findViewById(R.id.messenger_upload_progressbar);
         mImageCanceButton = findViewById(R.id.messenger_cancel_image_selection);
         mImageCanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +104,7 @@ public class MessagingActivity extends AppCompatActivity {
         mAdapter = new MessageAdapter(mMessageArray);
 
         mRecylerView.setAdapter(mAdapter);
-        mRecylerView.hasFixedSize();
+        mRecylerView.setHasFixedSize(true);
 
         mLayoutManager = new LinearLayoutManager(this);
 
@@ -116,11 +119,10 @@ public class MessagingActivity extends AppCompatActivity {
                 if(!messageHashset.contains(snapshotKey)) {
                     messageHashset.add(snapshotKey);
                     Message receivedMessage = dataSnapshot.getValue(Message.class);
-                    Log.e("Message Test", " " + receivedMessage.getMessage() + "  " + dataSnapshot);
-                    //textTextView.setText(receivedMessage.getMessage());
-
                     mMessageArray.add(receivedMessage);
                     mAdapter.notifyItemInserted(mMessageArray.size());
+                    mRecylerView.smoothScrollToPosition(mMessageArray.size());
+                    Log.e("Hashset contetns", " "+ messageHashset);
                 }
                 else{
                     //FOR TESTING ONLY
@@ -152,12 +154,13 @@ public class MessagingActivity extends AppCompatActivity {
         /*
         Not sure --> if it will be efficient to load all of the children as that may be too much for the app
          */
-        mRef.limitToLast(1).addChildEventListener(mChildListener);
+        mRef.orderByKey().addChildEventListener(mChildListener);
     }
 
     /*
     Depending on whether the message is text based or picture based this method will appropriately
-    add it to the database and display it in the chat application
+    add it to the database and display it in the chat application. Sets the appropriate views
+    depending on the type of message
      */
     public void sendMessage(View view){
         if(!isPictureMessage) {
@@ -172,6 +175,9 @@ public class MessagingActivity extends AppCompatActivity {
             }
         }
         else{
+            mUploadProgressbar.setVisibility(View.VISIBLE);
+            mImageToSend.setVisibility(View.GONE);
+            mImageCanceButton.setVisibility(View.GONE);
             uploadSelectedImage(mImageUri);
         }
     }
@@ -211,12 +217,14 @@ public class MessagingActivity extends AppCompatActivity {
     }
     /*
     Called when the cancel image button and it nulls the image uri and sets the picture related views
-    to gone. It set the user input edit text back to visible
+    to gone. It set the user input edit text back to visible and nulls the uri. Lastly, the
+    isPicture boolean is changed to false.
      */
     public void cancelImageSelection(){
         mUserTextInput.setVisibility(View.VISIBLE);
         mImageCanceButton.setVisibility(View.GONE);
         mImageToSend.setVisibility(View.GONE);
+        isPictureMessage = false;
         mImageUri = null;
     }
 
@@ -242,19 +250,21 @@ public class MessagingActivity extends AppCompatActivity {
     for the download url
      */
     private void uploadSelectedImage(Uri imageUri){
-    //TODO add progress bar for upload
         Uri file = imageUri;
         UploadTask uploadTask = mStorage.getReference("Images/"+ imageUri.getLastPathSegment()).putFile(file);
 
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //todo log error
+                Log.e("Upload Picture Image", "could not properly upload image");
+                //TODO add message to resources
+                Toast.makeText(MessagingActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
             }
         }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                //todo change UI
+                mUploadProgressbar.setVisibility(View.GONE);
+                cancelImageSelection();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -264,6 +274,10 @@ public class MessagingActivity extends AppCompatActivity {
             }
         });
     }
+    /*
+    This method take an image url and creates a message object to send to the realtime database.
+    It then scrolls the recyclerview to the bottom of the list
+     */
 
     private void sendPictureMessage(String pictureUrl){
         Message pictureMessageToSend = new Message(
@@ -271,9 +285,7 @@ public class MessagingActivity extends AppCompatActivity {
                 null,
                 pictureUrl,
                 null);
-        cancelImageSelection();
         mRef.push().setValue(pictureMessageToSend);
         mRecylerView.smoothScrollToPosition(mMessageArray.size());
-        isPictureMessage = false;
     }
 }

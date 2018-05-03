@@ -80,6 +80,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
 
+    /*
+    Overridden so that the recyclerview does not duplicate views
+    setStableIds
+    getItemId
+    getItemViewType
+     */
+    @Override
+    public void setHasStableIds(boolean hasStableIds) {
+        super.setHasStableIds(true);
+    }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 }

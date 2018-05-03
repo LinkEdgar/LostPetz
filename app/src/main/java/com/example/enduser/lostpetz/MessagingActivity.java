@@ -77,8 +77,7 @@ public class MessagingActivity extends AppCompatActivity {
 
         //get Firebase instance
         mDatabase = FirebaseDatabase.getInstance();
-        //TODO add static class to add strings for firebase
-        mRef = mDatabase.getReference().child("Messages");
+        mRef = mDatabase.getReference().child(FirebaseValues.FirebaseDatabaseValues.FIREBASE_MESSAGES_ROOT);
         mStorage = FirebaseStorage.getInstance();
 
 
@@ -174,18 +173,6 @@ public class MessagingActivity extends AppCompatActivity {
         }
         else{
             uploadSelectedImage(mImageUri);
-            /*
-            String pictureUrl = uploadSelectedImage(mImageUri);
-            Message pictureMessageToSend = new Message(
-                    "Username",
-                    null,
-                    pictureUrl,
-                    null);
-            cancelImageSelection();
-            mRef.push().setValue(pictureMessageToSend);
-            mRecylerView.smoothScrollToPosition(mMessageArray.size());
-            isPictureMessage = false;
-            */
         }
     }
 

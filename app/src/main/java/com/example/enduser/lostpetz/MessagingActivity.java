@@ -40,6 +40,8 @@ import java.util.HashSet;
     The message console refers to the bottom layout that the user interacts with to
     send pictures. This includes the two image buttons, gallery and send, as well as the
     corresponding UI.
+    The application handles full screen pictures via a custom dialog fragment that will
+    get picture information such as the url from a android preferences
  */
 public class MessagingActivity extends AppCompatActivity implements MessageAdapter.onPitureClicked{
 

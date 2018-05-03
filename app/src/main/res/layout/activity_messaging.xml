@@ -71,7 +71,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp" />
                 <EditText
-                    android:inputType="textMultiLine"
+                    android:hint="@string/send_message_hint"
+                    android:paddingBottom="4dp"
+                    android:inputType="textMultiLine|textCapSentences"
                     android:id="@+id/messenger_user_input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />

@@ -257,8 +257,9 @@ public class MessagingActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e("Upload Picture Image", "could not properly upload image");
-                //TODO add message to resources
-                Toast.makeText(MessagingActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessagingActivity.this,
+                        getResources().getString(R.string.image_upload_failed)
+                        , Toast.LENGTH_SHORT).show();
             }
         }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override

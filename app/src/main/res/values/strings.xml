@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">LostPetz</string>
-
+<!-- Messaging Activity Resources -->
+    <string name="image_upload_failed">Failed to upload image</string>
     <!-- Message console string values  -->
     <string name="send_message_hint">Type your message </string>
 </resources>

@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void switchToMessenger(View view){
-        Intent intent = new Intent(this, MessagingActivity.class);
+        Intent intent = new Intent(this, PetQueryActivity.class);
         startActivity(intent);
     }
 }

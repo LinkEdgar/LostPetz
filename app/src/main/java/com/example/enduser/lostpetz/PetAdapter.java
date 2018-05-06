@@ -38,6 +38,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder,final int position) {
         Pet pet = mArrayList.get(position);
+        holder.name.setText(pet.getName());
         holder.description.setText(pet.getDescription());
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,8 +55,6 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
             holder.date.setText(PET_STATUS_LOST+ " " +pet.getDateLost());
 
         }
-        holder.name.setText(pet.getName());
-
     }
 
     @Override

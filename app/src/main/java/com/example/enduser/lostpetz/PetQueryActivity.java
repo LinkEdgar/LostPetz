@@ -4,14 +4,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class PetQueryActivity extends AppCompatActivity implements PetAdapter.onViewClicked{
+    //Firebase
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mRef;
+
+
     //Recycler view
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -29,6 +42,10 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_query);
+        //firebase instances
+        //TODO add to firebase values PETS!
+        mDatabase = FirebaseDatabase.getInstance();
+        mRef = mDatabase.getReference("Pets");
         //Variable instances
         //TODO appropriately display this when there are no messages
         mNoMessageProgressBar = findViewById(R.id.pet_query_progressbar);
@@ -37,7 +54,7 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
             @Override
             public boolean onQueryTextSubmit(String s) {
                 if(!isDoubleSubmit && s.length() > 0){
-                    submitSearchQuery();
+                    submitSearchQuery(s);
                     isDoubleSubmit = true;
                 }
                 return false;
@@ -69,8 +86,39 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         mRecyclerView.setAdapter(mPetAdapter);
 
         }
-        private void submitSearchQuery(){
+        private void submitSearchQuery(String string){
+        //Todo add hashset to avoid duplication
             Toast.makeText(this, "Search Query Submitted", Toast.LENGTH_SHORT).show();
+            String query = string.toLowerCase();
+            //TODO add filter options and remove hard coded "name" child
+            mRef.orderByChild("name").startAt(query).endAt(query).addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Toast.makeText(PetQueryActivity.this, "Child Added", Toast.LENGTH_SHORT).show();
+                    addPetsFromSnapshot(dataSnapshot);
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
             //TODO in the query make all characters lowercase so that the searches are optimized
         }
 
@@ -78,5 +126,11 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     public void onClick(int position) {
         //TODO fill with actual logic and remove toast
         Toast.makeText(this, "clicked on item " + position , Toast.LENGTH_SHORT).show();
+    }
+    private void addPetsFromSnapshot(DataSnapshot snapshot){
+            Pet pet = snapshot.getValue(Pet.class);
+            mPetArrrayList.add(pet);
+            mPetAdapter.notifyItemChanged(mPetArrrayList.size());
+
     }
 }

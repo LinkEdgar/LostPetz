@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -21,6 +20,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+
+
+/*
+    This activity does allows the user to search through lost pets with filters. The two key filters being name and breed have been set to lower
+    case for search optimization but are formatted when they are put in the PetAdapter. These values cannot be null as they will cause a null pointer
+    exception. 
+ */
 
 public class PetQueryActivity extends AppCompatActivity implements PetAdapter.onViewClicked{
 
@@ -84,7 +90,8 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mPetArrrayList = new ArrayList<>();
-        //Fake info
+
+        //Fake info to be deleted later
         for(int x =0; x< 10; x++){
             boolean isFound;
             if(x %2 ==0){
@@ -95,13 +102,17 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
             }
         mPetArrrayList.add(new Pet(" "+ x, "Pet description goes here", isFound));
         }
+
         mPetAdapter = new PetAdapter(mPetArrrayList);
         mPetAdapter.setOnViewClicked(this);
         mRecyclerView.setAdapter(mPetAdapter);
 
         }
+
+        /*
+        Takes a query from the user to query it from the realtime database
+         */
         private void submitSearchQuery(String string){
-            Toast.makeText(this, "Search Query Submitted", Toast.LENGTH_SHORT).show();
             String query = string.toLowerCase();
             mRef.orderByChild(searchFilterType).startAt(query).endAt(query).addChildEventListener(new ChildEventListener() {
                 @Override
@@ -132,37 +143,54 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
 
         }
 
+    /*
+    This is the onClick interface from the PetAdapter to allow onClick handling
+     */
     @Override
     public void onClick(int position) {
         //TODO fill with actual logic and remove toast
         Toast.makeText(this, "clicked on item " + position , Toast.LENGTH_SHORT).show();
     }
+    /*
+    This method takes in a snapshot and checks its keys to a hashset as to not allow for duplicate values
+    it also formats the name and breed of the pet as this data is defaulted to lowercase for search efficiency.
+     */
     private void addPetsFromSnapshot(DataSnapshot snapshot){
             String key = snapshot.getKey();
             if(!mPetKeyHashset.contains(key)) {
                 mPetKeyHashset.add(key);
                 Pet pet = snapshot.getValue(Pet.class);
-                //TODO capitalize pet name and format data set properly
+
+                String lowerCaseName = pet.getName();
+                String formattedName = lowerCaseName.substring(0,1).toUpperCase()
+                        + lowerCaseName.substring(1,lowerCaseName.length());
+                pet.setName(formattedName);
+
+                String lowerCaseBreed = pet.getBreed();
+                String formattedBreed = lowerCaseBreed.substring(0,1).toUpperCase()
+                        + lowerCaseBreed.substring(1,lowerCaseBreed.length());
+                pet.setBreed(formattedBreed);
+
                 mPetArrrayList.add(pet);
                 mPetAdapter.notifyItemChanged(mPetArrrayList.size());
             }
 
     }
+    /*
+    This method sets the filter type when the user
+     */
     public void chooseFilterType(View view){
         int viewId = view.getId();
         Log.e("view id", " "+ viewId);
         switch (viewId){
             case R.id.pet_query_name_filter:
                 searchFilterType = SEARCH_FILTER_NAME;
-                Toast.makeText(this, "name selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id .pet_query_breed_filter:
                 searchFilterType = SEARCH_FILTER_BREED;
-                Toast.makeText(this, "breed selected", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.pet_query_zip_filter:
                 searchFilterType = SEARCH_FILTER_ZIP;
-                Toast.makeText(this, "zip selected", Toast.LENGTH_SHORT).show();
                 break;
         }
     }

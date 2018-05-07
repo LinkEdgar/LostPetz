@@ -7,16 +7,63 @@
     android:layout_height="match_parent"
     tools:context=".PetQueryActivity">
     <SearchView
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/pet_query_filter_cardview"
         android:id="@+id/pet_query_searchview"
         android:iconifiedByDefault="false"
         android:background="@color/white"
         android:elevation="8dp"
         android:queryHint="@string/searchview_hint"
         android:focusedByDefault="true"
-        android:layout_margin="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <android.support.v7.widget.CardView
+        android:elevation="8dp"
+        android:visibility="gone"
+        android:id="@+id/pet_query_filter_cardview"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:text="@string/cardview_filter_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_marginLeft="2dp"
+                android:text="@string/cardview_filter_name"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:text="@string/cardview_filter_zip"
+                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Button
+                android:layout_marginRight="2dp"
+                android:text="@string/cardview_filter_breed"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
 
     <ProgressBar
         android:id="@+id/pet_query_progressbar"

@@ -2,10 +2,12 @@ package com.example.enduser.lostpetz;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -37,16 +39,17 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     //this variable check if the user is submitting the same query twice so that
     //we don't do two network calls
     private boolean isDoubleSubmit = false;
+    private CardView mCardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pet_query);
         //firebase instances
-        //TODO add to firebase values PETS!
         mDatabase = FirebaseDatabase.getInstance();
-        mRef = mDatabase.getReference("Pets");
+        mRef = mDatabase.getReference(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
         //Variable instances
+        mCardView = findViewById(R.id.pet_query_filter_cardview);
         //TODO appropriately display this when there are no messages
         mNoMessageProgressBar = findViewById(R.id.pet_query_progressbar);
         mSearchView = findViewById(R.id.pet_query_searchview);
@@ -56,12 +59,14 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
                 if(!isDoubleSubmit && s.length() > 0){
                     submitSearchQuery(s);
                     isDoubleSubmit = true;
+                    mCardView.setVisibility(View.GONE);
                 }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
+                mCardView.setVisibility(View.VISIBLE);
                 isDoubleSubmit = false;
                 return false;
             }
@@ -94,7 +99,6 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
             mRef.orderByChild("name").startAt(query).endAt(query).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Toast.makeText(PetQueryActivity.this, "Child Added", Toast.LENGTH_SHORT).show();
                     addPetsFromSnapshot(dataSnapshot);
                 }
 

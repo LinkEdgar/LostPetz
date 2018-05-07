@@ -6,4 +6,12 @@
     <string name="send_message_hint">Type your message </string>
     <!-- PetQuery string resources-->
     <string name="searchview_hint"> Search for pets</string>
+    
+    <string name="cardview_filter_label">Filter Results</string>
+    
+    <string name="cardview_filter_name">Name</string>
+
+    <string name="cardview_filter_zip">Zip</string>
+
+    <string name="cardview_filter_breed">Breed</string>
 </resources>

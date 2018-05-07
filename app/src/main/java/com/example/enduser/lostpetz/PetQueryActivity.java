@@ -20,8 +20,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class PetQueryActivity extends AppCompatActivity implements PetAdapter.onViewClicked{
+
+    public static final String SEARCH_FILTER_NAME = "name";
+    public static final String SEARCH_FILTER_ZIP = "zip";
+    public static final String SEARCH_FILTER_BREED = "breed";
     //Firebase
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
@@ -40,6 +45,9 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     //we don't do two network calls
     private boolean isDoubleSubmit = false;
     private CardView mCardView;
+    private String searchFilterType = SEARCH_FILTER_NAME;
+
+    private HashSet<String> mPetKeyHashset;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,7 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
         //Variable instances
+        mPetKeyHashset = new HashSet<>();
         mCardView = findViewById(R.id.pet_query_filter_cardview);
         //TODO appropriately display this when there are no messages
         mNoMessageProgressBar = findViewById(R.id.pet_query_progressbar);
@@ -92,11 +101,9 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
 
         }
         private void submitSearchQuery(String string){
-        //Todo add hashset to avoid duplication
             Toast.makeText(this, "Search Query Submitted", Toast.LENGTH_SHORT).show();
             String query = string.toLowerCase();
-            //TODO add filter options and remove hard coded "name" child
-            mRef.orderByChild("name").startAt(query).endAt(query).addChildEventListener(new ChildEventListener() {
+            mRef.orderByChild(searchFilterType).startAt(query).endAt(query).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     addPetsFromSnapshot(dataSnapshot);
@@ -123,7 +130,6 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
                 }
             });
 
-            //TODO in the query make all characters lowercase so that the searches are optimized
         }
 
     @Override
@@ -132,9 +138,32 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         Toast.makeText(this, "clicked on item " + position , Toast.LENGTH_SHORT).show();
     }
     private void addPetsFromSnapshot(DataSnapshot snapshot){
-            Pet pet = snapshot.getValue(Pet.class);
-            mPetArrrayList.add(pet);
-            mPetAdapter.notifyItemChanged(mPetArrrayList.size());
+            String key = snapshot.getKey();
+            if(!mPetKeyHashset.contains(key)) {
+                mPetKeyHashset.add(key);
+                Pet pet = snapshot.getValue(Pet.class);
+                //TODO capitalize pet name and format data set properly
+                mPetArrrayList.add(pet);
+                mPetAdapter.notifyItemChanged(mPetArrrayList.size());
+            }
 
+    }
+    public void chooseFilterType(View view){
+        int viewId = view.getId();
+        Log.e("view id", " "+ viewId);
+        switch (viewId){
+            case R.id.pet_query_name_filter:
+                searchFilterType = SEARCH_FILTER_NAME;
+                Toast.makeText(this, "name selected", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id .pet_query_breed_filter:
+                searchFilterType = SEARCH_FILTER_BREED;
+                Toast.makeText(this, "breed selected", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.pet_query_zip_filter:
+                searchFilterType = SEARCH_FILTER_ZIP;
+                Toast.makeText(this, "zip selected", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

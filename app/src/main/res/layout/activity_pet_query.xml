@@ -40,6 +40,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:onClick="chooseFilterType"
+                android:id="@+id/pet_query_name_filter"
                 android:layout_marginLeft="2dp"
                 android:text="@string/cardview_filter_name"
                 android:layout_alignParentLeft="true"
@@ -47,12 +49,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:onClick="chooseFilterType"
+                android:id="@+id/pet_query_zip_filter"
                 android:text="@string/cardview_filter_zip"
                 android:layout_centerVertical="true"
                 android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:onClick="chooseFilterType"
+                android:id="@+id/pet_query_breed_filter"
                 android:layout_marginRight="2dp"
                 android:text="@string/cardview_filter_breed"
                 android:layout_centerVertical="true"
@@ -80,7 +86,5 @@
         android:id="@+id/pet_query_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-
 
 </RelativeLayout>

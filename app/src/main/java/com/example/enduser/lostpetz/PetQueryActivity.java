@@ -181,7 +181,6 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
      */
     public void chooseFilterType(View view){
         int viewId = view.getId();
-        Log.e("view id", " "+ viewId);
         switch (viewId){
             case R.id.pet_query_name_filter:
                 searchFilterType = SEARCH_FILTER_NAME;

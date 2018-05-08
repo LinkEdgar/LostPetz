@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -33,10 +34,11 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     public static final String SEARCH_FILTER_NAME = "name";
     public static final String SEARCH_FILTER_ZIP = "zip";
     public static final String SEARCH_FILTER_BREED = "breed";
+    private static final int NO_PETS_FOUND = 0;
     //Firebase
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
-
+    private ChildEventListener mListener;
 
     //Recycler view
     private RecyclerView mRecyclerView;
@@ -44,8 +46,9 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     private PetAdapter mPetAdapter;
     private ArrayList<Pet> mPetArrrayList;
 
-    //
-    private ProgressBar mNoMessageProgressBar;
+    //Views
+    private TextView mNoPetsFoundTextView;
+    private ProgressBar mNoPetsProgressBar;
     private SearchView mSearchView;
     //this variable check if the user is submitting the same query twice so that
     //we don't do two network calls
@@ -55,66 +58,24 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
 
     private HashSet<String> mPetKeyHashset;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pet_query);
-        //firebase instances
-        mDatabase = FirebaseDatabase.getInstance();
-        mRef = mDatabase.getReference(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
-        //Variable instances
-        mPetKeyHashset = new HashSet<>();
-        mCardView = findViewById(R.id.pet_query_filter_cardview);
-        //TODO appropriately display this when there are no messages
-        mNoMessageProgressBar = findViewById(R.id.pet_query_progressbar);
-        mSearchView = findViewById(R.id.pet_query_searchview);
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                if(!isDoubleSubmit && s.length() > 0){
-                    submitSearchQuery(s);
-                    isDoubleSubmit = true;
-                    mCardView.setVisibility(View.GONE);
-                }
-                return false;
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_pet_query);
+            //firebase instances
+            mDatabase = FirebaseDatabase.getInstance();
+            mRef = mDatabase.getReference(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
+            initUIViewsAndVariables();
             }
 
-            @Override
-            public boolean onQueryTextChange(String s) {
-                mCardView.setVisibility(View.VISIBLE);
-                isDoubleSubmit = false;
-                return false;
-            }
-        });
-        mRecyclerView = findViewById(R.id.pet_query_recyclerview);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mPetArrrayList = new ArrayList<>();
 
-        //Fake info to be deleted later
-        for(int x =0; x< 10; x++){
-            boolean isFound;
-            if(x %2 ==0){
-                isFound = false;
-            }
-            else {
-                isFound = true;
-            }
-        mPetArrrayList.add(new Pet(" "+ x, "Pet description goes here", isFound));
-        }
-
-        mPetAdapter = new PetAdapter(mPetArrrayList);
-        mPetAdapter.setOnViewClicked(this);
-        mRecyclerView.setAdapter(mPetAdapter);
-
-        }
 
         /*
         Takes a query from the user to query it from the realtime database
          */
         private void submitSearchQuery(String string){
             String query = string.toLowerCase();
-            mRef.orderByChild(searchFilterType).startAt(query).endAt(query).addChildEventListener(new ChildEventListener() {
+            mRef.orderByChild(searchFilterType).startAt(query).endAt(query).addChildEventListener(mListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     addPetsFromSnapshot(dataSnapshot);
@@ -191,6 +152,67 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
             case R.id.pet_query_zip_filter:
                 searchFilterType = SEARCH_FILTER_ZIP;
                 break;
+        }
+    }
+
+    /*
+    Initializes all UI elements and variable instances
+     */
+    private void initUIViewsAndVariables(){
+        //Variable instances
+        mNoPetsFoundTextView = findViewById(R.id.pet_query_no_pets_textview);
+        mPetKeyHashset = new HashSet<>();
+        mCardView = findViewById(R.id.pet_query_filter_cardview);
+        //TODO appropriately display this when there are no pets
+        mNoPetsProgressBar = findViewById(R.id.pet_query_progressbar);
+        mSearchView = findViewById(R.id.pet_query_searchview);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                if(!isDoubleSubmit && s.length() > 0){
+                    submitSearchQuery(s);
+                    isDoubleSubmit = true;
+                    mCardView.setVisibility(View.GONE);
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                mCardView.setVisibility(View.VISIBLE);
+                isDoubleSubmit = false;
+                return false;
+            }
+        });
+        mRecyclerView = findViewById(R.id.pet_query_recyclerview);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mPetArrrayList = new ArrayList<>();
+
+        mPetAdapter = new PetAdapter(mPetArrrayList);
+        mPetAdapter.setOnViewClicked(this);
+        mRecyclerView.setAdapter(mPetAdapter);
+    }
+
+    /*
+    Adds the child listener when the activity is restarted
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mListener != null) {
+            mRef.addChildEventListener(mListener);
+        }
+    }
+
+    /*
+    Removes the child event listener when the user is no longer using the application
+     */
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mListener != null){
+            mRef.addChildEventListener(mListener);
         }
     }
 }

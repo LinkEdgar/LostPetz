@@ -14,4 +14,6 @@
     <string name="cardview_filter_zip">Zip</string>
 
     <string name="cardview_filter_breed">Breed</string>
+
+    <string name="no_pets_found_textview">No pets found</string>
 </resources>

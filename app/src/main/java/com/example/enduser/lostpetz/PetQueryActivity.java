@@ -25,7 +25,7 @@ import java.util.HashSet;
 /*
     This activity does allows the user to search through lost pets with filters. The two key filters being name and breed have been set to lower
     case for search optimization but are formatted when they are put in the PetAdapter. These values cannot be null as they will cause a null pointer
-    exception. 
+    exception.
  */
 
 public class PetQueryActivity extends AppCompatActivity implements PetAdapter.onViewClicked{

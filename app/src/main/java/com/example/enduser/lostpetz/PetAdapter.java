@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
     private ArrayList<Pet> mArrayList;
     private onViewClicked mClicked;
+    //Displays whether the pet was reported as lost by the poster or found
     private static String PET_STATUS_LOST = "Lost ";
     private static String PET_STATUS_FOUND= "Found";
 
@@ -46,7 +49,10 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
                 mClicked.onClick(position);
             }
         });
-        //TODO set profile picture via glide
+        if(pet.getProfileUrl() != null) {
+            Glide.with(holder.profilePicture).load(pet.getProfileUrl()).into(holder.profilePicture);
+        }
+
         if(pet.getIsFoundPet()) {
             //TODO format date and time
             holder.date.setText(PET_STATUS_FOUND+ " " +pet.getDateLost());

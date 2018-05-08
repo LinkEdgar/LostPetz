@@ -8,8 +8,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <RelativeLayout
+        android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <!-- TODO add a default "no image" image-->
     <ImageView
         android:src="@mipmap/ic_launcher"
         android:id="@+id/pet_container_profile_picture"

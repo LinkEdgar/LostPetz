@@ -74,8 +74,22 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         Takes a query from the user to query it from the realtime database
          */
         private void submitSearchQuery(String string){
+            //TODO find out how to properly remove the old query
             String query = string.toLowerCase();
-            mRef.orderByChild(searchFilterType).startAt(query).endAt(query).addChildEventListener(mListener = new ChildEventListener() {
+            mNoPetsProgressBar.setVisibility(View.VISIBLE);
+            mRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    checkIfPetsFound();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+            mRef.orderByChild(searchFilterType).startAt(query).endAt(query).addChildEventListener(
+                    mListener = new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     addPetsFromSnapshot(dataSnapshot);
@@ -163,7 +177,6 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         mNoPetsFoundTextView = findViewById(R.id.pet_query_no_pets_textview);
         mPetKeyHashset = new HashSet<>();
         mCardView = findViewById(R.id.pet_query_filter_cardview);
-        //TODO appropriately display this when there are no pets
         mNoPetsProgressBar = findViewById(R.id.pet_query_progressbar);
         mSearchView = findViewById(R.id.pet_query_searchview);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -215,4 +228,14 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
             mRef.addChildEventListener(mListener);
         }
     }
+    private void checkIfPetsFound(){
+        mNoPetsProgressBar.setVisibility(View.GONE);
+        if(mPetArrrayList.size() == NO_PETS_FOUND){
+            mNoPetsFoundTextView.setVisibility(View.VISIBLE);
+        }
+        else{
+            mNoPetsFoundTextView.setVisibility(View.GONE);
+        }
+    }
+
 }

@@ -75,8 +75,8 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         erased
          */
         private void submitSearchQuery(String string){
-            //TODO figure out why firebase stops querying after four queries
             mPetArrrayList.clear();
+            mPetKeyHashset.clear();
             mPetAdapter.notifyDataSetChanged();
             String query = string.toLowerCase().trim();
             mNoPetsProgressBar.setVisibility(View.VISIBLE);

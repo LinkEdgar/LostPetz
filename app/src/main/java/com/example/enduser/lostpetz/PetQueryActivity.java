@@ -71,11 +71,14 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
 
 
         /*
-        Takes a query from the user to query it from the realtime database
+        Takes a query from the user to query it from the realtime database. The old query is
+        erased
          */
         private void submitSearchQuery(String string){
-            //TODO find out how to properly remove the old query
-            String query = string.toLowerCase();
+            //TODO figure out why firebase stops querying after four queries
+            mPetArrrayList.clear();
+            mPetAdapter.notifyDataSetChanged();
+            String query = string.toLowerCase().trim();
             mNoPetsProgressBar.setVisibility(View.VISIBLE);
             mRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -228,6 +231,10 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
             mRef.addChildEventListener(mListener);
         }
     }
+    /*
+    called on after from the single event listener to ensure the UI reflects the
+    query status.
+     */
     private void checkIfPetsFound(){
         mNoPetsProgressBar.setVisibility(View.GONE);
         if(mPetArrrayList.size() == NO_PETS_FOUND){

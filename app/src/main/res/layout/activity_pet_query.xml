@@ -15,8 +15,8 @@
         android:queryHint="@string/searchview_hint"
         android:focusedByDefault="true"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/horizontal_margin"
+        android:layout_marginRight="@dimen/horizontal_margin"
         android:layout_marginBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
@@ -25,8 +25,8 @@
         android:visibility="gone"
         android:id="@+id/pet_query_filter_cardview"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginRight="@dimen/horizontal_margin"
+        android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="100dp">
@@ -40,15 +40,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:textColor="@color/white"
+                android:background="@color/colorAccent"
                 android:onClick="chooseFilterType"
                 android:id="@+id/pet_query_name_filter"
-                android:layout_marginLeft="2dp"
+                android:layout_marginLeft="@dimen/horizontal_margin"
                 android:text="@string/cardview_filter_name"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary"
                 android:onClick="chooseFilterType"
                 android:id="@+id/pet_query_zip_filter"
                 android:text="@string/cardview_filter_zip"
@@ -57,9 +61,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <Button
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary"
                 android:onClick="chooseFilterType"
                 android:id="@+id/pet_query_breed_filter"
-                android:layout_marginRight="2dp"
+                android:layout_marginRight="@dimen/horizontal_margin"
                 android:text="@string/cardview_filter_breed"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"

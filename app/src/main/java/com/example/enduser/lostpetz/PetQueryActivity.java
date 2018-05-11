@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -50,6 +51,9 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     private TextView mNoPetsFoundTextView;
     private ProgressBar mNoPetsProgressBar;
     private SearchView mSearchView;
+    private Button mNameFilterButton;
+    private Button mZipFilterButton;
+    private Button mBreedFilterButton;
     //this variable check if the user is submitting the same query twice so that
     //we don't do two network calls
     private boolean isDoubleSubmit = false;
@@ -162,12 +166,22 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         switch (viewId){
             case R.id.pet_query_name_filter:
                 searchFilterType = SEARCH_FILTER_NAME;
+                view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                mBreedFilterButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                mZipFilterButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 break;
             case R.id .pet_query_breed_filter:
                 searchFilterType = SEARCH_FILTER_BREED;
+                view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                mZipFilterButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                mNameFilterButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 break;
             case R.id.pet_query_zip_filter:
                 searchFilterType = SEARCH_FILTER_ZIP;
+                view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                mBreedFilterButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                mNameFilterButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
                 break;
         }
     }
@@ -181,6 +195,9 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         mPetKeyHashset = new HashSet<>();
         mCardView = findViewById(R.id.pet_query_filter_cardview);
         mNoPetsProgressBar = findViewById(R.id.pet_query_progressbar);
+        mNameFilterButton = findViewById(R.id.pet_query_name_filter);
+        mZipFilterButton = findViewById(R.id.pet_query_zip_filter);
+        mBreedFilterButton = findViewById(R.id.pet_query_breed_filter);
         mSearchView = findViewById(R.id.pet_query_searchview);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

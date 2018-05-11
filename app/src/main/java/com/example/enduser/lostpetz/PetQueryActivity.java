@@ -131,7 +131,9 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     @Override
     public void onClick(int position) {
         //TODO fill with actual logic and remove toast
-        Toast.makeText(this, "clicked on item " + position , Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(this, "clicked on item " + position, Toast.LENGTH_SHORT).show();
+
     }
     /*
     This method takes in a snapshot and checks its keys to a hashset as to not allow for duplicate values

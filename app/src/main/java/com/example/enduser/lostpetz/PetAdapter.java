@@ -17,8 +17,8 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
     private ArrayList<Pet> mArrayList;
     private onViewClicked mClicked;
     //Displays whether the pet was reported as lost by the poster or found
-    private static String PET_STATUS_LOST = "Lost ";
-    private static String PET_STATUS_FOUND= "Found";
+    private static String PET_STATUS_LOST = "Lost on ";
+    private static String PET_STATUS_FOUND= "Found on ";
 
     public PetAdapter(ArrayList<Pet> arrayList){
         mArrayList = arrayList;
@@ -54,11 +54,10 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
         }
 
         if(pet.getIsFoundPet()) {
-            //TODO format date and time
-            holder.date.setText(PET_STATUS_FOUND+ " " +pet.getDateLost());
+            holder.date.setText(PET_STATUS_FOUND+ pet.getDateLost());
         }
         else{
-            holder.date.setText(PET_STATUS_LOST+ " " +pet.getDateLost());
+            holder.date.setText(PET_STATUS_LOST +pet.getDateLost());
 
         }
     }
@@ -84,6 +83,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
             date = itemView.findViewById(R.id.pet_container_date_lost);
         }
     }
+
     /*
     sets the onViewClicked interface to enable onclick listeners for the view in the
     recyclerview

@@ -39,6 +39,10 @@ public class Pet {
         this.profileUrlThree = profileUrlThree;
     }
 
+    public void setProfileUrlOne(String profileUrlOne) {
+        this.profileUrlOne = profileUrlOne;
+    }
+
     public void setProfileUrlTwo(String profileUrlTwo) {
         this.profileUrlTwo = profileUrlTwo;
     }

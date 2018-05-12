@@ -25,7 +25,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private onPitureClicked onClick;
 
     public interface onPitureClicked{
-        void onPictureClicked();
+        void onPictureClicked(int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -63,7 +63,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Message message = mMessageList.get(position);
         holder.mProfileImage.setImageResource(R.mipmap.ic_launcher);
         holder.mUserName.setText(message.getUserName());
@@ -79,7 +79,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.mPictureMessage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onClick.onPictureClicked();
+                    onClick.onPictureClicked(position);
                 }
             });
         }

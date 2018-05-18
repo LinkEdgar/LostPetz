@@ -32,6 +32,9 @@ import java.util.HashSet;
 
 public class PetQueryActivity extends AppCompatActivity implements PetAdapter.onViewClicked{
 
+
+    public static final String PET_ARRAY_KEY = "arrayList";
+
     public static final String SEARCH_FILTER_NAME = "name";
     public static final String SEARCH_FILTER_ZIP = "zip";
     public static final String SEARCH_FILTER_BREED = "breed";
@@ -264,4 +267,20 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable(PET_ARRAY_KEY, mPetArrrayList);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null){
+            mPetArrrayList = (ArrayList<Pet>) savedInstanceState.getSerializable(PET_ARRAY_KEY);
+            mPetAdapter = new PetAdapter(mPetArrrayList);
+            mRecyclerView.setAdapter(mPetAdapter);
+        }
+    }
 }

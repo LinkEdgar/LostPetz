@@ -17,9 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MessagingActivity" />
-        <!-- not a best practice, consider changing this for future configuration (configChanges) -->
         <activity
-            android:screenOrientation="portrait"
             android:name=".PetQueryActivity"
             android:launchMode="singleTop">
 

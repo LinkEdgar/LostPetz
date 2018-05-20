@@ -76,6 +76,8 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
     private final int RC_PICK_IMAGE = 3141;
 
+    //TODO add a query check so that not all of the messages are loaded at once
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

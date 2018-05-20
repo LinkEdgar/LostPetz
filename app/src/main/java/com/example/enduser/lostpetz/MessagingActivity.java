@@ -295,8 +295,11 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
      */
 
     @Override
-    public void onPictureClicked() {
+    public void onPictureClicked(int position) {
+        //TODO pass url information for full screen
         FullScreenDialog dialogFragment = new FullScreenDialog();
+        String url = mMessageArray.get(position).getPhotoUrl();
+        dialogFragment.setImageUrl(url);
         dialogFragment.show(getSupportFragmentManager(),"Fragment");
     }
 }

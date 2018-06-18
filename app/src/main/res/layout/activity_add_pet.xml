@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.enduser.lostpetz.AddPetActivity">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_margin="@dimen/horizontal_margin_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/add_pet_name"
+                android:inputType="text"
+                android:hint="@string/pet_name_label"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_margin="@dimen/horizontal_margin_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:hint="@string/pet_zip_label"
+                android:inputType="number"
+                android:id="@+id/add_pet_zip"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_margin="@dimen/horizontal_margin_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.design.widget.TextInputEditText
+                android:inputType="textMultiLine"
+                android:hint="@string/pet_description_label"
+                android:id="@+id/add_pet_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/horizontal_margin_large"
+
+            android:text="@string/date_label"
+            android:layout_marginLeft="@dimen/horizontal_margin_large"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <Spinner
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:textAlignment="viewStart"
+            android:id="@+id/add_pet_date_spinner"
+            android:layout_marginBottom="@dimen/horizontal_margin_large"
+            android:layout_marginRight="@dimen/horizontal_margin_large"
+            android:layout_marginLeft="@dimen/horizontal_margin_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/add_pet_image_select"
+                    android:layout_centerInParent="true"
+                    android:drawableRight="@mipmap/ic_launcher_round"
+                    android:drawableEnd="@mipmap/ic_launcher_round"
+                    android:text="@string/date_picker_select_image_label"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/add_pet_upload_one"
+                    android:layout_marginLeft="@dimen/horizontal_margin_large"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/add_pet_cancel_image_one"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_toRightOf="@+id/add_pet_upload_one"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/add_pet_upload_two"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/add_pet_cancel_image_two"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_toRightOf="@+id/add_pet_upload_two"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/add_pet_upload_three"
+                    android:layout_marginRight="@dimen/horizontal_margin_large"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/add_pet_cancel_image_three"
+                    android:visibility="gone"
+                    android:src="@mipmap/ic_launcher_round"
+                    android:layout_toRightOf="@+id/add_pet_upload_three"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
+
+            </RelativeLayout>
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</ScrollView>

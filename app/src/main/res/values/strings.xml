@@ -16,4 +16,7 @@
     <string name="cardview_filter_breed">Breed</string>
 
     <string name="no_pets_found_textview">No pets found</string>
+
+    <!-- Message inbox-->
+    <string name="no_messages">No messages</string>
 </resources>

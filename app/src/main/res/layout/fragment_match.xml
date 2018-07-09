@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:swipedeck="http://schemas.android.com/apk/res-auto">
+
+    <com.daprlabs.aaron.swipedeck.layouts.SwipeFrameLayout
+        android:layout_marginBottom="80dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.daprlabs.aaron.swipedeck.SwipeDeck
+            android:id="@+id/swipe_deck"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            swipedeck:max_visible="3"
+            swipedeck:card_spacing="15dp"
+            swipedeck:swipe_enabled="true"/>
+
+    </com.daprlabs.aaron.swipedeck.layouts.SwipeFrameLayout>
+
+
+</RelativeLayout>

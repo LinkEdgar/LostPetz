@@ -1,4 +1,6 @@
+/*
 package com.example.enduser.lostpetz;
+
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -18,3 +20,4 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 }
+*/

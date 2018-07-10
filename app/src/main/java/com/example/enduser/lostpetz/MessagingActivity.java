@@ -47,7 +47,7 @@ import java.util.HashSet;
     The application handles full screen pictures via a custom dialog fragment that will
     get picture information such as the url from a android preferences
  */
-public class MessagingActivity extends Fragment implements MessageAdapter.onPitureClicked{
+public class MessagingActivity extends AppCompatActivity implements MessageAdapter.onPitureClicked{
 
 
     //Firebase instance variables
@@ -83,15 +83,15 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
     //TODO add a query check so that not all of the messages are loaded at once
 
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_messaging, container, false);
-        initUi(rootView);
-        return rootView;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_messaging);
+        initUi();
+
     }
 
-    private void initUi(View rootView){
+    private void initUi(){
 
         //get Firebase instance
         mDatabase = FirebaseDatabase.getInstance();
@@ -99,11 +99,11 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
         mStorage = FirebaseStorage.getInstance();
 
         //View Referencing
-        testTextView = rootView.findViewById(R.id.test_display_textview);
-        mUserTextInput = rootView.findViewById(R.id.messenger_user_input_text);
-        mImageToSend = rootView.findViewById(R.id.messenger_image_to_send);
-        mUploadProgressbar = rootView.findViewById(R.id.messenger_upload_progressbar);
-        mImageCanceButton = rootView.findViewById(R.id.messenger_cancel_image_selection);
+        testTextView = findViewById(R.id.test_display_textview);
+        mUserTextInput = findViewById(R.id.messenger_user_input_text);
+        mImageToSend = findViewById(R.id.messenger_image_to_send);
+        mUploadProgressbar = findViewById(R.id.messenger_upload_progressbar);
+        mImageCanceButton = findViewById(R.id.messenger_cancel_image_selection);
         mImageCanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -111,7 +111,7 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
             }
         });
 
-        mRecylerView = rootView.findViewById(R.id.messaging_recycler_view);
+        mRecylerView = findViewById(R.id.messaging_recycler_view);
 
         mMessageArray = new ArrayList<>();
 
@@ -121,7 +121,7 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
         mRecylerView.setAdapter(mAdapter);
         mRecylerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(MessagingActivity.this);
 
         mRecylerView.setLayoutManager(mLayoutManager);
 
@@ -268,7 +268,7 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.e("Upload Picture Image", "could not properly upload image");
-                Toast.makeText(getContext(),
+                Toast.makeText(MessagingActivity.this,
                         getResources().getString(R.string.image_upload_failed)
                         , Toast.LENGTH_SHORT).show();
             }
@@ -282,7 +282,7 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 sendPictureMessage(taskSnapshot.getDownloadUrl().toString());
-                Toast.makeText(getContext(), "Image upload successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MessagingActivity.this, "Image upload successful", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -312,6 +312,6 @@ public class MessagingActivity extends Fragment implements MessageAdapter.onPitu
         FullScreenDialog dialogFragment = new FullScreenDialog();
         String url = mMessageArray.get(position).getPhotoUrl();
         dialogFragment.setImageUrl(url);
-        dialogFragment.show(getFragmentManager(),"Fragment");
+        dialogFragment.show(getSupportFragmentManager(),"Fragment");
     }
 }

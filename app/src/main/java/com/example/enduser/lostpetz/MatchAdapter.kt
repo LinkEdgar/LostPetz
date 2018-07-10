@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Toast
+import kotlinx.android.synthetic.main.match_container.view.*
 
-open class MatchAdapter(list: ArrayList<MatchInfo>, context: Context, onClick: onClicked ) : BaseAdapter(){
+open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val context: Context,val onClick: onClicked ) : BaseAdapter(){
 
     interface onClicked{
-        fun nextClicked()
-        fun backClicked()
+        fun nextClicked(position: Int)
+        fun detailClicked(position: Int)
+        fun bookmarkClicked()
     }
 
-    var onClick: onClicked ? = onClick
     val layoutInflater = LayoutInflater.from(context)
-    var listOfPotentialMatches: ArrayList<MatchInfo>? = list
-    var context: Context?= context
 
     override fun getCount(): Int {
         return listOfPotentialMatches!!.size
@@ -37,21 +36,37 @@ open class MatchAdapter(list: ArrayList<MatchInfo>, context: Context, onClick: o
         if(view == null) {
             view = layoutInflater!!.inflate(R.layout.match_container, parent, false)
         }
-        val imageView = view!!.findViewById<View>(R.id.nextImageView)
+        val nextImageButton = view!!.findViewById<View>(R.id.match_container_next)
 
-        imageView.setOnClickListener({onNextClick()})
+        nextImageButton.setOnClickListener({onNextClick(position)})
+
+        val detailImageButton = view!!.findViewById<View>(R.id.match_container_detail)
+
+        detailImageButton.setOnClickListener({onDetailClick(position)})
+
+        val bookmarkImageButton = view!!.findViewById<View>(R.id.match_container_bookmark)
+
+        bookmarkImageButton.setOnClickListener({onBookmarkClick()})
+
+        //TODO delete this later
+        view.test_textview.setText(listOfPotentialMatches[position].name)
 
         return view!!
     }
 
-    open fun onNextClick(){
+    fun onNextClick(position: Int){
         val toast = Toast.makeText(context, "Next Clicked", Toast.LENGTH_SHORT)
         toast.show()
-        onClick!!.nextClicked()
+        onClick!!.nextClicked(position)
     }
 
-    open fun onBackClick(){
-        onClick?.backClicked()
+    fun onDetailClick(position: Int){
+        onClick?.detailClicked(position)
     }
+
+    fun onBookmarkClick(){
+        onClick?.bookmarkClicked()
+    }
+
 
 }

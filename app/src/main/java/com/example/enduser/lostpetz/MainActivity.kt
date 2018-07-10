@@ -6,8 +6,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
-
 
 open class MainActivity: AppCompatActivity(){
 
@@ -15,15 +13,19 @@ open class MainActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        //TEST code
+        initFragments()
+    }
+    /*
+    This method sets up the tab layout, viewpager, and pager adapter
+     */
+    fun initFragments(){
         val mPagerAdapter = MainActivityPager(supportFragmentManager)
         main_activity_viewpager.adapter = mPagerAdapter
         main_activity_tablayout.setupWithViewPager(main_activity_viewpager)
     }
 
     /*
-    Viewpager
+    Viewpager inner class
      */
 
     open class MainActivityPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
@@ -33,23 +35,23 @@ open class MainActivity: AppCompatActivity(){
         }
 
         override fun getItem(position: Int): Fragment {
-            when(position){
-                0 -> return MatchFragment()
-                1 -> return  MessageInboxFragment()
-                2 -> return  MessageInboxFragment()
-                3 -> return  MessageInboxFragment()
-                else -> return MatchFragment()
+            return when(position){
+                0 -> MatchFragment()
+                1 -> MessageInboxFragment()
+                2 -> MessageInboxFragment()
+                3 -> MessageInboxFragment()
+                else -> MatchFragment()
             }
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            when(position){
-                0 -> return "Match"
-                1 -> return "Search"
-                2 -> return "Add"
-                3 -> return "Message"
-                else -> return null
-        }
+            return when(position){
+                0 -> "Match"
+                1 -> "Search"
+                2 -> "Add"
+                3 -> "Message"
+                else -> null
+            }
     }
     }
 }

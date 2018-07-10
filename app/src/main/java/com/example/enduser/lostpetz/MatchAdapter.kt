@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.match_container.view.*
 open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val context: Context,val onClick: onClicked ) : BaseAdapter(){
 
     interface onClicked{
-        fun nextClicked(position: Int)
-        fun detailClicked(position: Int)
+        fun nextClicked()
+        fun prevClicked()
         fun bookmarkClicked()
     }
 
@@ -38,11 +38,11 @@ open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val con
         }
         val nextImageButton = view!!.findViewById<View>(R.id.match_container_next)
 
-        nextImageButton.setOnClickListener({onNextClick(position)})
+        nextImageButton.setOnClickListener({onNextClick()})
 
         val detailImageButton = view!!.findViewById<View>(R.id.match_container_detail)
 
-        detailImageButton.setOnClickListener({onDetailClick(position)})
+        detailImageButton.setOnClickListener({onDetailClick()})
 
         val bookmarkImageButton = view!!.findViewById<View>(R.id.match_container_bookmark)
 
@@ -54,14 +54,14 @@ open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val con
         return view!!
     }
 
-    fun onNextClick(position: Int){
+    fun onNextClick(){
         val toast = Toast.makeText(context, "Next Clicked", Toast.LENGTH_SHORT)
         toast.show()
-        onClick!!.nextClicked(position)
+        onClick!!.nextClicked()
     }
 
-    fun onDetailClick(position: Int){
-        onClick?.detailClicked(position)
+    fun onDetailClick(){
+        onClick?.prevClicked()
     }
 
     fun onBookmarkClick(){

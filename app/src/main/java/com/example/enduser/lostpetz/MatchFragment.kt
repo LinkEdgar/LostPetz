@@ -30,12 +30,12 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         dataSet?.add(MatchInfo("2","2"))
         dataSet?.add(MatchInfo("3","3"))
         dataSet?.add(MatchInfo("4","4"))
-        initCarSwipe(rootView)
+        initCardSwipe(rootView)
 
         return rootView
     }
 
-    fun initCarSwipe(rootView: View){
+    fun initCardSwipe(rootView: View){
         cardSwipe = rootView.swipe_deck
         matchAdapter = MatchAdapter(dataSet!!,context!!, this)
         cardSwipe?.setAdapter(matchAdapter)
@@ -56,13 +56,14 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         })
     }
 
-    override fun detailClicked(position:Int) {
+    override fun prevClicked() {
         //TODO start intent to switch into detail activity
         val toast = Toast.makeText(context, "Detail Button clicked", Toast.LENGTH_SHORT)
         toast.show()
+        cardSwipe?.unSwipeCard()
     }
 
-    override fun nextClicked(position: Int) {
+    override fun nextClicked() {
         cardSwipe!!.swipeTopCardLeft(180)
         //TODO figure out delete options for objects in dataset
 

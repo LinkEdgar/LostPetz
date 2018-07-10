@@ -1,12 +1,17 @@
 package com.example.enduser.lostpetz;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -30,7 +35,7 @@ import java.util.HashSet;
     exception.
  */
 
-public class PetQueryActivity extends AppCompatActivity implements PetAdapter.onViewClicked{
+public class PetQueryActivity extends Fragment implements PetAdapter.onViewClicked{
 
 
     public static final String PET_ARRAY_KEY = "arrayList";
@@ -65,22 +70,21 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
 
     private HashSet<String> mPetKeyHashset;
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_pet_query);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.activity_pet_query, container, false);
             //firebase instances
             mDatabase = FirebaseDatabase.getInstance();
             mRef = mDatabase.getReference(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
-            initUIViewsAndVariables();
-            }
+            initUIViewsAndVariables(rootView);
+            return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
-
-
-        /*
-        Takes a query from the user to query it from the realtime database. The old query is
-        erased
-         */
+    /*
+            Takes a query from the user to query it from the realtime database. The old query is
+            erased
+             */
         private void submitSearchQuery(String string){
             mPetArrrayList.clear();
             mPetKeyHashset.clear();
@@ -135,7 +139,7 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     public void onClick(int position) {
         //TODO fill with actual logic and remove toast
 
-        Toast.makeText(this, "clicked on item " + position, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "clicked on item " + position, Toast.LENGTH_SHORT).show();
 
     }
     /*
@@ -194,16 +198,16 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     /*
     Initializes all UI elements and variable instances
      */
-    private void initUIViewsAndVariables(){
+    private void initUIViewsAndVariables(View rootView){
         //Variable instances
-        mNoPetsFoundTextView = findViewById(R.id.pet_query_no_pets_textview);
+        mNoPetsFoundTextView = rootView.findViewById(R.id.pet_query_no_pets_textview);
         mPetKeyHashset = new HashSet<>();
-        mCardView = findViewById(R.id.pet_query_filter_cardview);
-        mNoPetsProgressBar = findViewById(R.id.pet_query_progressbar);
-        mNameFilterButton = findViewById(R.id.pet_query_name_filter);
-        mZipFilterButton = findViewById(R.id.pet_query_zip_filter);
-        mBreedFilterButton = findViewById(R.id.pet_query_breed_filter);
-        mSearchView = findViewById(R.id.pet_query_searchview);
+        mCardView = rootView.findViewById(R.id.pet_query_filter_cardview);
+        mNoPetsProgressBar = rootView.findViewById(R.id.pet_query_progressbar);
+        mNameFilterButton = rootView.findViewById(R.id.pet_query_name_filter);
+        mZipFilterButton = rootView.findViewById(R.id.pet_query_zip_filter);
+        mBreedFilterButton = rootView.findViewById(R.id.pet_query_breed_filter);
+        mSearchView = rootView.findViewById(R.id.pet_query_searchview);
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -222,8 +226,8 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
                 return false;
             }
         });
-        mRecyclerView = findViewById(R.id.pet_query_recyclerview);
-        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView = rootView.findViewById(R.id.pet_query_recyclerview);
+        mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mPetArrrayList = new ArrayList<>();
 
@@ -236,7 +240,7 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     Adds the child listener when the activity is restarted
      */
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         if(mListener != null) {
             mRef.addChildEventListener(mListener);
@@ -247,7 +251,7 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     Removes the child event listener when the user is no longer using the application
      */
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         if(mListener != null){
             mRef.addChildEventListener(mListener);
@@ -268,15 +272,15 @@ public class PetQueryActivity extends AppCompatActivity implements PetAdapter.on
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putSerializable(PET_ARRAY_KEY, mPetArrrayList);
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if(savedInstanceState != null){
             mPetArrrayList = (ArrayList<Pet>) savedInstanceState.getSerializable(PET_ARRAY_KEY);
             mPetAdapter = new PetAdapter(mPetArrrayList);

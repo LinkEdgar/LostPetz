@@ -1,6 +1,10 @@
 package com.example.enduser.lostpetz;
 
-public class Pet {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Pet implements Parcelable{
+
     public Pet(){
 
     }
@@ -33,7 +37,6 @@ public class Pet {
 
 
     // setter methods
-
 
     public void setProfileUrlThree(String profileUrlThree) {
         this.profileUrlThree = profileUrlThree;
@@ -100,4 +103,46 @@ public class Pet {
     public String getProfileUrlThree() {
         return profileUrlThree;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(profileUrlOne);
+        parcel.writeString(profileUrlTwo);
+        parcel.writeString(profileUrlThree);
+        parcel.writeString(name);
+        parcel.writeString(zip);
+        parcel.writeString(dateLost);
+        parcel.writeString(description);
+        parcel.writeByte((byte) (foundPet ? 1 : 0));
+        parcel.writeString(breed);
+    }
+
+    protected Pet(Parcel in) {
+        profileUrlOne = in.readString();
+        profileUrlTwo = in.readString();
+        profileUrlThree = in.readString();
+        name = in.readString();
+        zip = in.readString();
+        dateLost = in.readString();
+        description = in.readString();
+        foundPet = in.readByte() != 0;
+        breed = in.readString();
+    }
+
+    public static final Creator<Pet> CREATOR = new Creator<Pet>() {
+        @Override
+        public Pet createFromParcel(Parcel in) {
+            return new Pet(in);
+        }
+
+        @Override
+        public Pet[] newArray(int size) {
+            return new Pet[size];
+        }
+    };
 }

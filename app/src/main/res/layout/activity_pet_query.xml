@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".PetQueryActivity">
     <SearchView
+        android:focusable="false"
         android:layout_below="@+id/pet_query_filter_cardview"
         android:id="@+id/pet_query_searchview"
         android:iconifiedByDefault="false"
@@ -44,7 +45,6 @@
             <Button
                 android:textColor="@color/white"
                 android:background="@color/colorAccent"
-                android:onClick="chooseFilterType"
                 android:id="@+id/pet_query_name_filter"
                 android:layout_marginLeft="@dimen/horizontal_margin"
                 android:textSize="@dimen/default_text_size"
@@ -57,7 +57,6 @@
                 android:textSize="@dimen/default_text_size"
                 android:textColor="@color/white"
                 android:background="@color/colorPrimary"
-                android:onClick="chooseFilterType"
                 android:id="@+id/pet_query_zip_filter"
                 android:text="@string/cardview_filter_zip"
                 android:layout_centerVertical="true"
@@ -68,7 +67,6 @@
                 android:textSize="@dimen/default_text_size"
                 android:textColor="@color/white"
                 android:background="@color/colorPrimary"
-                android:onClick="chooseFilterType"
                 android:id="@+id/pet_query_breed_filter"
                 android:layout_marginRight="@dimen/horizontal_margin"
                 android:text="@string/cardview_filter_breed"
@@ -101,6 +99,7 @@
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginBottom="80dp"
         android:layout_below="@id/pet_query_searchview"
         android:layout_centerInParent="true"
         android:id="@+id/pet_query_recyclerview"

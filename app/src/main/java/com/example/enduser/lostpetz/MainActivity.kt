@@ -37,7 +37,7 @@ open class MainActivity: AppCompatActivity(){
         override fun getItem(position: Int): Fragment {
             return when(position){
                 0 -> MatchFragment()
-                1 -> MessageInboxFragment()
+                1 -> PetQueryFragment()
                 2 -> MessageInboxFragment()
                 3 -> MessageInboxFragment()
                 else -> MatchFragment()

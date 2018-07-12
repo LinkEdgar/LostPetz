@@ -1,9 +1,12 @@
 package com.example.enduser.lostpetz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -76,16 +80,23 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
     private final int RC_PICK_IMAGE = 3141;
 
+    //TODO add a query check so that not all of the messages are loaded at once
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
+        initUi();
+
+    }
+
+    private void initUi(){
 
         //get Firebase instance
         mDatabase = FirebaseDatabase.getInstance();
         mRef = mDatabase.getReference().child(FirebaseValues.FirebaseDatabaseValues.FIREBASE_MESSAGES_ROOT);
         mStorage = FirebaseStorage.getInstance();
-
 
         //View Referencing
         testTextView = findViewById(R.id.test_display_textview);
@@ -110,7 +121,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mRecylerView.setAdapter(mAdapter);
         mRecylerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        mLayoutManager = new LinearLayoutManager(MessagingActivity.this);
 
         mRecylerView.setLayoutManager(mLayoutManager);
 
@@ -190,9 +201,9 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_PICK_IMAGE && resultCode == RESULT_OK
+        if(requestCode == RC_PICK_IMAGE && resultCode == Activity.RESULT_OK
                 && null != data){
             mImageUri = data.getData();
             setImageToConsole(mImageUri);
@@ -231,16 +242,18 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     Overridden to remove listeners
      */
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         mRef.removeEventListener(mChildListener);
     }
+
+
 
     /*
     Overridden to remove listeners
      */
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         mRef.addChildEventListener(mChildListener);
     }
@@ -279,6 +292,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
      */
 
     private void sendPictureMessage(String pictureUrl){
+        //TODO actually populate message with real data
         Message pictureMessageToSend = new Message(
                 "Username",
                 null,
@@ -293,8 +307,11 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
      */
 
     @Override
-    public void onPictureClicked() {
+    public void onPictureClicked(int position) {
+        //TODO pass url information for full screen
         FullScreenDialog dialogFragment = new FullScreenDialog();
+        String url = mMessageArray.get(position).getPhotoUrl();
+        dialogFragment.setImageUrl(url);
         dialogFragment.show(getSupportFragmentManager(),"Fragment");
     }
 }

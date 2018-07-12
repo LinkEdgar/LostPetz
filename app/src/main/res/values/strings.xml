@@ -6,9 +6,9 @@
     <string name="send_message_hint">Type your message </string>
     <!-- PetQuery string resources-->
     <string name="searchview_hint"> Search for pets</string>
-    
+
     <string name="cardview_filter_label">Filter Results</string>
-    
+
     <string name="cardview_filter_name">Name</string>
 
     <string name="cardview_filter_zip">Zip</string>
@@ -19,4 +19,7 @@
 
     <!-- Message inbox-->
     <string name="no_messages">No messages</string>
+
+    <!-- PetSearchDetail-->
+    <string name="description_label">Description</string>
 </resources>

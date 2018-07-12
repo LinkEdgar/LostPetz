@@ -1,5 +1,6 @@
 package com.example.enduser.lostpetz
 
+import android.content.Intent
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.CardView
@@ -107,6 +108,9 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     override fun onClick(position: Int) {
         //TODO fill with actual logic and remove toast
         Toast.makeText(context, "clicked on item $position", Toast.LENGTH_SHORT).show()
+        val intent = Intent(activity,PetSearchDetailActivity::class.java)
+        intent?.putExtra("pet", mPetArrrayList?.get(position))
+        startActivity(intent)
 
     }
 

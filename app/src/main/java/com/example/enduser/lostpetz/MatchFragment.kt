@@ -74,4 +74,10 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         toast.show()
         //TODO call firebase to set bookmark and maybe toast that it's complet
     }
+
+    fun loadCards(){
+        val zipCode = "12345"
+        //TODO investigate best way to calculate distance
+        //geo fencing might be the best choice as far as I can tell
+    }
 }

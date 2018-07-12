@@ -52,16 +52,12 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     private var mZipFilterButton: Button? = null
     private var mBreedFilterButton: Button? = null
     //this variable check if the user is submitting the same query twice so that
-    //we don't do two network calls
+    //we don't perform two network calls
     private var isDoubleSubmit = false
     private var mCardView: CardView? = null
     private var searchFilterType = SEARCH_FILTER_NAME
 
     private var mPetKeyHashset: HashSet<String>? = null
-
-    //TODO fix error Arraylist auto loading data on viewpager saved instance state
-
-    //TODO fix error with "No pets found" textview as it displays even when the array size > 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.activity_pet_query, container, false)
@@ -75,7 +71,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
     /*
     Takes a query from the user to query it against the realtime database. The old query is
-    erased
+    erased and views are changed accordingly
     */
     private fun submitSearchQuery(string: String) {
         mPetArrrayList!!.clear()
@@ -120,8 +116,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
      */
     private fun addPetsFromSnapshot(snapshot: DataSnapshot) {
 
-        //TODO format name
-        for(x in snapshot.children){
+        for(x in snapshot.children){ // iterates through each child in the snapshot to extract info
             val key = x.key
             if(!mPetKeyHashset!!.contains(key)) {
                 mPetKeyHashset!!.add(key)
@@ -130,37 +125,22 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 val breed = x.child("breed").getValue().toString()
                 val description = x.child("description").getValue().toString()
                 val pet = Pet()
-                pet.name = name
-                pet.breed = breed
+                /*
+                Since breed and name are used to filter they are entered into the DB in lowercase forms
+                so we are converting them back to a more user friendly mode
+                 */
+                pet.name = name?.substring(0,1).toUpperCase() + name?.substring(1, name.length)
+                pet.breed = breed?.substring(0,1).toUpperCase() + breed?.substring(1, breed.length)
                 pet.zip = zip
                 pet.description = description
                 mPetArrrayList!!.add(pet)
                 mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
             }
         }
-
-        /*
-        val key = snapshot.key
-        if (!mPetKeyHashset!!.contains(key)) {
-            mPetKeyHashset!!.add(key)
-            val pet = snapshot.getValue(Pet::class.java)
-
-            val lowerCaseName = pet!!.name
-            val formattedName = lowerCaseName.substring(0, 1).toUpperCase() + lowerCaseName.substring(1, lowerCaseName.length)
-            pet.name = formattedName
-
-            val lowerCaseBreed = pet.breed
-            val formattedBreed = lowerCaseBreed.substring(0, 1).toUpperCase() + lowerCaseBreed.substring(1, lowerCaseBreed.length)
-            pet.breed = formattedBreed
-
-            mPetArrrayList!!.add(pet)
-            mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
-        }
-        */
     }
 
     /*
-    This method sets the filter type when the user
+    This method sets the filter type when the user chooses a filter
      */
     fun chooseFilterType(view: View) {
         val viewId = view.id
@@ -204,6 +184,10 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         mSearchView = rootView.findViewById(R.id.pet_query_searchview)
         mSearchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
+                /*
+                This ensures the user does not re-submit the same query and hides the filter tab
+                so the user can clearly see the list
+                 */
                 if (!isDoubleSubmit && s.length > 0) {
                     submitSearchQuery(s)
                     isDoubleSubmit = true
@@ -211,7 +195,9 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 }
                 return false
             }
-
+            /*
+            Sets the flag to ensure the user does not re-submit queries
+             */
             override fun onQueryTextChange(s: String): Boolean {
                 mCardView!!.visibility = View.VISIBLE
                 isDoubleSubmit = false
@@ -249,6 +235,9 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         if (savedInstanceState != null) {
+            /*
+            Saves arraylist for any instance state change
+             */
             if(savedInstanceState.containsKey(PET_ARRAY_KEY)) {
                 mPetArrrayList = savedInstanceState.getSerializable(PET_ARRAY_KEY) as ArrayList<Pet>
                 mPetAdapter = PetAdapter(mPetArrrayList)

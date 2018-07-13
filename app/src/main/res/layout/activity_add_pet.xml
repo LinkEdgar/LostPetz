@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.enduser.lostpetz.AddPetActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -94,8 +99,8 @@
                     android:layout_centerInParent="true"
                     android:src="@mipmap/ic_launcher_round"
                     android:layout_alignParentLeft="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="75dp"
+                    android:layout_height="100dp" />
 
                 <ImageView
                     android:id="@+id/add_pet_cancel_image_one"
@@ -110,8 +115,8 @@
                     android:id="@+id/add_pet_upload_two"
                     android:layout_centerInParent="true"
                     android:src="@mipmap/ic_launcher_round"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="75dp"
+                    android:layout_height="100dp" />
 
                 <ImageView
                     android:id="@+id/add_pet_cancel_image_two"
@@ -128,8 +133,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
                     android:src="@mipmap/ic_launcher_round"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="75dp"
+                    android:layout_height="100dp" />
 
                 <ImageView
                     android:id="@+id/add_pet_cancel_image_three"
@@ -142,7 +147,17 @@
             </RelativeLayout>
         </FrameLayout>
 
-
     </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginRight="@dimen/horizontal_margin_large"
+        android:layout_marginBottom="@dimen/horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

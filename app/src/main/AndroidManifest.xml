@@ -18,11 +18,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MessagingActivity" />
         <activity
             android:name=".PetQueryActivity"
             android:launchMode="singleTop"></activity>
         <activity android:name=".PetSearchDetailActivity"></activity>
+
+        <activity
+            android:windowSoftInputMode="adjustNothing"
+            android:name=".AddPetActivity"></activity>
     </application>
 
 </manifest>

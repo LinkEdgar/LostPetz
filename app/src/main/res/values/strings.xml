@@ -22,4 +22,18 @@
 
     <!-- PetSearchDetail-->
     <string name="description_label">Description</string>
+    <string-array name="date_array">
+        <item>Today</item>
+        <item>Set Date</item>
+    </string-array>
+
+    <!-- AddPets Strings -->
+    <string name="select_images_label">Select Images</string>
+    <string name="date_label">Date</string>
+    <string name="date_picker_cancel">Cancel</string>
+    <string name="date_picker_select_image_label">Select Images</string>
+    <string name="date_picker_done">Done</string>
+    <string name="pet_name_label">Name</string>
+    <string name="pet_zip_label">Zip</string>
+    <string name="pet_description_label">Description</string>
 </resources>

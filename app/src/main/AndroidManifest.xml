@@ -22,7 +22,9 @@
             android:name=".PetQueryActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".AddPetActivity"></activity>
+        <activity
+            android:windowSoftInputMode="adjustNothing"
+            android:name=".AddPetActivity"></activity>
     </application>
 
 </manifest>

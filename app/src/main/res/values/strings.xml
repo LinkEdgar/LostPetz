@@ -23,6 +23,7 @@
     </string-array>
 
     <!-- AddPets Strings -->
+    <string name="select_images_label">Select Images</string>
     <string name="date_label">Date</string>
     <string name="date_picker_cancel">Cancel</string>
     <string name="date_picker_select_image_label">Select Images</string>

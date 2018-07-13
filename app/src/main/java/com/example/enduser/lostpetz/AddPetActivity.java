@@ -39,8 +39,10 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
     private ArrayAdapter<String> adapter;
     private List<String> mSpinnerList;
 
-    private LinkedList<Uri> imageUriList; //used to hold the Uri's that will be uploaded
+    private Uri[] imageUriArray; //used to hold the Uri's that will be uploaded
     private static int DEFAULT_IMAGE_SELECT_RESOURCE = R.mipmap.ic_launcher_round;
+
+    private int imageSelectorPosition; //used to keep track of the uri the user is choosing
 
     private static final int IMAGE_GALLERY_RESULT = 3141;
 
@@ -58,18 +60,18 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.add_pet_upload_one:
-
+                startGalleryIntent(0);
                 //TODO reevaluate case statements
                 break;
             case R.id.add_pet_upload_two:
                 Log.e("yeet", "yyet");
-                startGalleryIntent();
+                startGalleryIntent(1);
                 break;
             case R.id.add_pet_upload_three:
-                startGalleryIntent();
+                startGalleryIntent(2);
                 break;
             case R.id.add_pet_image_select:
-                startGalleryIntent();
+                //startGalleryIntent();
                 break;
             case R.id.add_pet_cancel_image_one:
                 removeImageFromList(0);
@@ -114,7 +116,7 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
         mImageCancelTwo.setOnClickListener(this);
         mImageCancelThree = findViewById(R.id.add_pet_cancel_image_three);
         mImageCancelThree.setOnClickListener(this);
-        imageUriList = new LinkedList<>();
+        imageUriArray = new Uri[3];
 
     }
 
@@ -170,54 +172,55 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
 
         if(requestCode == IMAGE_GALLERY_RESULT && resultCode == RESULT_OK && data != null){
             Uri uri = data.getData();
-            addImageToList(uri);
+            addImageToList(uri,imageSelectorPosition);
         }
     }
 
-    private void addImageToList(Uri uri){
-        if(imageUriList.size() == 0) {
-            imageUriList.add(uri);
-            mImageToUpload.setVisibility(View.VISIBLE);
-            mSelectImageButton.setVisibility(View.GONE);
-            mImageCancel.setVisibility(View.VISIBLE);
-            mImageToUpload2.setVisibility(View.VISIBLE);
-            Glide.with(this).load(uri).into(mImageToUpload);
-        }
-        else if(imageUriList.size() == 1){
-            imageUriList.add(uri);
-            mImageCancelTwo.setVisibility(View.VISIBLE);
-            mImageToUpload3.setVisibility(View.VISIBLE);
-            mImageCancelThree.setVisibility(View.VISIBLE);
-            Glide.with(this).load(uri).into(mImageToUpload2);
-        }
-        else{
-            mImageCancelThree.setVisibility(View.VISIBLE);
-            imageUriList.add(uri);
-            Glide.with(this).load(uri).into(mImageToUpload3);
+    /*
+    Sets views based on the size of imageUriList. Currently there is only support for a maximum of
+    three images per pet entry into the DB.
+     */
+    private void addImageToList(Uri uri, int position){
+        imageUriArray[position] = uri;
+        switch(position){
+            case 0:
+                Glide.with(this).load(uri).into(mImageToUpload);
+                mImageCancel.setVisibility(View.VISIBLE);
+                break;
+            case 1:
+                Glide.with(this).load(uri).into(mImageToUpload2);
+                mImageCancelTwo.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                Glide.with(this).load(uri).into(mImageToUpload3);
+                mImageCancelThree.setVisibility(View.VISIBLE);
+                break;
         }
 
     }
 
     private void removeImageFromList(int position){
-        switch(position){
-            case 0:
-                imageUriList.remove(0);
-                mImageToUpload.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
-                break;
-            case 1:
-                imageUriList.remove(1);
-                mImageToUpload2.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
-                break;
-            case 2:
-                imageUriList.remove(2);
-                mImageToUpload.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
-                break;
-        }
+            imageUriArray[position] = null;
+            switch(position){
+                case 0:
+                    mImageToUpload.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
+                    mImageCancel.setVisibility(View.GONE);
+                    break;
+                case 1:
+                    mImageToUpload2.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
+                    mImageCancelTwo.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    mImageToUpload3.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
+                    mImageCancelThree.setVisibility(View.GONE);
+                    break;
+            }
     }
 
-    private void startGalleryIntent(){
+    private void startGalleryIntent(int position){
         Intent searchGalleryIntent = new Intent();
         searchGalleryIntent.setType("image/*");
+        imageSelectorPosition = position; //sets the position for onActivityResult
         searchGalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(searchGalleryIntent,"Select Picture"), IMAGE_GALLERY_RESULT);
     }

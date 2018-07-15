@@ -1,28 +1,31 @@
 package com.example.enduser.lostpetz;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
-public class AddPetActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked{
+public class AddPetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked{
     private ArrayList<Pet> mArrayList;
     private Spinner mDateSpinner;
     private TextInputEditText mPetNameEditText;
@@ -49,11 +52,12 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
     //Pet detail variables
     private String dateLost;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_pet);
-        initUI();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_add_pet, container, false);
+        initUI(rootView);
+        return rootView;
     }
 
     @Override
@@ -61,7 +65,6 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()){
             case R.id.add_pet_upload_one:
                 startGalleryIntent(0);
-                //TODO reevaluate case statements
                 break;
             case R.id.add_pet_upload_two:
                 Log.e("yeet", "yyet");
@@ -69,9 +72,6 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.add_pet_upload_three:
                 startGalleryIntent(2);
-                break;
-            case R.id.add_pet_image_select:
-                //startGalleryIntent();
                 break;
             case R.id.add_pet_cancel_image_one:
                 removeImageFromList(0);
@@ -89,32 +89,30 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
     /*
     Initializes views and sets on click listeners
      */
-    private void initUI(){
+    private void initUI(View rootView){
         mSpinnerList = new ArrayList<>();
         mSpinnerList.add("Today");
         mSpinnerList.add("Set Date");
-        mDateSpinner = findViewById(R.id.add_pet_date_spinner);
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, mSpinnerList);
+        mDateSpinner = rootView.findViewById(R.id.add_pet_date_spinner);
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, mSpinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mDateSpinner.setAdapter(adapter);
         mDateSpinner.setOnItemSelectedListener(this);
-        mImageToUpload3 = findViewById(R.id.add_pet_upload_three);
+        mImageToUpload3 = rootView.findViewById(R.id.add_pet_upload_three);
         mImageToUpload3.setOnClickListener(this);
-        mImageToUpload = findViewById(R.id.add_pet_upload_one);
+        mImageToUpload = rootView.findViewById(R.id.add_pet_upload_one);
         mImageToUpload.setOnClickListener(this);
-        mImageToUpload2 = findViewById(R.id.add_pet_upload_two);
+        mImageToUpload2 = rootView.findViewById(R.id.add_pet_upload_two);
         mImageToUpload2.setOnClickListener(this);
         mImageToUpload3.setOnClickListener(this);
-        mPetNameEditText = findViewById(R.id.add_pet_name);
-        mPetZipEditText = findViewById(R.id.add_pet_zip);
-        mPetDescriptionEditText = findViewById(R.id.add_pet_description);
-        mSelectImageButton = findViewById(R.id.add_pet_image_select);
-        mSelectImageButton.setOnClickListener(this);
-        mImageCancel = findViewById(R.id.add_pet_cancel_image_one);
+        mPetNameEditText = rootView.findViewById(R.id.add_pet_name);
+        mPetZipEditText = rootView.findViewById(R.id.add_pet_zip);
+        mPetDescriptionEditText = rootView.findViewById(R.id.add_pet_description);
+        mImageCancel = rootView.findViewById(R.id.add_pet_cancel_image_one);
         mImageCancel.setOnClickListener(this);
-        mImageCancelTwo = findViewById(R.id.add_pet_cancel_image_two);
+        mImageCancelTwo = rootView.findViewById(R.id.add_pet_cancel_image_two);
         mImageCancelTwo.setOnClickListener(this);
-        mImageCancelThree = findViewById(R.id.add_pet_cancel_image_three);
+        mImageCancelThree = rootView.findViewById(R.id.add_pet_cancel_image_three);
         mImageCancelThree.setOnClickListener(this);
         imageUriArray = new Uri[3];
 
@@ -129,7 +127,7 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
         if(selectPosition == 1 ) {
             chooseDateDialogFragment = new ChooseDateDialogFragment();
             chooseDateDialogFragment.setOnClicked(this);
-            chooseDateDialogFragment.show(getFragmentManager(), "chooseDate");
+            chooseDateDialogFragment.show(getActivity().getFragmentManager(), "chooseDate");
         } else{
             Date date = new Date(System.currentTimeMillis());
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
@@ -164,13 +162,11 @@ public class AddPetActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    //TODO test all of the coded after this line
-
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == IMAGE_GALLERY_RESULT && resultCode == RESULT_OK && data != null){
+        if(requestCode == IMAGE_GALLERY_RESULT && resultCode == Activity.RESULT_OK && data != null){
             Uri uri = data.getData();
             addImageToList(uri,imageSelectorPosition);
         }

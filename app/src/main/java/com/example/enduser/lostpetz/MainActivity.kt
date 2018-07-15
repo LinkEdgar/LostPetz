@@ -38,7 +38,7 @@ open class MainActivity: AppCompatActivity(){
             return when(position){
                 0 -> MatchFragment()
                 1 -> PetQueryFragment()
-                2 -> MessageInboxFragment()
+                2 -> AddPetFragment()
                 3 -> MessageInboxFragment()
                 else -> MatchFragment()
             }

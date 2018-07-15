@@ -90,17 +90,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/add_pet_image_select"
-                    android:layout_centerInParent="true"
-                    android:drawableRight="@mipmap/ic_launcher_round"
-                    android:drawableEnd="@mipmap/ic_launcher_round"
-                    android:text="@string/date_picker_select_image_label"
-                    android:layout_gravity="center"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
                 <ImageView
                     android:layout_marginRight="32dp"
                     android:layout_toLeftOf="@+id/add_pet_upload_two"
@@ -160,14 +149,5 @@
     </LinearLayout>
 
     </ScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:src="@mipmap/ic_launcher"
-        android:layout_marginRight="@dimen/horizontal_margin_large"
-        android:layout_marginBottom="@dimen/horizontal_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </RelativeLayout>

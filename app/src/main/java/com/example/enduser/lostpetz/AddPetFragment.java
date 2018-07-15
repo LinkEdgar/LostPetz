@@ -17,8 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +44,13 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private ChooseDateDialogFragment chooseDateDialogFragment;
     private ArrayAdapter<String> adapter;
     private List<String> mSpinnerList;
+    private Button mSubmitButton;
+    private Pet petToAdd;
+    private static String PET_BUNDLE_KEY = "pet";
+
+    //firebase
+    private DatabaseReference mDatabase;
+
 
     private Uri[] imageUriArray; //used to hold the Uri's that will be uploaded
     private static int DEFAULT_IMAGE_SELECT_RESOURCE = R.mipmap.ic_launcher_round;
@@ -51,6 +61,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
     //Pet detail variables
     private String dateLost;
+
+    //TODO bundle datelost
+    //TODO bundle image URI's
 
     @Nullable
     @Override
@@ -81,6 +94,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                 break;
             case R.id.add_pet_cancel_image_three:
                 removeImageFromList(2);
+                break;
+            case R.id.add_pet_submit_button:
+                submitPet();
                 break;
 
         }
@@ -115,6 +131,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mImageCancelThree = rootView.findViewById(R.id.add_pet_cancel_image_three);
         mImageCancelThree.setOnClickListener(this);
         imageUriArray = new Uri[3];
+        mSubmitButton = rootView.findViewById(R.id.add_pet_submit_button);
+        mSubmitButton.setOnClickListener(this);
+        petToAdd = new Pet();
 
     }
 
@@ -219,5 +238,47 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         imageSelectorPosition = position; //sets the position for onActivityResult
         searchGalleryIntent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(searchGalleryIntent,"Select Picture"), IMAGE_GALLERY_RESULT);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(PET_BUNDLE_KEY, petToAdd);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState != null) {
+            if (savedInstanceState.containsKey(PET_BUNDLE_KEY)) {
+                petToAdd = savedInstanceState.getParcelable(PET_BUNDLE_KEY);
+            }
+        }
+    }
+
+    private void submitPet(){
+        if(checkNullRequirements()){
+            petToAdd.setName(mPetNameEditText.getText().toString().trim());
+            petToAdd.setZip(mPetZipEditText.getText().toString().trim());
+            petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
+            petToAdd.setDateLost(dateLost);
+            addPetToFirebase();
+        }
+    }
+
+    private boolean checkNullRequirements(){
+
+        return true;
+    }
+
+    private void addPetToFirebase(){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        /*
+        mDatabase.child(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
+        mDatabase.push().setValue(petToAdd);
+        */
+        DatabaseReference specificRef = mDatabase.child("Pets").push();
+        specificRef.setValue("1 yeet");
+        Toast.makeText(getContext(), "Pet added", Toast.LENGTH_SHORT).show();
     }
 }

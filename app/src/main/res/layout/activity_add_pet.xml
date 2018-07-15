@@ -16,6 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:gravity="center"
+            android:layout_margin="@dimen/horizontal_margin_large"
+            android:text="Add information about your pet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_margin="@dimen/horizontal_margin_large"
             android:layout_width="match_parent"
@@ -145,6 +152,14 @@
 
             </RelativeLayout>
         </FrameLayout>
+
+        <Button
+            android:id="@+id/add_pet_submit_button"
+            android:layout_marginTop="@dimen/vertical_margin_large"
+            android:layout_gravity="center"
+            android:text="@string/submit_button_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

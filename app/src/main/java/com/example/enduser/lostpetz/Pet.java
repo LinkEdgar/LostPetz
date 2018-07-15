@@ -34,9 +34,14 @@ public class Pet implements Parcelable{
     private String description;
     private boolean foundPet;
     private String breed;
+    private String userID;
 
 
     // setter methods
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
     public void setProfileUrlThree(String profileUrlThree) {
         this.profileUrlThree = profileUrlThree;
@@ -102,6 +107,10 @@ public class Pet implements Parcelable{
 
     public String getProfileUrlThree() {
         return profileUrlThree;
+    }
+
+    public String getUserID() {
+        return userID;
     }
 
     @Override

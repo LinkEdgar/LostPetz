@@ -245,6 +245,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
             if(savedInstanceState.containsKey(PET_ARRAY_KEY)) {
                 mPetArrrayList = savedInstanceState.getSerializable(PET_ARRAY_KEY) as ArrayList<Pet>
                 mPetAdapter = PetAdapter(mPetArrrayList)
+                mPetAdapter!!.setOnViewClicked(this)
                 mRecyclerView!!.adapter = mPetAdapter
             }
 

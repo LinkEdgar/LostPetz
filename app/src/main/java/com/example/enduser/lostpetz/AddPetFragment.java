@@ -1,6 +1,7 @@
 package com.example.enduser.lostpetz;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -20,16 +21,23 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class AddPetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked{
-    private ArrayList<Pet> mArrayList;
     private Spinner mDateSpinner;
     private TextInputEditText mPetNameEditText;
     private TextInputEditText mPetZipEditText;
@@ -46,9 +54,11 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private Button mSubmitButton;
     private Pet petToAdd;
     private static String PET_BUNDLE_KEY = "pet";
+    private int imageCounter = 0;
 
     //firebase
     private DatabaseReference mDatabase;
+    private StorageReference mStorage;
 
 
     private Uri[] imageUriArray; //used to hold the Uri's that will be uploaded
@@ -63,6 +73,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
     //TODO bundle datelost
     //TODO bundle image URI's
+    //TODO bundle imagecounter
 
     @Nullable
     @Override
@@ -194,6 +205,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     three images per pet entry into the DB.
      */
     private void addImageToList(Uri uri, int position){
+        imageCounter++;
         imageUriArray[position] = uri;
         switch(position){
             case 0:
@@ -213,6 +225,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private void removeImageFromList(int position){
+        imageCounter--;
             imageUriArray[position] = null;
             switch(position){
                 case 0:
@@ -260,8 +273,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             petToAdd.setZip(mPetZipEditText.getText().toString().trim());
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
             petToAdd.setDateLost(dateLost);
-            addPetToFirebase();
-            clearUI();
+            initiatePictureUpload();
         }
     }
 
@@ -272,10 +284,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
     private void addPetToFirebase(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        /*
-        mDatabase.child(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT);
-        mDatabase.push().setValue(petToAdd);
-        */
         DatabaseReference specificRef = mDatabase.child("Pets").push();
         specificRef.setValue(petToAdd);
         Toast.makeText(getContext(), "Pet added", Toast.LENGTH_SHORT).show();
@@ -301,8 +309,85 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mImageToUpload3.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
         mImageCancelThree.setVisibility(View.GONE);
         dateLost = null;
-        mSpinnerList.remove(2);
+        imageCounter = 0;
+        if(mSpinnerList.size() >2)mSpinnerList.remove(2);
+
         mDateSpinner.setSelection(0);
-        
+    }
+
+    private void uploadPictures(){
+        mStorage = FirebaseStorage.getInstance().getReference("petImages/");
+        final ProgressDialog dialog = new ProgressDialog(getContext());
+        dialog.setTitle("Uploading ...");
+        int counter = 0;// counts the amount of uploaded pictures
+        for(int x = 0; x < imageUriArray.length; x++){
+            if(imageUriArray[x] != null){
+                counter++;
+                dialog.show();
+                if(counter == imageCounter) {
+                    //final image upload
+                    mStorage.child(UUID.randomUUID().toString());
+                    final int finalX1 = x;
+                    mStorage.putFile(imageUriArray[x]).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            setImageUrl(taskSnapshot.getDownloadUrl().toString(), finalX1);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            dialog.dismiss();
+                            addPetToFirebase();
+                            clearUI();
+
+                        }
+                    });
+                }else {
+                    dialog.show();
+                    mStorage.child(UUID.randomUUID().toString());
+                    final int finalX = x;
+                    mStorage.putFile(imageUriArray[x]).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            dialog.setTitle("Uploading Image"+ finalX);
+                            setImageUrl(taskSnapshot.getDownloadUrl().toString(), finalX);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                        }
+                    });
+                }
+            }
+            else break;
+        }
+    }
+
+    private void initiatePictureUpload(){
+        if(imageCounter > 0){
+            uploadPictures();
+        }else{
+            addPetToFirebase();
+            clearUI();
+        }
+    }
+    private void setImageUrl(String url, int postition){
+        switch(postition){
+            case 0:
+                petToAdd.setProfileUrlOne(url);
+                break;
+            case 1:
+                petToAdd.setProfileUrlTwo(url);
+                break;
+            case 2:
+                petToAdd.setProfileUrlThree(url);
+                break;
+        }
     }
 }

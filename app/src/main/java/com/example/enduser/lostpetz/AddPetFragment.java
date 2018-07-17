@@ -25,18 +25,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class AddPetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked{
     private Spinner mDateSpinner;
@@ -257,11 +254,15 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         startActivityForResult(Intent.createChooser(searchGalleryIntent,"Select Picture"), IMAGE_GALLERY_RESULT);
     }
 
+    /*
+    imageCounter(determines the amount of images the user wants to upload) needs to be bundled
+    The uris that the user selected must also be bundled
+    the pet's information must also be bundled
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PET_BUNDLE_KEY, petToAdd);
-        Log.e("onSave", " "+ imageCounter);
         outState.putInt(IMAGE_COUNTER_KEY, imageCounter);
         if(imageUriArray[0] != null) outState.putParcelable(IMAGE_URI_ONE_KEY, imageUriArray[0]);
         if(imageUriArray[1]!= null) outState.putParcelable(IMAGE_URI_TWO_KEY, imageUriArray[1]);
@@ -277,11 +278,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                 petToAdd = savedInstanceState.getParcelable(PET_BUNDLE_KEY);
             }
             if(savedInstanceState.containsKey(IMAGE_COUNTER_KEY)){
-                Log.e("image bundle", " "+ savedInstanceState.getInt(IMAGE_COUNTER_KEY));
                 imageCounter = savedInstanceState.getInt(IMAGE_COUNTER_KEY, 0);
-                Log.e("imageCounter", ""+ imageCounter);
-            }else Log.e("imageCOunter", "Not in bouble"+ imageCounter);
-
+            }
             if(savedInstanceState.containsKey(IMAGE_URI_ONE_KEY)){
                 addImageToList((Uri)savedInstanceState.getParcelable(IMAGE_URI_ONE_KEY),0,true);
             }
@@ -294,12 +292,16 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         }
     }
 
+    //This method gets the information the user entered from the UI and add it to our instance of
+    // a pet class 'petToAdd.' Then calls intiatePictureUpload() to handle the rest
     private void submitPet(){
         if(checkNullRequirements()){
             petToAdd.setName(mPetNameEditText.getText().toString().trim());
             petToAdd.setZip(mPetZipEditText.getText().toString().trim());
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
             petToAdd.setDateLost(dateLost);
+            //Checks if there are pictures to upload to the DB before adding
+            //the pet
             initiatePictureUpload();
         }
     }
@@ -313,7 +315,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference specificRef = mDatabase.child("Pets").push();
         specificRef.setValue(petToAdd);
-        Toast.makeText(getContext(), "Pet added", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.pet_added_success, Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -322,7 +324,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
      */
     private void clearUI(){
         petToAdd = new Pet();
-        Log.e("Pet test", "->"+ petToAdd.getName());
         mPetNameEditText.setText("");
         mPetDescriptionEditText.setText("");
         mPetZipEditText.setText("");
@@ -342,6 +343,14 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mDateSpinner.setSelection(0);
     }
 
+    /*
+    Firebase Storage upload
+    Two cases:
+    1--> the current picture that is being uploaded isn't the last one
+    2--> the current picture being uploaded is the laste one
+    For case 1 we just upload the picture normally, but for case 2 we must
+    attach an on complete listener to add the pet to the DB and clear the UI afterwards
+     */
     private void uploadPictures(){
         final ProgressDialog dialog = new ProgressDialog(getContext());
         dialog.setTitle("Uploading ...");
@@ -350,19 +359,22 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             if(imageUriArray[x] != null){
                 counter++;
                 dialog.show();
+                //Case 2
                 if(counter == imageCounter) {
 
                     UploadTask uploadTask = mStorage.getReference("petImages/"+ imageUriArray[x].getLastPathSegment()).putFile(imageUriArray[x]);
-
                     final int finalCounter = counter;
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e("Upload Picture Image", "could not properly upload image");
+                            Log.d("Upload Image", "failed to upload image");
                         }
                     }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            //Once the task is done we can upload the pet to the DB with
+                            //DL urls. Since this is done on a background thread we must
+                            //add the pet after this task is complete to avoid null data
                             dialog.dismiss();
                             addPetToFirebase();
                             clearUI();
@@ -370,22 +382,25 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //we need to get the image download url for each pet beofore adding it to the DB
                             setImageUrl(taskSnapshot.getDownloadUrl().toString(), finalCounter);
                         }
                     });
 
                 }else {
+                    //Case 1
                     dialog.show();
                     UploadTask uploadTask = mStorage.getReference("petImages/"+imageUriArray[x].getLastPathSegment()).putFile(imageUriArray[x]);
                     final int finalCounter1 = counter;
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-
+                            Log.d("Upload Image", "failed to upload image");
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            //we need to get the image download url for each pet beofore adding it to the DB
                             setImageUrl(taskSnapshot.getDownloadUrl().toString(), finalCounter1);
                         }
                     });
@@ -394,6 +409,10 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         }
     }
 
+    /*This methods gets checks if there are pictures that need to be uploaded
+    and uploads them before calling the adding the pet and clearing the UI. If there
+    are no pictures to upload then the pet is added and the UI is cleared
+     */
     private void initiatePictureUpload(){
         if(imageCounter > 0){
             uploadPictures();
@@ -403,9 +422,13 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         }
     }
 
-    //This method takes the download url from a snapshot and adds it to the pet based on its position
-    private void setImageUrl(String url, int postition){
-        switch(postition){
+    /*
+    This method takes the download url from a snapshot and adds it to the pet based on the number of images
+    which ensures that profilePictureOne will always contain the first image
+     */
+
+    private void setImageUrl(String url, int position){
+        switch(position){
             case 1:
                 petToAdd.setProfileUrlOne(url);
                 break;

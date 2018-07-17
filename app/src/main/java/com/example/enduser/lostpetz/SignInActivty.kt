@@ -14,6 +14,9 @@ import kotlinx.android.synthetic.main.activity_sign_in_activty.*
 import android.widget.LinearLayout
 import android.widget.EditText
 
+//TODO add google sign in
+//TODO add facebook sign in
+
 class SignInActivty : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth ?= null

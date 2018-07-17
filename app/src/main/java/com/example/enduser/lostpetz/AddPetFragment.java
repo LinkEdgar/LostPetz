@@ -34,7 +34,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private TextInputEditText mPetNameEditText;
     private TextInputEditText mPetZipEditText;
     private TextInputEditText mPetDescriptionEditText;
-    private Button mSelectImageButton;
     private ImageView mImageToUpload;
     private ImageView mImageToUpload2;
     private ImageView mImageToUpload3;
@@ -80,7 +79,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                 startGalleryIntent(0);
                 break;
             case R.id.add_pet_upload_two:
-                Log.e("yeet", "yyet");
                 startGalleryIntent(1);
                 break;
             case R.id.add_pet_upload_three:
@@ -263,6 +261,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
             petToAdd.setDateLost(dateLost);
             addPetToFirebase();
+            clearUI();
         }
     }
 
@@ -278,7 +277,32 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mDatabase.push().setValue(petToAdd);
         */
         DatabaseReference specificRef = mDatabase.child("Pets").push();
-        specificRef.setValue("1 yeet");
+        specificRef.setValue(petToAdd);
         Toast.makeText(getContext(), "Pet added", Toast.LENGTH_SHORT).show();
+    }
+
+    /*
+    Clears all the UI from any former data that might have been present, it also resets image selections
+    and the URI array 
+     */
+    private void clearUI(){
+        petToAdd = new Pet();
+        Log.e("Pet test", "->"+ petToAdd.getName());
+        mPetNameEditText.setText("");
+        mPetDescriptionEditText.setText("");
+        mPetZipEditText.setText("");
+        for(int x = 0; x< imageUriArray.length; x++){
+            imageUriArray[x] = null;
+        }
+        mImageToUpload.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
+        mImageCancel.setVisibility(View.GONE);
+        mImageToUpload2.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
+        mImageCancelTwo.setVisibility(View.GONE);
+        mImageToUpload3.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
+        mImageCancelThree.setVisibility(View.GONE);
+        dateLost = null;
+        mSpinnerList.remove(2);
+        mDateSpinner.setSelection(0);
+        
     }
 }

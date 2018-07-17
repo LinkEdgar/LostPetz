@@ -35,7 +35,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         return rootView
     }
 
-    fun initCardSwipe(rootView: View){
+    private fun initCardSwipe(rootView: View){
         cardSwipe = rootView.swipe_deck
         matchAdapter = MatchAdapter(dataSet!!,context!!, this)
         cardSwipe?.setAdapter(matchAdapter)
@@ -75,7 +75,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         //TODO call firebase to set bookmark and maybe toast that it's complet
     }
 
-    fun loadCards(){
+    private fun loadCards(){
         val zipCode = "12345"
         //TODO investigate best way to calculate distance
         //geo fencing might be the best choice as far as I can tell

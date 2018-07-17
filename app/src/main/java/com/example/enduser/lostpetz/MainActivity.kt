@@ -18,7 +18,7 @@ open class MainActivity: AppCompatActivity(){
     /*
     This method sets up the tab layout, viewpager, and pager adapter
      */
-    fun initFragments(){
+    private fun initFragments(){
         val mPagerAdapter = MainActivityPager(supportFragmentManager)
         main_activity_viewpager.adapter = mPagerAdapter
         main_activity_tablayout.setupWithViewPager(main_activity_viewpager)

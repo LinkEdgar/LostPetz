@@ -12,22 +12,24 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustNothing">
+        </activity>
+        <activity android:name=".MessagingActivity" />
+
+        <!-- TODO delete these activity tags-->
+        <activity
+            android:name=".PetQueryActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".PetSearchDetailActivity" />
+        <activity
+            android:name=".AddPetActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity android:name=".SignInActivty">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".MessagingActivity" />
-        <activity
-            android:name=".PetQueryActivity"
-            android:launchMode="singleTop"></activity>
-        <activity android:name=".PetSearchDetailActivity"></activity>
-
-        <activity
-            android:windowSoftInputMode="adjustNothing"
-            android:name=".AddPetActivity"></activity>
     </application>
 
 </manifest>

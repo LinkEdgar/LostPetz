@@ -15,14 +15,14 @@ class PetSearchDetailActivity : AppCompatActivity() {
         setPetData()
     }
 
-    fun handleIntentData(){
+    private fun handleIntentData(){
         pet = intent.getParcelableExtra("pet")
     }
 
     /*
     Sets views data based on passed in pet object
      */
-    fun setPetData(){
+    private fun setPetData(){
         search_detail_description_textview.setText(pet?.description)
         search_detail_name_textview.setText(pet?.name)
     }

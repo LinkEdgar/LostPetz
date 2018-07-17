@@ -19,7 +19,7 @@ open class InboxAdapter(val data: ArrayList<Message>, val context: Context?, val
         holder.profilePictureIv?.setImageResource(R.mipmap.ic_launcher_round)
         holder.senderNameTv?.setText("Name goes here")
         holder.lastMessageTv?.setText("Last message goes here ")
-        holder.view?.setOnClickListener({onClick.onClick(position)})
+        holder.view?.setOnClickListener{onClick.onClick(position)}
     }
 
     override fun getItemCount(): Int {

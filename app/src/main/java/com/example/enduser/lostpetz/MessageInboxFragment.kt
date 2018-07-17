@@ -29,7 +29,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked{
         return rootView
     }
 
-    fun initRecyclerView(rootView: View){
+    private fun initRecyclerView(rootView: View){
         mRecylerview = rootView.message_inbox_fragment_recyclerview
         val layoutManager = LinearLayoutManager(context)
         mRecylerview!!.layoutManager = layoutManager

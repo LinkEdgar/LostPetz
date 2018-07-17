@@ -49,4 +49,12 @@
     <string name="reset_password_dialog_title">Reset Password</string>
     <string name="reset_password_success">Password reset email sent</string>
     <string name="reset_password_fail"> Failed to send reset password email</string>
+    <string name="non_null_email">Email cannot be empty</string>
+    <!-- Register-->
+    <string name="confirm_password_hint">Confirm password</string>
+    <string name="register_button_label">Register</string>
+    <string name="register_success">Successfully registered your account</string>
+    <string name="register_fail"> Unfortunately we could not register your account</string>
+    <string name="password_match_fail">Your passwords did not match or did not meet the 7 minimum character count</string>
+
 </resources>

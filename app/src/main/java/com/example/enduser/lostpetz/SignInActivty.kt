@@ -1,5 +1,6 @@
 package com.example.enduser.lostpetz
 
+import android.app.FragmentManager
 import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -13,15 +14,12 @@ import kotlinx.android.synthetic.main.activity_sign_in_activty.*
 import android.widget.LinearLayout
 import android.widget.EditText
 
-
-
-
 class SignInActivty : AppCompatActivity() {
 
-    var mAuth: FirebaseAuth ?= null
-    var mUserName: String ?= null
-    var mPassword: String ?= null
-    var mUser: FirebaseUser ?= null
+    private var mAuth: FirebaseAuth ?= null
+    private var mUserName: String ?= null
+    private var mPassword: String ?= null
+    private var mUser: FirebaseUser ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,20 +45,21 @@ class SignInActivty : AppCompatActivity() {
     private fun signInViaAuth(){
         mUserName = signin_email.text.toString().trim()
         mPassword = signin_password.text.toString()
-        signin_progressbar.visibility = View.VISIBLE
-        signin_button.visibility = View.GONE
-        mAuth?.signInWithEmailAndPassword(mUserName!!,mPassword!!)?.addOnCompleteListener(this){
-            task ->
-            signin_progressbar.visibility = View.GONE
-            signin_button.visibility = View.VISIBLE
-            if(task.isSuccessful){
-                mUser = mAuth?.currentUser
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }else{
-                Toast.makeText(this, R.string.login_fail, Toast.LENGTH_SHORT).show()
+        if(mUserName != null && mUserName!!.isNotEmpty()) {
+            signin_progressbar.visibility = View.VISIBLE
+            signin_button.visibility = View.GONE
+            mAuth?.signInWithEmailAndPassword(mUserName!!, mPassword!!)?.addOnCompleteListener(this) { task ->
+                signin_progressbar.visibility = View.GONE
+                signin_button.visibility = View.VISIBLE
+                if (task.isSuccessful) {
+                    mUser = mAuth?.currentUser
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                } else {
+                    Toast.makeText(this, R.string.login_fail, Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+        } else Toast.makeText(this, R.string.non_null_email, Toast.LENGTH_SHORT).show()
 
     }
 
@@ -83,24 +82,35 @@ class SignInActivty : AppCompatActivity() {
         builder.show()
     }
 
+    /*
+        This method takes a string email address and sends a password reset to it. Verification is done through the firebase
+        SDK. A log message is displayed for its success or failure
+     */
     private fun passwordRecovery(email: String){
-        mAuth?.sendPasswordResetEmail(email)?.addOnCompleteListener(this){
-            task ->
-            if(task.isSuccessful){
-                Log.d("Password Reset:", "Successful")
-                Toast.makeText(this, R.string.reset_password_success, Toast.LENGTH_SHORT).show()
-            }else{
-                Log.d("Password Reset:", "Failed")
-                Toast.makeText(this, R.string.reset_password_fail,Toast.LENGTH_SHORT).show()
+        if(email != null && email.length > 0) {
+            mAuth?.sendPasswordResetEmail(email)?.addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Log.d("Password Reset:", "Successful")
+                    Toast.makeText(this, R.string.reset_password_success, Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.d("Password Reset:", "Failed")
+                    Toast.makeText(this, R.string.reset_password_fail, Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+        }else Toast.makeText(this, R.string.non_null_email, Toast.LENGTH_LONG).show()
     }
 
+    /*
+    This method launches a dialog fragment
+     */
     private fun beginRegister(){
-        //TODO implement decide whether it would be activity or frag
-        Toast.makeText(this, "Register clicked", Toast.LENGTH_SHORT).show()
+        val registerFragment = RegisterDialogFragment()
+        registerFragment.show(supportFragmentManager, "RegisterFrag")
     }
 
+    /*
+    Checks if the user has previously signed in
+     */
     override fun onStart() {
         super.onStart()
         //TODO remove commented code

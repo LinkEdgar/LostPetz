@@ -54,19 +54,17 @@ open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val con
         return view!!
     }
 
-    fun onNextClick(){
+    private fun onNextClick(){
         val toast = Toast.makeText(context, "Next Clicked", Toast.LENGTH_SHORT)
         toast.show()
         onClick!!.nextClicked()
     }
 
-    fun onDetailClick(){
+    private fun onDetailClick(){
         onClick?.prevClicked()
     }
 
-    fun onBookmarkClick(){
+    private fun onBookmarkClick(){
         onClick?.bookmarkClicked()
     }
-
-
 }

@@ -55,6 +55,11 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private Button mSubmitButton;
     private Pet petToAdd;
     private static String PET_BUNDLE_KEY = "pet";
+    private static String IMAGE_COUNTER_KEY = "imageCounter";
+    private static String IMAGE_URI_ONE_KEY = "uri1";
+    private static String IMAGE_URI_TWO_KEY = "uri2";
+    private static String IMAGE_URI_THREE_KEY = "uri3";
+
     private int imageCounter = 0;
 
     //firebase
@@ -71,10 +76,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
     //Pet detail variables
     private String dateLost;
-
-    //TODO bundle datelost
-    //TODO bundle image URI's
-    //TODO bundle imagecounter
 
     @Nullable
     @Override
@@ -199,16 +200,18 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
         if(requestCode == IMAGE_GALLERY_RESULT && resultCode == Activity.RESULT_OK && data != null){
             Uri uri = data.getData();
-            addImageToList(uri,imageSelectorPosition);
+            addImageToList(uri,imageSelectorPosition, false);
         }
     }
 
     /*
     Sets views based on the size of imageUriList. Currently there is only support for a maximum of
-    three images per pet entry into the DB.
+    three images per pet entry into the DB. The third parameter determines whether or not to increase the
+    imageCounter variable based on whether the call is being made from onRestoreInstanceState or not. This
+    ensures that the imageCounter reflects correct amount of images
      */
-    private void addImageToList(Uri uri, int position){
-        imageCounter++;
+    private void addImageToList(Uri uri, int position, boolean isCallFromInstanceState){
+        if(!isCallFromInstanceState)imageCounter++;
         imageUriArray[position] = uri;
         switch(position){
             case 0:
@@ -258,6 +261,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(PET_BUNDLE_KEY, petToAdd);
+        Log.e("onSave", " "+ imageCounter);
+        outState.putInt(IMAGE_COUNTER_KEY, imageCounter);
+        if(imageUriArray[0] != null) outState.putParcelable(IMAGE_URI_ONE_KEY, imageUriArray[0]);
+        if(imageUriArray[1]!= null) outState.putParcelable(IMAGE_URI_TWO_KEY, imageUriArray[1]);
+        if(imageUriArray[2]!= null) outState.putParcelable(IMAGE_URI_THREE_KEY, imageUriArray[2]);
+
     }
 
     @Override
@@ -266,6 +275,21 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         if(savedInstanceState != null) {
             if (savedInstanceState.containsKey(PET_BUNDLE_KEY)) {
                 petToAdd = savedInstanceState.getParcelable(PET_BUNDLE_KEY);
+            }
+            if(savedInstanceState.containsKey(IMAGE_COUNTER_KEY)){
+                Log.e("image bundle", " "+ savedInstanceState.getInt(IMAGE_COUNTER_KEY));
+                imageCounter = savedInstanceState.getInt(IMAGE_COUNTER_KEY, 0);
+                Log.e("imageCounter", ""+ imageCounter);
+            }else Log.e("imageCOunter", "Not in bouble"+ imageCounter);
+
+            if(savedInstanceState.containsKey(IMAGE_URI_ONE_KEY)){
+                addImageToList((Uri)savedInstanceState.getParcelable(IMAGE_URI_ONE_KEY),0,true);
+            }
+            if(savedInstanceState.containsKey(IMAGE_URI_TWO_KEY)){
+                addImageToList((Uri)savedInstanceState.getParcelable(IMAGE_URI_TWO_KEY),1,true);
+            }
+            if(savedInstanceState.containsKey(IMAGE_URI_THREE_KEY)){
+                addImageToList((Uri)savedInstanceState.getParcelable(IMAGE_URI_THREE_KEY),2,true);
             }
         }
     }

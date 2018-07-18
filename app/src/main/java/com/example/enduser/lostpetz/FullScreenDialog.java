@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 public class FullScreenDialog extends DialogFragment{
     //TODO reference UI elements
@@ -32,7 +33,7 @@ public class FullScreenDialog extends DialogFragment{
             }
         });
         mImageView = (ImageView) view.findViewById(R.id.message_full_screen_image);
-        Glide.with(getContext()).load(imageUrl).into(mImageView);
+        Glide.with(getContext()).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher)).load(imageUrl).into(mImageView);
 
 
 

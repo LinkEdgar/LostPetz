@@ -96,9 +96,11 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     This interface creates a full screen dialog of the selected image
      */
     override fun onClicked(position: Int) {
-        val fullScreenDialog = FullScreenDialog()
-        fullScreenDialog.setImageUrl(urlList!![position])
-        fullScreenDialog.show(supportFragmentManager,"fullscreen")
+        if(urlList!!.size >0) {
+            val fullScreenDialog = FullScreenDialog()
+            fullScreenDialog.setImageUrl(urlList!![position])
+            fullScreenDialog.show(supportFragmentManager, "fullscreen")
+        }
     }
 
 }

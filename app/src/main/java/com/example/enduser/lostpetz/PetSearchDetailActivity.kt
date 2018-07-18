@@ -29,7 +29,7 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
         setStaticMap()
         setUpImageSlider()
     }
-
+    
     private fun handleIntentData(){
         pet = intent.getParcelableExtra("pet")
     }
@@ -38,16 +38,22 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     Sets views data based on passed in pet object
      */
     private fun setPetData(){
-        //Glide.with(this).load(pet!!.profileUrl).into(search_detail_imageview)
         search_detail_description_textview.setText(pet?.description)
         search_detail_name_textview.setText(pet?.name)
     }
 
+    /*
+    sets static map via glide
+     */
     private fun setStaticMap(){
         val staticMapUrl = GOOGLE_STATIC_MAP_BASE_URL + "center=" + Latitude + "," + Longitude + GOOGLE_STATIC_MAP_ZOOM + "&size=600x300&maptype=rpadmap&key=" + GOOGLE_API_KEY
         Glide.with(this).applyDefaultRequestOptions(RequestOptions().centerCrop()).load(staticMapUrl).into(search_detail_static_map)
     }
 
+    /*
+    Using the zip code the user has provided for us we extract coordinates to display a static map image of the general area
+    where the pet was lost. We also populate a view based on the city extracted from the zip code
+     */
     private fun getStaticMapParameters() {
         val geoCoder = Geocoder(this)
         try {
@@ -64,6 +70,13 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
         }
     }
 
+    /*
+    This methods gets a count of how many pictures if any the pet has and adds them to
+    the urlList array if they are not null.
+    An ImageSlider() adapter is created with the list of urls for the pet images
+    A circular indicator is attached to our viewpager
+     */
+
     private fun setUpImageSlider(){
         if(pet!!.profileUrl != null && !pet!!.profileUrl.equals("null")){
             urlList!!.add(pet!!.profileUrl)
@@ -79,6 +92,9 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
         search_detail_indicator.setViewPager(search_detail_viewpager)
     }
 
+    /*
+    This interface creates a full screen dialog of the selected image
+     */
     override fun onClicked(position: Int) {
         val fullScreenDialog = FullScreenDialog()
         fullScreenDialog.setImageUrl(urlList!![position])

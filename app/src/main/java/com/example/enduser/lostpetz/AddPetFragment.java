@@ -82,6 +82,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         View rootView = inflater.inflate(R.layout.activity_add_pet, container, false);
         //firebase storage
         mStorage = FirebaseStorage.getInstance();
+        initiateDateLost();
         initUI(rootView);
         return rootView;
     }
@@ -159,16 +160,14 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             chooseDateDialogFragment = new ChooseDateDialogFragment();
             chooseDateDialogFragment.setOnClicked(this);
             chooseDateDialogFragment.show(getActivity().getFragmentManager(), "chooseDate");
-        } else{
-            Date date = new Date(System.currentTimeMillis());
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
-            dateLost = formatter.format(date);
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+        dateLost = formatter.format(date);
     }
     /*
     This method is called when the user clicks done in the ChooseDateDialogFragment.
@@ -310,7 +309,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private boolean checkNullRequirements(){
-
+        //TODO figure out which values can and cannot be null
         return true;
     }
 
@@ -442,5 +441,11 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                 petToAdd.setProfileUrlThree(url);
                 break;
         }
+    }
+    //Sets the pet's lost date to today's date by default
+    private void initiateDateLost(){
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
+        dateLost = formatter.format(date);
     }
 }

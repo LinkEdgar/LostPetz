@@ -5,12 +5,11 @@ import android.os.Bundle
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pet_search_detail.*
 import android.location.Geocoder
-import android.util.Log
 import com.bumptech.glide.request.RequestOptions
 import java.io.IOException
 
 
-class PetSearchDetailActivity : AppCompatActivity() {
+class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
 
     var pet: Pet ?= null
     private val GOOGLE_STATIC_MAP_BASE_URL = "https://maps.googleapis.com/maps/api/staticmap?"
@@ -75,8 +74,15 @@ class PetSearchDetailActivity : AppCompatActivity() {
         if(pet!!.profileUrlThree != null && !pet!!.profileUrlThree.equals("null")){
             urlList!!.add(pet!!.profileUrlThree)
         }
-        val adapter = ImageSlider(this, urlList!!)
+        val adapter = ImageSlider(this, urlList!!, this)
         search_detail_viewpager.adapter = adapter
         search_detail_indicator.setViewPager(search_detail_viewpager)
     }
+
+    override fun onClicked(position: Int) {
+        val fullScreenDialog = FullScreenDialog()
+        fullScreenDialog.setImageUrl(urlList!![position])
+        fullScreenDialog.show(supportFragmentManager,"fullscreen")
+    }
+
 }

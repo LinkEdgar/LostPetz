@@ -34,10 +34,11 @@
     <string name="date_picker_cancel">Cancel</string>
     <string name="date_picker_select_image_label">Select Images</string>
     <string name="date_picker_done">Done</string>
-    <string name="pet_name_label">Name</string>
-    <string name="pet_zip_label">Zip</string>
+    <string name="pet_name_label">Name (Required)</string>
+    <string name="pet_zip_label">Zip (Required)</string>
     <string name="pet_description_label">Description</string>
     <string name="pet_added_success">Pet added to the database</string>
+    <string name="required_fields_fail">Please add a name and or a valid zip code</string>
 
     <!--SignIn -->
     <string name="email_hint_label">Email</string>

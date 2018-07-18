@@ -70,7 +70,7 @@ public class ChooseDateDialogFragment extends DialogFragment implements View.OnC
                 .append(mDatePicker.getDayOfMonth())
                 .append("/")
                 .append(mDatePicker.getYear());
-        Log.e("Date string ", stringBuilder.toString());
+        Log.d("Date string ", stringBuilder.toString());
         return stringBuilder.toString();
     }
 

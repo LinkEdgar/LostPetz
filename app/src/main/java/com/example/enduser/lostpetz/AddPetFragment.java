@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -62,7 +63,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     //firebase
     private DatabaseReference mDatabase;
     private FirebaseStorage mStorage;
-
+    private FirebaseAuth mAuth;
 
     private Uri[] imageUriArray; //used to hold the Uri's that will be uploaded
     private static int DEFAULT_IMAGE_SELECT_RESOURCE = R.mipmap.ic_launcher_round;
@@ -82,6 +83,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         View rootView = inflater.inflate(R.layout.activity_add_pet, container, false);
         //firebase storage
         mStorage = FirebaseStorage.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         initiateDateLost();
         initUI(rootView);
         return rootView;
@@ -298,6 +300,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     //Name and breed will be in added in lower case for search
     private void submitPet(){
         if(checkNullRequirements()){
+            //the user id to associate this pet with the poster of the pet
+            petToAdd.setUserID(mAuth.getUid());
             petToAdd.setName(mPetNameEditText.getText().toString().toLowerCase().trim());
             petToAdd.setZip(mPetZipEditText.getText().toString().trim());
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
@@ -305,12 +309,18 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             //Checks if there are pictures to upload to the DB before adding
             //the pet
             initiatePictureUpload();
-        }
+        }else Toast.makeText(getContext(), R.string.required_fields_fail, Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkNullRequirements(){
         //TODO figure out which values can and cannot be null
-        return true;
+        //zip can't be null
+        //name can't be null
+        String name = mPetNameEditText.getText().toString();
+        String zip = mPetZipEditText.getText().toString();
+        if(zip.length() == 5 && name.length() >0){
+            return true;
+        }else return false;
     }
 
     private void addPetToFirebase(){

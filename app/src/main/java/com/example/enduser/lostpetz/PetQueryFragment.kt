@@ -141,11 +141,13 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 val profilePicture = x.child("profileUrl").getValue().toString()
                 val url2 = x.child("profileUrlTwo").getValue().toString()
                 val url3 = x.child("profileUrlThree").getValue().toString()
+                val userId = x.child("userID").getValue().toString()
                 val pet = Pet()
                 /*
                 Since breed and name are used to filter they are entered into the DB in lowercase forms
                 so we are converting them back to a more user friendly mode
                  */
+                pet.userID = userId
                 pet.name = name?.substring(0,1).toUpperCase() + name?.substring(1, name.length)
                 pet.breed = breed?.substring(0,1).toUpperCase() + breed?.substring(1, breed.length)
                 pet.zip = zip
@@ -210,7 +212,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 so the user can clearly see the list
                  */
                 if (!isDoubleSubmit && s.length > 0) {
-                    Log.e("string query", "--> $s")
                     submitSearchQuery(s, false)
                     isDoubleSubmit = true
                     mCardView!!.visibility = View.GONE

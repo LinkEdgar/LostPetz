@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PetSearchDetailActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/search_detail_image_viewpager"
+    <ImageView
+        android:id="@+id/search_detail_imageview"
         android:layout_width="match_parent"
         android:layout_height="275dp"/>
 
     <TextView
+        android:textSize="@dimen/heading_text_size"
+        android:textStyle="bold"
         android:layout_marginTop="@dimen/vertical_margin"
         android:layout_marginLeft="@dimen/horizontal_margin_large"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/search_detail_image_viewpager"
+        android:layout_below="@+id/search_detail_imageview"
         tools:text="Name"
         android:id="@+id/search_detail_name_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
+        android:textSize="@dimen/default_text_size"
         android:text="@string/description_label"
         android:layout_marginTop="@dimen/vertical_margin"
         android:textStyle="bold"
@@ -41,12 +43,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ImageView
+    <TextView
+        android:textStyle="bold"
         android:layout_marginTop="@dimen/vertical_margin"
+        tools:text="City goes here"
+        android:layout_marginLeft="@dimen/vertical_margin_large"
+        android:layout_below="@+id/search_detail_description_textview"
+        android:id="@+id/search_detail_city_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/search_detail_static_map"
+        android:layout_marginTop="@dimen/vertical_margin_large"
         android:src="@mipmap/ic_launcher"
-        android:layout_below="@id/search_detail_description_textview"
+        android:layout_below="@id/search_detail_city_textview"
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="175dp" />
 
     <Button
         android:elevation="4dp"

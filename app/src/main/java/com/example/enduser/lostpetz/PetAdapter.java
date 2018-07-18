@@ -50,7 +50,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
             }
         });
         if(pet.getProfileUrl() != null) {
-            Glide.with(holder.profilePicture).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher_round).centerCrop()).load(pet.getProfileUrl()).into(holder.profilePicture);
+            Glide.with(holder.profilePicture).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher_round).circleCrop()).load(pet.getProfileUrl()).into(holder.profilePicture);
         }
 
         if(pet.getIsFoundPet()) {

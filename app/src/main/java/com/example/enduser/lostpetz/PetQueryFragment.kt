@@ -60,6 +60,13 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
     private var mPetKeyHashset: HashSet<String>? = null
 
+    //user search query
+    private var searchQuery: String ?= null
+
+    private var listener: ValueEventListener ?= null
+
+    private var searchQueryLimit: Int ? = 12
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.activity_pet_query, container, false)
         //firebase instances
@@ -72,13 +79,16 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
     /*
     Takes a query from the user to query it against the realtime database. The old query is
-    erased and views are changed accordingly
+    erased and views are changed accordingly. is Refresh scroll determines whether or not the user has
+    finished scrolling to the end of the list and it needs to refresh
     */
-    private fun submitSearchQuery(string: String) {
-        mPetArrrayList!!.clear()
-        mPetKeyHashset!!.clear()
-        mPetAdapter!!.notifyDataSetChanged()
-        val query = string.toLowerCase().trim { it <= ' ' }
+    private fun submitSearchQuery(string: String,isRefreshScroll: Boolean) {
+        if(!isRefreshScroll) {
+            mPetArrrayList!!.clear()
+            mPetKeyHashset!!.clear()
+            mPetAdapter!!.notifyDataSetChanged()
+        }
+        searchQuery = string.toLowerCase().trim()
         mNoPetsProgressBar!!.visibility = View.VISIBLE
         mRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -89,7 +99,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
             }
         })
-        val listener= object : ValueEventListener{
+        listener= object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {
             }
 
@@ -99,14 +109,13 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
 
         }
-        mRef!!.orderByChild(searchFilterType).startAt(query).endAt(query).addListenerForSingleValueEvent(listener)
+        mRef!!.limitToFirst(searchQueryLimit!!).orderByChild(searchFilterType).startAt(searchQuery).endAt(searchQuery).addListenerForSingleValueEvent(listener)
     }
 
     /*
     This is the onClick interface from the PetAdapter to allow onClick handling
      */
     override fun onClick(position: Int) {
-        //TODO fill with actual logic and remove toast
         Toast.makeText(context, "clicked on item $position", Toast.LENGTH_SHORT).show()
         val intent = Intent(activity,PetSearchDetailActivity::class.java)
         intent?.putExtra("pet", mPetArrrayList?.get(position))
@@ -128,6 +137,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 val zip = x.child("zip").getValue().toString()
                 val breed = x.child("breed").getValue().toString()
                 val description = x.child("description").getValue().toString()
+                val datelost = x.child("dateLost").getValue().toString()
+                val profilePicture = x.child("profileUrl").getValue().toString()
                 val pet = Pet()
                 /*
                 Since breed and name are used to filter they are entered into the DB in lowercase forms
@@ -137,6 +148,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 pet.breed = breed?.substring(0,1).toUpperCase() + breed?.substring(1, breed.length)
                 pet.zip = zip
                 pet.description = description
+                pet.dateLost = datelost
+                pet.profileUrl = profilePicture
                 mPetArrrayList!!.add(pet)
                 mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
             }
@@ -146,7 +159,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     /*
     This method sets the filter type when the user chooses a filter
      */
-    fun chooseFilterType(view: View) {
+    private fun chooseFilterType(view: View) {
         val viewId = view.id
         when (viewId) {
             R.id.pet_query_name_filter -> {
@@ -193,7 +206,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 so the user can clearly see the list
                  */
                 if (!isDoubleSubmit && s.length > 0) {
-                    submitSearchQuery(s)
+                    Log.e("string query", "--> $s")
+                    submitSearchQuery(s, false)
                     isDoubleSubmit = true
                     mCardView!!.visibility = View.GONE
                 }
@@ -216,6 +230,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         mPetAdapter = PetAdapter(mPetArrrayList)
         mPetAdapter!!.setOnViewClicked(this)
         mRecyclerView!!.adapter = mPetAdapter
+        setOnScrollListener()
     }
 
     /*
@@ -234,6 +249,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(PET_ARRAY_KEY, mPetArrrayList)
+        outState.putString(PET_SEARCH_QUERY_KEY, searchQuery)
+        outState.putInt(PET_SEARCH_QUERY_LIMIT_KEY, searchQueryLimit!!)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -248,11 +265,34 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 mPetAdapter!!.setOnViewClicked(this)
                 mRecyclerView!!.adapter = mPetAdapter
             }
+            if(savedInstanceState.containsKey(PET_SEARCH_QUERY_KEY)){
+                searchQuery = savedInstanceState.getString(PET_SEARCH_QUERY_KEY)
+            }
+            if(savedInstanceState.containsKey(PET_SEARCH_QUERY_LIMIT_KEY)){
+                searchQueryLimit = savedInstanceState.getInt(PET_SEARCH_QUERY_LIMIT_KEY)
+            }
 
         }
     }
 
+    /*
+    Adds a scroll listener to the recycler view in order to detect when the user has reached the end of the list
+     */
+    private fun setOnScrollListener(){
+        mRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(!recyclerView!!.canScrollVertically(1)){
+                    searchQueryLimit = searchQueryLimit!!.plus(12!!)
+                    submitSearchQuery(searchQuery!!, true)
+                }
+            }
+        })
+    }
+
     companion object {
+        val PET_SEARCH_QUERY_LIMIT_KEY = "limit"
+        val PET_SEARCH_QUERY_KEY = "query"
         val PET_ARRAY_KEY = "arrayList"
         val SEARCH_FILTER_NAME = "name"
         val SEARCH_FILTER_ZIP = "zip"

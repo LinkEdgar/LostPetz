@@ -74,6 +74,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     //Pet detail variables
     private String dateLost;
 
+    //TODO add breed for pet
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -294,9 +296,10 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
     //This method gets the information the user entered from the UI and add it to our instance of
     // a pet class 'petToAdd.' Then calls intiatePictureUpload() to handle the rest
+    //Name and breed will be in added in lower case for search
     private void submitPet(){
         if(checkNullRequirements()){
-            petToAdd.setName(mPetNameEditText.getText().toString().trim());
+            petToAdd.setName(mPetNameEditText.getText().toString().toLowerCase().trim());
             petToAdd.setZip(mPetZipEditText.getText().toString().trim());
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
             petToAdd.setDateLost(dateLost);

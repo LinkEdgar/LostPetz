@@ -18,17 +18,17 @@ class PetSearchDetailActivity : AppCompatActivity() {
     private val GOOGLE_STATIC_MAP_ZOOM = "&zoom=12"
     private var Latitude: Double? = null
     private var Longitude: Double ?= null
-
-
+    private var urlList: ArrayList<String> ?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_search_detail)
-
+        urlList = ArrayList()
         handleIntentData()
         setPetData()
-        getStaticMapParamaters()
+        getStaticMapParameters()
         setStaticMap()
+        setUpImageSlider()
     }
 
     private fun handleIntentData(){
@@ -39,7 +39,7 @@ class PetSearchDetailActivity : AppCompatActivity() {
     Sets views data based on passed in pet object
      */
     private fun setPetData(){
-        Glide.with(this).load(pet!!.profileUrl).into(search_detail_imageview)
+        //Glide.with(this).load(pet!!.profileUrl).into(search_detail_imageview)
         search_detail_description_textview.setText(pet?.description)
         search_detail_name_textview.setText(pet?.name)
     }
@@ -48,22 +48,35 @@ class PetSearchDetailActivity : AppCompatActivity() {
         val staticMapUrl = GOOGLE_STATIC_MAP_BASE_URL + "center=" + Latitude + "," + Longitude + GOOGLE_STATIC_MAP_ZOOM + "&size=600x300&maptype=rpadmap&key=" + GOOGLE_API_KEY
         Glide.with(this).applyDefaultRequestOptions(RequestOptions().centerCrop()).load(staticMapUrl).into(search_detail_static_map)
     }
-    
-    private fun getStaticMapParamaters() {
-        val geocoder = Geocoder(this)
+
+    private fun getStaticMapParameters() {
+        val geoCoder = Geocoder(this)
         try {
-            val addresses = geocoder.getFromLocationName(pet!!.zip, 1)
+            val addresses = geoCoder.getFromLocationName(pet!!.zip, 1)
             if (addresses != null && !addresses.isEmpty()) {
                 val address = addresses[0]
                 Latitude = address.latitude
                 Longitude = address.longitude
                 val city = address.locality
-                Log.e("City ", "--> $city")
                 search_detail_city_textview.text = city
             }
         } catch (e: IOException) {
             e.printStackTrace()
         }
+    }
 
+    private fun setUpImageSlider(){
+        if(pet!!.profileUrl != null && !pet!!.profileUrl.equals("null")){
+            urlList!!.add(pet!!.profileUrl)
+        }
+        if(pet!!.profileUrlTwo != null && !pet!!.profileUrlTwo.equals("null") ){
+            urlList!!.add(pet!!.profileUrlTwo)
+        }
+        if(pet!!.profileUrlThree != null && !pet!!.profileUrlThree.equals("null")){
+            urlList!!.add(pet!!.profileUrlThree)
+        }
+        val adapter = ImageSlider(this, urlList!!)
+        search_detail_viewpager.adapter = adapter
+        search_detail_indicator.setViewPager(search_detail_viewpager)
     }
 }

@@ -116,7 +116,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     This is the onClick interface from the PetAdapter to allow onClick handling
      */
     override fun onClick(position: Int) {
-        Toast.makeText(context, "clicked on item $position", Toast.LENGTH_SHORT).show()
         val intent = Intent(activity,PetSearchDetailActivity::class.java)
         intent?.putExtra("pet", mPetArrrayList?.get(position))
         startActivity(intent)
@@ -131,6 +130,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
         for(x in snapshot.children){ // iterates through each child in the snapshot to extract info
             val key = x.key
+            //TODO add all information for pets
             if(!mPetKeyHashset!!.contains(key)) {
                 mPetKeyHashset!!.add(key)
                 val name = x.child("name").getValue().toString()
@@ -139,6 +139,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 val description = x.child("description").getValue().toString()
                 val datelost = x.child("dateLost").getValue().toString()
                 val profilePicture = x.child("profileUrl").getValue().toString()
+                val url2 = x.child("profileUrlTwo").getValue().toString()
+                val url3 = x.child("profileUrlThree").getValue().toString()
                 val pet = Pet()
                 /*
                 Since breed and name are used to filter they are entered into the DB in lowercase forms
@@ -150,6 +152,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 pet.description = description
                 pet.dateLost = datelost
                 pet.profileUrl = profilePicture
+                pet.profileUrlTwo = url2
+                pet.profileUrlThree = url3
                 mPetArrrayList!!.add(pet)
                 mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
             }

@@ -28,6 +28,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -55,7 +56,8 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private DatabaseReference mRef;
     private ChildEventListener mChildListener;
     private FirebaseStorage mStorage;
-
+    private FirebaseAuth mAuth;
+    private DatabaseReference mChatRef;
     //Test textview to connect with the database
     /* TODO replace testTextView with pet summary layout */
     private TextView testTextView;
@@ -77,6 +79,13 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private MessageAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    /*
+
+     */
+    //message key creation
+    private String posterId;
+    private String currentUserId;
+    private String jointUserChat;
 
     private final int RC_PICK_IMAGE = 3141;
 
@@ -87,17 +96,14 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messaging);
+        handleIntentData();
+        initFirebase();
+        associateChatWithUsers();
         initUi();
 
     }
 
     private void initUi(){
-
-        //get Firebase instance
-        mDatabase = FirebaseDatabase.getInstance();
-        mRef = mDatabase.getReference().child(FirebaseValues.FirebaseDatabaseValues.FIREBASE_MESSAGES_ROOT);
-        mStorage = FirebaseStorage.getInstance();
-
         //View Referencing
         testTextView = findViewById(R.id.test_display_textview);
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
@@ -164,7 +170,31 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         /*
         Not sure --> if it will be efficient to load all of the children as that may be too much for the app
          */
-        mRef.orderByKey().addChildEventListener(mChildListener);
+        mChatRef.orderByKey().addChildEventListener(mChildListener);
+        //mRef.orderByKey().addChildEventListener(mChildListener);
+    }
+
+    private void initFirebase(){
+        //get Firebase instance
+        mDatabase = FirebaseDatabase.getInstance();
+        mRef = mDatabase.getReference().child(FirebaseValues.FirebaseDatabaseValues.FIREBASE_MESSAGES_ROOT);
+        mStorage = FirebaseStorage.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        currentUserId = mAuth.getCurrentUser().getUid().toString();
+        mChatRef = mRef.child(jointUserChat);
+    }
+
+    private void associateChatWithUsers(){
+        //sets chat for the poster
+        DatabaseReference chatRef = mDatabase.getReference("Users").child(posterId).child("chats");
+        DatabaseReference specificRef = chatRef.push();
+        specificRef.setValue(jointUserChat);
+        //sets chat for current user
+        chatRef = mDatabase.getReference("Users").child(currentUserId).child("chats");
+        specificRef = chatRef.push();
+        specificRef.setValue(jointUserChat);
+
+
     }
 
     /*
@@ -178,7 +208,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
             String textToSend = mUserTextInput.getText().toString().trim();
             if (textToSend.length() > 0) {
                 Message messageToSend = new Message("Anonymous", textToSend, null, null);
-                mRef.push().setValue(messageToSend);
+                mChatRef.push().setValue(messageToSend);
                 mUserTextInput.setText("");
                 mRecylerView.smoothScrollToPosition(mMessageArray.size());
 
@@ -244,7 +274,8 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onPause() {
         super.onPause();
-        mRef.removeEventListener(mChildListener);
+        //mRef.removeEventListener(mChildListener);
+        mChatRef.removeEventListener(mChildListener);
     }
 
 
@@ -255,7 +286,8 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onResume() {
         super.onResume();
-        mRef.addChildEventListener(mChildListener);
+        //mRef.addChildEventListener(mChildListener);
+        mChatRef.addChildEventListener(mChildListener);
     }
     /*
     Uploads the user selected image to to storage and returns the string
@@ -298,7 +330,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
                 null,
                 pictureUrl,
                 null);
-        mRef.push().setValue(pictureMessageToSend);
+        mChatRef.push().setValue(pictureMessageToSend);
         mRecylerView.smoothScrollToPosition(mMessageArray.size());
     }
     /*
@@ -312,5 +344,11 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         String url = mMessageArray.get(position).getPhotoUrl();
         dialogFragment.setImageUrl(url);
         dialogFragment.show(getSupportFragmentManager(),"Fragment");
+    }
+
+    private void handleIntentData(){
+        //TODO remove hardcode
+        posterId = getIntent().getStringExtra("posterId");
+        jointUserChat = currentUserId+posterId;
     }
 }

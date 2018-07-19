@@ -129,6 +129,7 @@ public class Pet implements Parcelable{
         parcel.writeString(description);
         parcel.writeByte((byte) (foundPet ? 1 : 0));
         parcel.writeString(breed);
+        parcel.writeString(userID);
     }
 
     protected Pet(Parcel in) {
@@ -141,6 +142,7 @@ public class Pet implements Parcelable{
         description = in.readString();
         foundPet = in.readByte() != 0;
         breed = in.readString();
+        userID = in.readString();
     }
 
     public static final Creator<Pet> CREATOR = new Creator<Pet>() {

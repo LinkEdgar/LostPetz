@@ -76,7 +76,7 @@
                     android:inputType="textMultiLine|textCapSentences"
                     android:id="@+id/messenger_user_input_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="50dp" />
             </RelativeLayout>
         </FrameLayout>
 

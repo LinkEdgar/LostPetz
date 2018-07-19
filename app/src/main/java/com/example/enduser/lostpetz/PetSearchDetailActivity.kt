@@ -1,11 +1,14 @@
 package com.example.enduser.lostpetz
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pet_search_detail.*
 import android.location.Geocoder
+import android.util.Log
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
 
 
@@ -18,6 +21,7 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     private var Latitude: Double? = null
     private var Longitude: Double ?= null
     private var urlList: ArrayList<String> ?= null
+    private val POSTER_ID_KEY = "posterId"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +32,8 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
         getStaticMapParameters()
         setStaticMap()
         setUpImageSlider()
+
+        search_detail_lost_button.setOnClickListener{yeet()}
     }
     
     private fun handleIntentData(){
@@ -101,6 +107,12 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
             fullScreenDialog.setImageUrl(urlList!![position])
             fullScreenDialog.show(supportFragmentManager, "fullscreen")
         }
+    }
+
+    private fun yeet(){
+        val switchToMessageIntent = Intent(this, MessagingActivity::class.java)
+        switchToMessageIntent.putExtra(POSTER_ID_KEY, pet!!.userID)
+        startActivity(switchToMessageIntent)
     }
 
 }

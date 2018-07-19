@@ -147,7 +147,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 Since breed and name are used to filter they are entered into the DB in lowercase forms
                 so we are converting them back to a more user friendly mode
                  */
-                pet.userID = userId
                 pet.name = name?.substring(0,1).toUpperCase() + name?.substring(1, name.length)
                 pet.breed = breed?.substring(0,1).toUpperCase() + breed?.substring(1, breed.length)
                 pet.zip = zip
@@ -156,6 +155,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 pet.profileUrl = profilePicture
                 pet.profileUrlTwo = url2
                 pet.profileUrlThree = url3
+                pet.userID = userId
                 mPetArrrayList!!.add(pet)
                 mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
             }

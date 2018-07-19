@@ -1,5 +1,6 @@
 package com.example.enduser.lostpetz
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -18,11 +19,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 
 class SignInActivty : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth ?= null
+    private var mDatabaseRef: DatabaseReference ?= null
     private var mUserName: String ?= null
     private var mPassword: String ?= null
     private var mUser: FirebaseUser ?= null
@@ -65,6 +69,7 @@ class SignInActivty : AppCompatActivity() {
                 signin_button.visibility = View.VISIBLE
                 if (task.isSuccessful) {
                     mUser = mAuth?.currentUser
+                    addUserToDB()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
@@ -164,14 +169,34 @@ class SignInActivty : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.e("AuthWithGoogle", "signInWithCredential:success")
-                        val user = mAuth!!.getCurrentUser() as FirebaseUser
+                        Log.d("AuthWithGoogle", "signInWithCredential:success")
+                        mUser = mAuth!!.getCurrentUser() as FirebaseUser
                         startActivity(Intent(this, MainActivity::class.java))
+                        addUserToDB()
+                        finish()
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.e("AuthWithGoogle", "signInWithCredential:failure", task.exception)
-                        Toast.makeText(this, R.string.googel_signin_fail, Toast.LENGTH_SHORT).show()
+                        Log.d("AuthWithGoogle", "signInWithCredential:failure", task.exception)
+                        Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_SHORT).show()
                     }
                 }
+    }
+
+    private fun addUserToDB(){
+        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        val key = getString(R.string.user_name_shared_pref)
+            if(!(sharedPref.getString(key, "null").equals(mUser!!.uid))) {
+                with(sharedPref.edit()) {
+                    putString(getString(R.string.user_name_shared_pref), mUser?.uid)
+                    commit()
+                }
+                mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users")
+
+                val userRef = mDatabaseRef!!.child(mUser!!.uid)
+                userRef.child("email").setValue(mUser!!.email)
+                if(mUser!!.displayName != null) {
+                    userRef.child("name").setValue(mUser!!.displayName)
+                }
+            }
     }
 }

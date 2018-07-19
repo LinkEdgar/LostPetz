@@ -69,6 +69,7 @@
         android:layout_height="175dp" />
 
     <Button
+        android:text="@string/lost_pet_button"
         android:layout_marginBottom="@dimen/vertical_margin_large"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"

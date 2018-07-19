@@ -296,7 +296,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     //This method gets the information the user entered from the UI and add it to our instance of
-    // a pet class 'petToAdd.' Then calls intiatePictureUpload() to handle the rest
+    // a pet class 'petToAdd.' Then calls initiatePictureUpload() to handle the rest
     //Name and breed will be in added in lower case for search
     private void submitPet(){
         if(checkNullRequirements()){
@@ -323,6 +323,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         }else return false;
     }
 
+    //Add pet to real-time database
     private void addPetToFirebase(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference specificRef = mDatabase.child("Pets").push();

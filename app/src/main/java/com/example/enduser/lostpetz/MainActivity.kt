@@ -23,6 +23,11 @@ open class MainActivity: AppCompatActivity(){
         val mPagerAdapter = MainActivityPager(supportFragmentManager)
         main_activity_viewpager.adapter = mPagerAdapter
         main_activity_tablayout.setupWithViewPager(main_activity_viewpager)
+        main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_heart)
+        main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_search)
+        main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_add)
+        main_activity_tablayout.getTabAt(3)!!.setIcon(R.drawable.ic_message)
+
     }
 
     /*

@@ -22,12 +22,13 @@
 
     <!-- PetSearchDetail-->
     <string name="description_label">Description</string>
+    <string name="lost_pet_button">Lost/Found</string>
+
+    <!-- AddPets Strings -->
     <string-array name="date_array">
         <item>Today</item>
         <item>Set Date</item>
     </string-array>
-
-    <!-- AddPets Strings -->
     <string name="submit_button_label">Submit</string>
     <string name="select_images_label">Select Images</string>
     <string name="date_label">Date</string>
@@ -52,7 +53,8 @@
     <string name="reset_password_success">Password reset email sent</string>
     <string name="reset_password_fail"> Failed to send reset password email</string>
     <string name="non_null_email">Email cannot be empty</string>
-    <string name="googel_signin_fail"> Failed to login with google</string>
+    <string name="google_signin_fail"> Failed to login with google</string>
+    <string name="user_name_shared_pref"></string>
     <!-- Register-->
     <string name="confirm_password_hint">Confirm password</string>
     <string name="register_button_label">Register</string>

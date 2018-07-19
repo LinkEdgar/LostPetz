@@ -35,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class AddPetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked{
     private Spinner mDateSpinner;
@@ -375,7 +376,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                 //Case 2
                 if(counter == imageCounter) {
 
-                    UploadTask uploadTask = mStorage.getReference("petImages/"+ imageUriArray[x].getLastPathSegment()).putFile(imageUriArray[x]);
+                    UploadTask uploadTask = mStorage.getReference("petImages/"+ UUID.randomUUID().toString()).putFile(imageUriArray[x]);
                     final int finalCounter = counter;
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override

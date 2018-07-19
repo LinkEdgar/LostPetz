@@ -68,5 +68,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/signin_google"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
 
 </LinearLayout>

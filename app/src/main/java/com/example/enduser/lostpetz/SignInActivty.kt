@@ -1,6 +1,5 @@
 package com.example.enduser.lostpetz
 
-import android.app.FragmentManager
 import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -13,9 +12,13 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_in_activty.*
 import android.widget.LinearLayout
 import android.widget.EditText
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.common.api.ApiException
 
-//TODO add google sign in
-//TODO add facebook sign in
 
 class SignInActivty : AppCompatActivity() {
 
@@ -23,10 +26,15 @@ class SignInActivty : AppCompatActivity() {
     private var mUserName: String ?= null
     private var mPassword: String ?= null
     private var mUser: FirebaseUser ?= null
+    private var mGoogleSignInClient: GoogleSignInClient ?= null
+    val RC_SIGN_IN = 3141
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in_activty)
+
+        enableGoogleSignIn()
+
         //initiates firebase auth
         mAuth = FirebaseAuth.getInstance()
         mUser = mAuth?.currentUser
@@ -38,6 +46,7 @@ class SignInActivty : AppCompatActivity() {
         signin_button.setOnClickListener{signInViaAuth()}
         signin_forgot_password.setOnClickListener{recoverPassword()}
         signin_register.setOnClickListener{beginRegister()}
+        signin_google.setOnClickListener{googleSignIn()}
     }
 
     /*
@@ -117,7 +126,52 @@ class SignInActivty : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         //TODO remove commented code
-        if(mUser != null)
-            startActivity(Intent(this, MainActivity::class.java))
+        //if(mUser != null)
+            //startActivity(Intent(this, MainActivity::class.java))
+    }
+
+    private fun googleSignIn(){
+        val signInIntent = mGoogleSignInClient!!.getSignInIntent()
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+    private fun enableGoogleSignIn(){
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == RC_SIGN_IN){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account)
+            } catch (e: ApiException) {
+                Log.w("onActivityResult", "Google sign in falied", e)
+            }
+
+
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount){
+        val credential = GoogleAuthProvider.getCredential(account.getIdToken(), null)
+        mAuth!!.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.e("AuthWithGoogle", "signInWithCredential:success")
+                        val user = mAuth!!.getCurrentUser() as FirebaseUser
+                        startActivity(Intent(this, MainActivity::class.java))
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.e("AuthWithGoogle", "signInWithCredential:failure", task.exception)
+                        Toast.makeText(this, R.string.googel_signin_fail, Toast.LENGTH_SHORT).show()
+                    }
+                }
     }
 }

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">LostPetz</string>
     <!-- Messaging Activity Resources -->
+
+    <string name="no_messages_label">No Messages</string>
     <string name="image_upload_failed">Failed to upload image</string>
     <!-- Message console string values  -->
     <string name="send_message_hint">Type your message </string>
@@ -61,5 +63,8 @@
     <string name="register_success">Successfully registered your account</string>
     <string name="register_fail"> Unfortunately we could not register your account</string>
     <string name="password_match_fail">Your passwords did not match or did not meet the 7 minimum character count</string>
+
+    <!-- PetSearchDetail-->
+    <string name="poster_error">You are the poster of this pet</string>
 
 </resources>

@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pet_search_detail.*
 import android.location.Geocoder
-import android.util.Log
+import android.widget.Toast
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
@@ -23,9 +23,12 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     private var urlList: ArrayList<String> ?= null
     private val POSTER_ID_KEY = "posterId"
 
+    private var mAuth: FirebaseAuth ?= null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_search_detail)
+        mAuth = FirebaseAuth.getInstance()
         urlList = ArrayList()
         handleIntentData()
         setPetData()
@@ -33,7 +36,7 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
         setStaticMap()
         setUpImageSlider()
 
-        search_detail_lost_button.setOnClickListener{yeet()}
+        search_detail_lost_button.setOnClickListener{lostFoundButton()}
     }
     
     private fun handleIntentData(){
@@ -109,10 +112,16 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
         }
     }
 
-    private fun yeet(){
-        val switchToMessageIntent = Intent(this, MessagingActivity::class.java)
-        switchToMessageIntent.putExtra(POSTER_ID_KEY, pet!!.userID)
-        startActivity(switchToMessageIntent)
+    /*
+    This method will switch the user to a messaging activity if they are not the poster of the pet.
+    One cannot chat with themselves about their lost pet
+     */
+    private fun lostFoundButton(){
+        if(mAuth!!.currentUser!!.uid != pet!!.userID ) {
+            val switchToMessageIntent = Intent(this, MessagingActivity::class.java)
+            switchToMessageIntent.putExtra(POSTER_ID_KEY, pet!!.userID)
+            startActivity(switchToMessageIntent)
+        }else Toast.makeText(this, R.string.poster_error, Toast.LENGTH_SHORT).show()
     }
 
 }

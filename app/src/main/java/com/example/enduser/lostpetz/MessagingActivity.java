@@ -55,6 +55,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private ChildEventListener mChildListener;
+    private ValueEventListener mValueListener;
     private FirebaseStorage mStorage;
     private FirebaseAuth mAuth;
     private DatabaseReference mChatRef;
@@ -62,6 +63,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     /* TODO replace testTextView with pet summary layout */
     private TextView testTextView;
     private EditText mUserTextInput;
+    private TextView mNoMessagesTextView;
 
     //hashset used to eliminate double messages
     private HashSet<String> messageHashset;
@@ -86,6 +88,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private String posterId;
     private String currentUserId;
     private String jointUserChat;
+    private String INTENT_GET_POSTER_ID_KEY = "posterId";
 
     private final int RC_PICK_IMAGE = 3141;
 
@@ -98,13 +101,13 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         setContentView(R.layout.activity_messaging);
         handleIntentData();
         initFirebase();
-        associateChatWithUsers();
         initUi();
 
     }
 
     private void initUi(){
         //View Referencing
+        mNoMessagesTextView = findViewById(R.id.messenger_activity_no_messages_tv);
         testTextView = findViewById(R.id.test_display_textview);
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
         mImageToSend = findViewById(R.id.messenger_image_to_send);
@@ -167,11 +170,25 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
             }
         };
 
-        /*
-        Not sure --> if it will be efficient to load all of the children as that may be too much for the app
-         */
-        mChatRef.orderByKey().addChildEventListener(mChildListener);
-        //mRef.orderByKey().addChildEventListener(mChildListener);
+        mValueListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                /*
+                This method check if to see if there are any messages and sets the UI accordingly
+                 */
+                checkIfFirstMessage();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+
+        //Syncs data after childevent listener
+        mChatRef.addListenerForSingleValueEvent(mValueListener);
+
+        mChatRef.limitToLast(1).orderByKey().addChildEventListener(mChildListener);
     }
 
     private void initFirebase(){
@@ -184,6 +201,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mChatRef = mRef.child(jointUserChat);
     }
 
+    //If the user chat is empty a chat value must be set for both users (poster and current user)
     private void associateChatWithUsers(){
         //sets chat for the poster
         DatabaseReference chatRef = mDatabase.getReference("Users").child(posterId).child("chats");
@@ -207,6 +225,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
             //TODO eventually change the null values
             String textToSend = mUserTextInput.getText().toString().trim();
             if (textToSend.length() > 0) {
+                mNoMessagesTextView.setVisibility(View.GONE);
                 Message messageToSend = new Message("Anonymous", textToSend, null, null);
                 mChatRef.push().setValue(messageToSend);
                 mUserTextInput.setText("");
@@ -274,7 +293,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onPause() {
         super.onPause();
-        //mRef.removeEventListener(mChildListener);
         mChatRef.removeEventListener(mChildListener);
     }
 
@@ -286,9 +304,9 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onResume() {
         super.onResume();
-        //mRef.addChildEventListener(mChildListener);
-        mChatRef.addChildEventListener(mChildListener);
+        mChatRef.limitToLast(1).addChildEventListener(mChildListener);
     }
+
     /*
     Uploads the user selected image to to storage and returns the string
     for the download url
@@ -318,11 +336,11 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
             }
         });
     }
+
     /*
     This method take an image url and creates a message object to send to the realtime database.
     It then scrolls the recyclerview to the bottom of the list
      */
-
     private void sendPictureMessage(String pictureUrl){
         //TODO actually populate message with real data
         Message pictureMessageToSend = new Message(
@@ -333,6 +351,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mChatRef.push().setValue(pictureMessageToSend);
         mRecylerView.smoothScrollToPosition(mMessageArray.size());
     }
+
     /*
     This method will display a fullscreen version of the image sent in
     the messenger
@@ -346,9 +365,22 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         dialogFragment.show(getSupportFragmentManager(),"Fragment");
     }
 
+    /*
+    Gets the poster's uId in order to create a unique chat
+     */
     private void handleIntentData(){
-        //TODO remove hardcode
-        posterId = getIntent().getStringExtra("posterId");
+        posterId = getIntent().getStringExtra(INTENT_GET_POSTER_ID_KEY);
         jointUserChat = currentUserId+posterId;
+    }
+
+    /*
+    This  method will set the UI to display a text message if there are no messages otherwise
+    it will set that text view to gone
+     */
+    private void checkIfFirstMessage(){
+        if(mMessageArray.size() == 0){
+            associateChatWithUsers();
+            mNoMessagesTextView.setVisibility(View.VISIBLE);
+        }else mNoMessagesTextView.setVisibility(View.GONE);
     }
 }

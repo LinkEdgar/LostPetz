@@ -71,6 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp" />
                 <EditText
+                    android:layout_marginRight="8dp"
+                    android:layout_marginLeft="8dp"
                     android:hint="@string/send_message_hint"
                     android:paddingBottom="4dp"
                     android:inputType="textMultiLine|textCapSentences"
@@ -89,6 +91,14 @@
             android:layout_height="48dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:visibility="gone"
+        android:text="@string/no_messages"
+        android:layout_centerInParent="true"
+        android:id="@+id/messenger_activity_no_messages_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

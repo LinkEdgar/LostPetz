@@ -60,9 +60,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private FirebaseStorage mStorage;
     private FirebaseAuth mAuth;
     private DatabaseReference mChatRef;
-    //Test textview to connect with the database
-    /* TODO replace testTextView with pet summary layout */
-    private TextView testTextView;
     private EditText mUserTextInput;
     private TextView mNoMessagesTextView;
     private ProgressBar mRefreshProgressBar;
@@ -117,7 +114,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         //View Referencing
         mRefreshProgressBar = findViewById(R.id.messenger_refresh_progressbar);
         mNoMessagesTextView = findViewById(R.id.messenger_activity_no_messages_tv);
-        testTextView = findViewById(R.id.test_display_textview);
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
         mImageToSend = findViewById(R.id.messenger_image_to_send);
         mUploadProgressbar = findViewById(R.id.messenger_upload_progressbar);

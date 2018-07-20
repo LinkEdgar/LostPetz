@@ -8,14 +8,14 @@
 
     <!--TODO replace this with a quick summary of the lost pet -->
     <TextView
-        android:text="Yeet!"
         android:id="@+id/test_display_textview"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="1dp" />
 
     <ProgressBar
+        android:layout_alignParentTop="true"
         android:visibility="gone"
         android:layout_below="@+id/test_display_textview"
         android:layout_centerInParent="true"

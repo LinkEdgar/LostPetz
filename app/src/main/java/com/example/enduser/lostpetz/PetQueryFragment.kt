@@ -152,7 +152,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 pet.zip = zip
                 pet.description = description
                 pet.dateLost = datelost
-                pet.profileUrl = profilePicture
+                pet.profileUrlOne = profilePicture
                 pet.profileUrlTwo = url2
                 pet.profileUrlThree = url3
                 pet.userID = userId

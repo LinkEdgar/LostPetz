@@ -51,7 +51,7 @@ import java.util.HashSet;
 public class MessagingActivity extends AppCompatActivity implements MessageAdapter.onPitureClicked{
 
 
-    //Firebase instance variables
+    //Firebase variables
     private FirebaseDatabase mDatabase;
     private DatabaseReference mRef;
     private ChildEventListener mChildListener;
@@ -90,6 +90,9 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private String jointUserChat;
     private String INTENT_GET_POSTER_ID_KEY = "posterId";
 
+    //TODO bundle user
+    private User mUser;
+
     private final int RC_PICK_IMAGE = 3141;
 
     //TODO add a query check so that not all of the messages are loaded at once
@@ -101,6 +104,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         setContentView(R.layout.activity_messaging);
         handleIntentData();
         initFirebase();
+        getUserData();
         initUi();
 
     }
@@ -123,6 +127,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mRecylerView = findViewById(R.id.messaging_recycler_view);
 
         mMessageArray = new ArrayList<>();
+        mUser = new User(null, null, null);
 
         mAdapter = new MessageAdapter(mMessageArray);
         mAdapter.setOnClick(this);
@@ -176,7 +181,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
                 /*
                 This method check if to see if there are any messages and sets the UI accordingly
                  */
-                checkIfFirstMessage();
+                checkIfMessagesEmpty();
             }
 
             @Override
@@ -188,7 +193,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         //Syncs data after childevent listener
         mChatRef.addListenerForSingleValueEvent(mValueListener);
 
-        mChatRef.limitToLast(1).orderByKey().addChildEventListener(mChildListener);
+        mChatRef.limitToLast(12).orderByKey().addChildEventListener(mChildListener);
     }
 
     private void initFirebase(){
@@ -222,11 +227,10 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
      */
     public void sendMessage(View view){
         if(!isPictureMessage) {
-            //TODO eventually change the null values
             String textToSend = mUserTextInput.getText().toString().trim();
             if (textToSend.length() > 0) {
                 mNoMessagesTextView.setVisibility(View.GONE);
-                Message messageToSend = new Message("Anonymous", textToSend, null, null);
+                Message messageToSend = new Message(mUser.getUserName(), textToSend, null, mUser.getProfileUrl());
                 mChatRef.push().setValue(messageToSend);
                 mUserTextInput.setText("");
                 mRecylerView.smoothScrollToPosition(mMessageArray.size());
@@ -304,7 +308,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onResume() {
         super.onResume();
-        mChatRef.limitToLast(1).addChildEventListener(mChildListener);
+        mChatRef.limitToLast(12).addChildEventListener(mChildListener);
     }
 
     /*
@@ -344,10 +348,10 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private void sendPictureMessage(String pictureUrl){
         //TODO actually populate message with real data
         Message pictureMessageToSend = new Message(
-                "Username",
+                mUser.getUserName(),
                 null,
                 pictureUrl,
-                null);
+                mUser.getProfileUrl());
         mChatRef.push().setValue(pictureMessageToSend);
         mRecylerView.smoothScrollToPosition(mMessageArray.size());
     }
@@ -377,10 +381,32 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     This  method will set the UI to display a text message if there are no messages otherwise
     it will set that text view to gone
      */
-    private void checkIfFirstMessage(){
+    private void checkIfMessagesEmpty(){
         if(mMessageArray.size() == 0){
             associateChatWithUsers();
             mNoMessagesTextView.setVisibility(View.VISIBLE);
         }else mNoMessagesTextView.setVisibility(View.GONE);
+    }
+
+    //Check the DB based on the user's UID
+    private void getUserData(){
+        DatabaseReference mUserRef = mDatabase.getReference("Users").child(currentUserId);
+        mUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                setUserData(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    //Takes a snapshot and extracts info to add to our User object
+    private void setUserData(DataSnapshot snapshot){
+        mUser.setUserName(snapshot.child("name").getValue(String.class));
+        mUser.setProfileUrl(snapshot.child("profileUrl").getValue(String.class));
+        mUser.setEmail(snapshot.child("email").getValue(String.class));
     }
 }

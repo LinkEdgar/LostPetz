@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -67,6 +68,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = mMessageList.get(position);
         holder.mProfileImage.setImageResource(R.mipmap.ic_launcher);
         holder.mUserName.setText(message.getUserName());
+        Glide.with(holder.mProfileImage).applyDefaultRequestOptions(new RequestOptions().circleCrop().error(R.mipmap.ic_launcher_round))
+                .load(mMessageList.get(position).getUserProfileUrl()).into(holder.mProfileImage);
         if(message.getPhotoUrl() == null) {
             holder.mMessage.setVisibility(View.VISIBLE);
             holder.mMessage.setText(message.getMessage());
@@ -74,7 +77,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         else{
             holder.mMessage.setVisibility(View.GONE);
             holder.mPictureMessage.setVisibility(View.VISIBLE);
-            //TODO load image here
             Glide.with(holder.mPictureMessage).load(message.getPhotoUrl()).into(holder.mPictureMessage);
             holder.mPictureMessage.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -18,6 +18,9 @@ open class RegisterDialogFragment: DialogFragment(), View.OnClickListener{
     private var mConfirmPassword: String ?= null
     private var mEmail: String ?= null
 
+    //TODO register user
+    //TODO add name entry
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.dialog_register, container, false)
         //instantiates firebase

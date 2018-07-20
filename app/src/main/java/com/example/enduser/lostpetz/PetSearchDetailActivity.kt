@@ -87,8 +87,8 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
      */
 
     private fun setUpImageSlider(){
-        if(pet!!.profileUrl != null && !pet!!.profileUrl.equals("null")){
-            urlList!!.add(pet!!.profileUrl)
+        if(pet!!.profileUrlOne != null && !pet!!.profileUrlOne.equals("null")){
+            urlList!!.add(pet!!.profileUrlOne)
         }
         if(pet!!.profileUrlTwo != null && !pet!!.profileUrlTwo.equals("null") ){
             urlList!!.add(pet!!.profileUrlTwo)

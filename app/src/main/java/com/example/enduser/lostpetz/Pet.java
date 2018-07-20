@@ -35,9 +35,20 @@ public class Pet implements Parcelable{
     private boolean foundPet;
     private String breed;
     private String userID;
+    private String userName;
 
 
     // setter methods
+
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+
+        return userName;
+    }
 
     public void setUserID(String userID) {
         this.userID = userID;
@@ -93,7 +104,7 @@ public class Pet implements Parcelable{
         return foundPet;
     }
 
-    public String getProfileUrl() {
+    public String getProfileUrlOne() {
         return profileUrlOne;
     }
 
@@ -130,6 +141,7 @@ public class Pet implements Parcelable{
         parcel.writeByte((byte) (foundPet ? 1 : 0));
         parcel.writeString(breed);
         parcel.writeString(userID);
+        parcel.writeString(userName);
     }
 
     protected Pet(Parcel in) {
@@ -143,6 +155,7 @@ public class Pet implements Parcelable{
         foundPet = in.readByte() != 0;
         breed = in.readString();
         userID = in.readString();
+        userName = in.readString();
     }
 
     public static final Creator<Pet> CREATOR = new Creator<Pet>() {

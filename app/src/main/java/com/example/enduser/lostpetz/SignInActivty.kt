@@ -131,8 +131,8 @@ class SignInActivty : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         //TODO remove commented code
-        //if(mUser != null)
-            //startActivity(Intent(this, MainActivity::class.java))
+        if(mUser != null)
+            startActivity(Intent(this, MainActivity::class.java))
     }
 
     private fun googleSignIn(){

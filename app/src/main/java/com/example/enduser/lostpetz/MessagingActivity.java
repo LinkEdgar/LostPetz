@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private TextView testTextView;
     private EditText mUserTextInput;
     private TextView mNoMessagesTextView;
+    private ProgressBar mRefreshProgressBar;
 
     //hashset used to eliminate double messages
     private HashSet<String> messageHashset;
@@ -82,10 +84,10 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private RecyclerView.LayoutManager mLayoutManager;
 
     /*
-
+    Chats are created by concatenating the user's uid and that becomes the ID for the new chat between users
      */
     //message key creation
-    private String posterId;
+    private String posterId;// user that posted the pet
     private String currentUserId;
     private String jointUserChat;
     private String INTENT_GET_POSTER_ID_KEY = "posterId";
@@ -93,9 +95,11 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     //TODO bundle user
     private User mUser;
 
-    private final int RC_PICK_IMAGE = 3141;
+    private int messageQuantity = 12;
 
-    //TODO add a query check so that not all of the messages are loaded at once
+    private boolean isRefresh = false;
+
+    private final int RC_PICK_IMAGE = 3141;
 
 
     @Override
@@ -111,6 +115,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
     private void initUi(){
         //View Referencing
+        mRefreshProgressBar = findViewById(R.id.messenger_refresh_progressbar);
         mNoMessagesTextView = findViewById(R.id.messenger_activity_no_messages_tv);
         testTextView = findViewById(R.id.test_display_textview);
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
@@ -134,6 +139,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
         mRecylerView.setAdapter(mAdapter);
         mRecylerView.setHasFixedSize(true);
+        setScrollListener();
 
         mLayoutManager = new LinearLayoutManager(MessagingActivity.this);
 
@@ -144,14 +150,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String snapshotKey = dataSnapshot.getKey();
-                if(!messageHashset.contains(snapshotKey)) {
-                    messageHashset.add(snapshotKey);
-                    Message receivedMessage = dataSnapshot.getValue(Message.class);
-                    mMessageArray.add(receivedMessage);
-                    mAdapter.notifyItemInserted(mMessageArray.size());
-                    mRecylerView.smoothScrollToPosition(mMessageArray.size());
-                }
+                addMessageToAdapter(dataSnapshot);
             }
 
             @Override
@@ -193,7 +192,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         //Syncs data after childevent listener
         mChatRef.addListenerForSingleValueEvent(mValueListener);
 
-        mChatRef.limitToLast(12).orderByKey().addChildEventListener(mChildListener);
+        mChatRef.limitToLast(messageQuantity).orderByKey().addChildEventListener(mChildListener);
     }
 
     private void initFirebase(){
@@ -308,7 +307,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onResume() {
         super.onResume();
-        mChatRef.limitToLast(12).addChildEventListener(mChildListener);
+        mChatRef.limitToLast(messageQuantity).addChildEventListener(mChildListener);
     }
 
     /*
@@ -346,7 +345,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     It then scrolls the recyclerview to the bottom of the list
      */
     private void sendPictureMessage(String pictureUrl){
-        //TODO actually populate message with real data
         Message pictureMessageToSend = new Message(
                 mUser.getUserName(),
                 null,
@@ -408,5 +406,56 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mUser.setUserName(snapshot.child("name").getValue(String.class));
         mUser.setProfileUrl(snapshot.child("profileUrl").getValue(String.class));
         mUser.setEmail(snapshot.child("email").getValue(String.class));
+    }
+
+    /*
+    Checks if the user has reached the top of the list in order to add more data into the set
+     */
+    private void setScrollListener(){
+
+        mRecylerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (!recyclerView.canScrollVertically(-10)) {
+                    mRefreshProgressBar.setVisibility(View.VISIBLE);
+                        messageQuantity = messageQuantity +6;
+                        isRefresh = true;
+                        mChatRef.limitToLast(messageQuantity).addChildEventListener(mChildListener);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+    }
+
+    /*
+    Adds messages from datasnapshot to adapter, if the this is a refresh from the user scrolling up then the
+    messages are written added to the top of the list as to maintain the order of the messages
+     */
+
+    private void addMessageToAdapter(DataSnapshot dataSnapshot){
+        String snapshotKey = dataSnapshot.getKey();
+        if(!isRefresh) {
+            if (!messageHashset.contains(snapshotKey)) {
+                messageHashset.add(snapshotKey);
+                Message receivedMessage = dataSnapshot.getValue(Message.class);
+                mMessageArray.add(receivedMessage);
+                mAdapter.notifyItemInserted(mMessageArray.size());
+                mRecylerView.smoothScrollToPosition(mMessageArray.size());// scrolls to the bottom 
+            }
+        }else{
+            mRefreshProgressBar.setVisibility(View.GONE);
+            if (!messageHashset.contains(snapshotKey)) {
+                messageHashset.add(snapshotKey);
+                Message receivedMessage = dataSnapshot.getValue(Message.class);
+                mMessageArray.add(0,receivedMessage);
+                mAdapter.notifyItemInserted(0);
+            }
+        }
     }
 }

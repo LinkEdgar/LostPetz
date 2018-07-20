@@ -51,7 +51,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
         });
         if(pet.getProfileUrlOne() != null) {
             Glide.with(holder.profilePicture).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher_round)
-                    .circleCrop()).load(pet.getProfileUrlOne()).into(holder.profilePicture);
+                    .centerCrop()).load(pet.getProfileUrlOne()).into(holder.profilePicture);
         }
 
         if(pet.getIsFoundPet()) {

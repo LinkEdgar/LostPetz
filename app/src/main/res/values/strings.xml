@@ -44,6 +44,7 @@
     <string name="required_fields_fail">Please add a name and or a valid zip code</string>
 
     <!--SignIn -->
+    <string name="name_hint">Name(first and last)</string>
     <string name="email_hint_label">Email</string>
     <string name="password_hint_label">Password</string>
     <string name="forgot_passwrod_label">Forgot Password?</string>
@@ -55,6 +56,7 @@
     <string name="reset_password_success">Password reset email sent</string>
     <string name="reset_password_fail"> Failed to send reset password email</string>
     <string name="non_null_email">Email cannot be empty</string>
+    <string name="name_limit_fail">Please enter a valid name</string>
     <string name="google_signin_fail"> Failed to login with google</string>
     <string name="user_name_shared_pref"></string>
     <!-- Register-->

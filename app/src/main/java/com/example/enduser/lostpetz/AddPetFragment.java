@@ -156,6 +156,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     /*
     Creates an instance of a chooseDialogFragment and sets its onClick listener
      */
+
+    //TODO third option rework
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         int selectPosition = mDateSpinner.getSelectedItemPosition();
@@ -314,7 +316,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     }
 
     private boolean checkNullRequirements(){
-        //TODO figure out which values can and cannot be null
         //zip can't be null
         //name can't be null
         String name = mPetNameEditText.getText().toString();

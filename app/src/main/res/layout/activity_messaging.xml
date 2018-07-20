@@ -15,8 +15,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.RecyclerView
+    <ProgressBar
+        android:visibility="gone"
         android:layout_below="@+id/test_display_textview"
+        android:layout_centerInParent="true"
+        android:id="@+id/messenger_refresh_progressbar"
+        android:indeterminate="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/messenger_refresh_progressbar"
         android:layout_above="@+id/messenger_message_console"
         android:id="@+id/messaging_recycler_view"
         android:layout_centerInParent="true"
@@ -71,14 +80,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="100dp" />
                 <EditText
+                    android:minHeight="48dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginLeft="8dp"
                     android:hint="@string/send_message_hint"
-                    android:paddingBottom="4dp"
                     android:inputType="textMultiLine|textCapSentences"
                     android:id="@+id/messenger_user_input_text"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp" />
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
         </FrameLayout>
 

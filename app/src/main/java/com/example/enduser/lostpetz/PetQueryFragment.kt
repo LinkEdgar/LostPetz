@@ -131,6 +131,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         for(x in snapshot.children){ // iterates through each child in the snapshot to extract info
             val key = x.key
             //TODO add all information for pets
+            //TODO remove hard coded values
             if(!mPetKeyHashset!!.contains(key)) {
                 mPetKeyHashset!!.add(key)
                 val name = x.child("name").getValue().toString()
@@ -138,7 +139,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 val breed = x.child("breed").getValue().toString()
                 val description = x.child("description").getValue().toString()
                 val datelost = x.child("dateLost").getValue().toString()
-                val profilePicture = x.child("profileUrl").getValue().toString()
+                val profilePicture = x.child("profileUrlOne").getValue().toString()
                 val url2 = x.child("profileUrlTwo").getValue().toString()
                 val url3 = x.child("profileUrlThree").getValue().toString()
                 val userId = x.child("userID").getValue().toString()

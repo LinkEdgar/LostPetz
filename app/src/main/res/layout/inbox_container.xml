@@ -26,9 +26,10 @@
             android:id="@+id/inbox_container_last_message"
             android:layout_marginTop="4dp"
             android:maxLines="2"
+            android:ellipsize="end"
             android:layout_toRightOf="@+id/inbox_container_profile_picture"
             android:layout_below="@+id/inbox_container_name"
-            tools:text="This is the last message sent by either party and will extend a max of two lines"
+            tools:text="This is the last message sent by either party and will extend a max of two lines and if it exceeds two lines"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>

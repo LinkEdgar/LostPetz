@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.inbox_container.view.*
 
 
-open class InboxAdapter(val data: ArrayList<Message>, val context: Context?, val onClick: onClicked): RecyclerView.Adapter<InboxAdapter.InboxViewHolder>() {
+open class InboxAdapter(val data: ArrayList<User>, val context: Context?, val onClick: onClicked): RecyclerView.Adapter<InboxAdapter.InboxViewHolder>() {
 
     interface onClicked{
         fun onClick(poisiton: Int)
@@ -17,8 +17,13 @@ open class InboxAdapter(val data: ArrayList<Message>, val context: Context?, val
     override fun onBindViewHolder(holder: InboxViewHolder, position: Int) {
         //test data
         holder.profilePictureIv?.setImageResource(R.mipmap.ic_launcher_round)
-        holder.senderNameTv?.setText("Name goes here")
-        holder.lastMessageTv?.setText("Last message goes here ")
+        holder.senderNameTv?.setText(data[position].userName)
+        val lastMessage = data[position].lastMessage
+        if(lastMessage.equals("null") || lastMessage == null)
+            holder.lastMessageTv?.setText("Picture message")
+        else
+            holder.lastMessageTv?.setText(data[position].lastMessage)
+
         holder.view?.setOnClickListener{onClick.onClick(position)}
     }
 

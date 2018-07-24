@@ -88,6 +88,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private String currentUserId;
     private String jointUserChat;
     private String INTENT_GET_POSTER_ID_KEY = "posterId";
+    private String INTENT_GET_JOINT_CHAT_KEY = "jointChat";
 
     //TODO bundle user
     private User mUser;
@@ -128,7 +129,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mRecylerView = findViewById(R.id.messaging_recycler_view);
 
         mMessageArray = new ArrayList<>();
-        mUser = new User(null, null, null);
+        mUser = new User(null, null, null, null, null);
 
         mAdapter = new MessageAdapter(mMessageArray);
         mAdapter.setOnClick(this);
@@ -198,6 +199,10 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mStorage = FirebaseStorage.getInstance();
         mAuth = FirebaseAuth.getInstance();
         currentUserId = mAuth.getCurrentUser().getUid().toString();
+        if(jointUserChat == null) { //checks if it was previously assigned via handleIntent()
+            jointUserChat = currentUserId + posterId;
+        }
+
         mChatRef = mRef.child(jointUserChat);
     }
 
@@ -367,8 +372,12 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     Gets the poster's uId in order to create a unique chat
      */
     private void handleIntentData(){
-        posterId = getIntent().getStringExtra(INTENT_GET_POSTER_ID_KEY);
-        jointUserChat = currentUserId+posterId;
+        Intent intent = getIntent();
+        if(intent.getStringExtra(INTENT_GET_POSTER_ID_KEY) != null) {
+            posterId = getIntent().getStringExtra(INTENT_GET_POSTER_ID_KEY);
+        }else{
+            jointUserChat = intent.getStringExtra(INTENT_GET_JOINT_CHAT_KEY);
+        }
     }
 
     /*

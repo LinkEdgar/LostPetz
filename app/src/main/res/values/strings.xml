@@ -69,4 +69,7 @@
     <!-- PetSearchDetail-->
     <string name="poster_error">You are the poster of this pet</string>
 
+    <!-- Message Inbox-->
+    <string name="no_inbox_messages_label">No active messages</string>
+
 </resources>

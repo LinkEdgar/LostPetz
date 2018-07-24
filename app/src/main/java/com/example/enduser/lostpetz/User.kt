@@ -3,14 +3,18 @@ package com.example.enduser.lostpetz
 import android.os.Parcel
 import android.os.Parcelable
 
-open class User(var userName: String?, var profileUrl: String?, var email:String?):Parcelable {
+open class User(var userName: String?, var profileUrl: String?, var email:String?, var lastMessage:String?, var chatId: String?):Parcelable {
 
     constructor(parcel: Parcel) : this(
+            parcel.readString(),
+            parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString())
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(chatId)
+        parcel.writeString(email)
         parcel.writeString(userName)
         parcel.writeString(profileUrl)
         parcel.writeString(email)

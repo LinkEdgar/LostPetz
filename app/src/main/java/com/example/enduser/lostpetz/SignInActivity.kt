@@ -133,6 +133,7 @@ class SignInActivity : AppCompatActivity() {
         //TODO remove commented code
         if(mUser != null)
             startActivity(Intent(this, MainActivity::class.java))
+            finish()
     }
 
     private fun googleSignIn(){

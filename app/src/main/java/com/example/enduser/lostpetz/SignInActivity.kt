@@ -23,7 +23,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 
-class SignInActivty : AppCompatActivity() {
+class SignInActivity : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth ?= null
     private var mDatabaseRef: DatabaseReference ?= null

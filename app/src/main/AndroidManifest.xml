@@ -15,15 +15,8 @@
         </activity>
         <activity android:name=".MessagingActivity" />
 
-        <!-- TODO delete these activity tags-->
-        <activity
-            android:name=".PetQueryActivity"
-            android:launchMode="singleTop" />
         <activity android:name=".PetSearchDetailActivity" />
-        <activity
-            android:name=".AddPetActivity"
-            android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".SignInActivty">
+        <activity android:name=".SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        //TODO add support for pictures messages
         public TextView mUserName;
         public TextView mMessage;
         public ImageView mProfileImage;
@@ -66,7 +66,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Message message = mMessageList.get(position);
-        holder.mProfileImage.setImageResource(R.mipmap.ic_launcher);
         holder.mUserName.setText(message.getUserName());
         Glide.with(holder.mProfileImage).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher_round))
                 .load(mMessageList.get(position).getUserProfileUrl()).into(holder.mProfileImage);
@@ -86,6 +85,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             });
         }
 
+        holder.itemView.setTag(position);
+
     }
 
     @Override
@@ -96,9 +97,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     /*
     Overridden so that the recyclerview does not duplicate views
-    setStableIds
-    getItemId
-    getItemViewType
+    1)setStableIds
+    2)getItemId
+    3)getItemViewType
      */
     @Override
     public void setHasStableIds(boolean hasStableIds) {

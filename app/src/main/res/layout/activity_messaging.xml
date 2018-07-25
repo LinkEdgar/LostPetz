@@ -24,13 +24,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_below="@+id/messenger_refresh_progressbar"
         android:layout_above="@+id/messenger_message_console"
-        android:id="@+id/messaging_recycler_view"
-        android:layout_centerInParent="true"
+        android:id="@+id/messaging_swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/messenger_refresh_progressbar"
+            android:layout_above="@+id/messenger_message_console"
+            android:id="@+id/messaging_recycler_view"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <!--TODO Replace the src of the images for the message console-->
     <LinearLayout

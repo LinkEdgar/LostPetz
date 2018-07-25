@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.solver.widgets.Snapshot;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 /*
@@ -49,7 +52,7 @@ import java.util.HashSet;
     The application handles full screen pictures via a custom dialog fragment that will
     get picture information such as the url from a android preferences
  */
-public class MessagingActivity extends AppCompatActivity implements MessageAdapter.onPitureClicked{
+public class MessagingActivity extends AppCompatActivity implements MessageAdapter.onPitureClicked, SwipeRefreshLayout.OnRefreshListener{
 
 
     //Firebase variables
@@ -75,6 +78,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     private ProgressBar mUploadProgressbar;
 
     //RecyclerView
+    private SwipeRefreshLayout mRefreshLayout;
     private ArrayList<Message> mMessageArray;
     private RecyclerView mRecylerView;
     private MessageAdapter mAdapter;
@@ -93,7 +97,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     //TODO bundle user
     private User mUser;
 
-    private int messageQuantity = 12;
+    private int messageQuantity = 2;
 
     private boolean isRefresh = false;
 
@@ -113,6 +117,8 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
     private void initUi(){
         //View Referencing
+        mRefreshLayout = findViewById(R.id.messaging_swipe_layout);
+        mRefreshLayout.setOnRefreshListener(this);
         mRefreshProgressBar = findViewById(R.id.messenger_refresh_progressbar);
         mNoMessagesTextView = findViewById(R.id.messenger_activity_no_messages_tv);
         mUserTextInput = findViewById(R.id.messenger_user_input_text);
@@ -136,7 +142,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
         mRecylerView.setAdapter(mAdapter);
         mRecylerView.setHasFixedSize(true);
-        setScrollListener();
+        //setScrollListener();
 
         mLayoutManager = new LinearLayoutManager(MessagingActivity.this);
 
@@ -308,7 +314,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     @Override
     public void onResume() {
         super.onResume();
-        mChatRef.limitToLast(messageQuantity).addChildEventListener(mChildListener);
+        mChatRef.limitToLast(messageQuantity).orderByKey().addChildEventListener(mChildListener);
     }
 
     /*
@@ -423,12 +429,35 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (!recyclerView.canScrollVertically(-10)) {
+                /*
+
+                if(newState == RecyclerView.SCROLL_INDICATOR_TOP && !recyclerView.canScrollVertically(-1)){
+                    Log.e("yeet", "Top reached ");
                     mRefreshProgressBar.setVisibility(View.VISIBLE);
-                        messageQuantity = messageQuantity +6;
-                        isRefresh = true;
-                        mChatRef.limitToLast(messageQuantity).addChildEventListener(mChildListener);
+                    messageQuantity = messageQuantity +6;
+                    mChatRef.limitToLast(messageQuantity).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            refreshScroll(dataSnapshot);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
+                */
+
+                /*old code
+
+                if (!recyclerView.canScrollVertically(-1)) {
+                    //mRefreshProgressBar.setVisibility(View.VISIBLE);
+                        //messageQuantity = messageQuantity +6;
+                        //isRefresh = true;
+                        //mChatRef.limitToLast(messageQuantity).addChildEventListener(mChildListener);
+                }
+                */
             }
 
             @Override
@@ -444,6 +473,15 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
      */
 
     private void addMessageToAdapter(DataSnapshot dataSnapshot){
+        String snapshotKey = dataSnapshot.getKey();
+            if (!messageHashset.contains(snapshotKey)) {
+                messageHashset.add(snapshotKey);
+                Message receivedMessage = dataSnapshot.getValue(Message.class);
+                mMessageArray.add(receivedMessage);
+                mAdapter.notifyItemInserted(mMessageArray.size());
+                mRecylerView.smoothScrollToPosition(mMessageArray.size());// scrolls to the bottom
+            }
+        /*
         String snapshotKey = dataSnapshot.getKey();
         if(!isRefresh) {
             if (!messageHashset.contains(snapshotKey)) {
@@ -462,5 +500,46 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
                 mAdapter.notifyItemInserted(0);
             }
         }
+        */
+    }
+
+    private void refreshScroll(DataSnapshot snapshot){
+
+        Collections.reverse(mMessageArray);
+        int count = 0;
+        Log.e("refresh snap", ""+ snapshot);
+        for(DataSnapshot snapshot1 : snapshot.getChildren()){
+            String key = snapshot1.getKey();
+            if(!messageHashset.contains(key)) {
+                messageHashset.add(key);
+                String message = snapshot1.child("message").getValue(String.class);
+                String userName = snapshot1.child("userName").getValue(String.class);
+                String photoUrl = snapshot1.child("photoUrl").getValue(String.class);
+                Message messageToAdd = new Message();
+                messageToAdd.setMessage(message);
+                messageToAdd.setPhotoUrl(photoUrl);
+                messageToAdd.setUserName(userName);
+                mMessageArray.add(count, messageToAdd);
+                mAdapter.notifyItemInserted(0);
+                count++;
+            }
+        }
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        messageQuantity = messageQuantity +1;
+        mChatRef.limitToLast(messageQuantity).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                refreshScroll(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

@@ -70,6 +70,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Glide.with(holder.mProfileImage).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher_round))
                 .load(mMessageList.get(position).getUserProfileUrl()).into(holder.mProfileImage);
         if(message.getPhotoUrl() == null) {
+            holder.mPictureMessage.setVisibility(View.GONE);
             holder.mMessage.setVisibility(View.VISIBLE);
             holder.mMessage.setText(message.getMessage());
         }

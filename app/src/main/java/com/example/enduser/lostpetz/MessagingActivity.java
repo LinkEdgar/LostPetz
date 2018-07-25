@@ -97,7 +97,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     //TODO bundle user
     private User mUser;
 
-    private int messageQuantity = 2;
+    private int messageQuantity = 12;
 
     private boolean isRefresh = false;
 
@@ -142,7 +142,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
         mRecylerView.setAdapter(mAdapter);
         mRecylerView.setHasFixedSize(true);
-        //setScrollListener();
 
         mLayoutManager = new LinearLayoutManager(MessagingActivity.this);
 
@@ -420,54 +419,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     }
 
     /*
-    Checks if the user has reached the top of the list in order to add more data into the set
-     */
-    private void setScrollListener(){
-
-        mRecylerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                /*
-
-                if(newState == RecyclerView.SCROLL_INDICATOR_TOP && !recyclerView.canScrollVertically(-1)){
-                    Log.e("yeet", "Top reached ");
-                    mRefreshProgressBar.setVisibility(View.VISIBLE);
-                    messageQuantity = messageQuantity +6;
-                    mChatRef.limitToLast(messageQuantity).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            refreshScroll(dataSnapshot);
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-                */
-
-                /*old code
-
-                if (!recyclerView.canScrollVertically(-1)) {
-                    //mRefreshProgressBar.setVisibility(View.VISIBLE);
-                        //messageQuantity = messageQuantity +6;
-                        //isRefresh = true;
-                        //mChatRef.limitToLast(messageQuantity).addChildEventListener(mChildListener);
-                }
-                */
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-    }
-
-    /*
     Adds messages from datasnapshot to adapter, if the this is a refresh from the user scrolling up then the
     messages are written added to the top of the list as to maintain the order of the messages
      */
@@ -481,31 +432,10 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
                 mAdapter.notifyItemInserted(mMessageArray.size());
                 mRecylerView.smoothScrollToPosition(mMessageArray.size());// scrolls to the bottom
             }
-        /*
-        String snapshotKey = dataSnapshot.getKey();
-        if(!isRefresh) {
-            if (!messageHashset.contains(snapshotKey)) {
-                messageHashset.add(snapshotKey);
-                Message receivedMessage = dataSnapshot.getValue(Message.class);
-                mMessageArray.add(receivedMessage);
-                mAdapter.notifyItemInserted(mMessageArray.size());
-                mRecylerView.smoothScrollToPosition(mMessageArray.size());// scrolls to the bottom 
-            }
-        }else{
-            mRefreshProgressBar.setVisibility(View.GONE);
-            if (!messageHashset.contains(snapshotKey)) {
-                messageHashset.add(snapshotKey);
-                Message receivedMessage = dataSnapshot.getValue(Message.class);
-                mMessageArray.add(0,receivedMessage);
-                mAdapter.notifyItemInserted(0);
-            }
-        }
-        */
     }
 
     private void refreshScroll(DataSnapshot snapshot){
 
-        Collections.reverse(mMessageArray);
         int count = 0;
         Log.e("refresh snap", ""+ snapshot);
         for(DataSnapshot snapshot1 : snapshot.getChildren()){
@@ -519,8 +449,8 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
                 messageToAdd.setMessage(message);
                 messageToAdd.setPhotoUrl(photoUrl);
                 messageToAdd.setUserName(userName);
-                mMessageArray.add(count, messageToAdd);
-                mAdapter.notifyItemInserted(0);
+                mMessageArray.add(count,messageToAdd);
+                mAdapter.notifyItemInserted(count);
                 count++;
             }
         }
@@ -529,7 +459,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
     @Override
     public void onRefresh() {
-        messageQuantity = messageQuantity +1;
+        messageQuantity = messageQuantity +8;
         mChatRef.limitToLast(messageQuantity).orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

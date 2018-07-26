@@ -17,8 +17,13 @@ import com.daprlabs.aaron.swipedeck.SwipeDeck
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_match.view.*
+import okhttp3.*
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.IOException
+
 
 /*
     This fragment allows the user to look through a variety of pets to potentially "match" with one. The user can skip to the next pet, favorite a pet,
@@ -32,17 +37,31 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
     private var dataSet: ArrayList<MatchInfo> ?= null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val MY_PERMISSIONS_REQUEST_LOCATION = 3141
+    private var cityHashSet: HashSet<String> ?= null
+    private var rootView: View ?= null
+
+    //firebase
+    private var mMatchRef: DatabaseReference ?= null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var rootView: View = inflater.inflate(R.layout.fragment_match, container, false)
+        rootView = inflater.inflate(R.layout.fragment_match, container, false)
+
+        cityHashSet = HashSet()
+        dataSet = ArrayList()
+
+        fakePopulateHashset()
+        initFirebase()
+
         //TODO delete fake data
+        /*
         dataSet = ArrayList<MatchInfo>()
         dataSet?.add(MatchInfo("1","1"))
         dataSet?.add(MatchInfo("2","2"))
         dataSet?.add(MatchInfo("3","3"))
         dataSet?.add(MatchInfo("4","4"))
-        initCardSwipe(rootView)
+        */
+        //initCardSwipe(rootView)
         getUserLocation()
 
         return rootView
@@ -124,10 +143,72 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
                 Log.e("zip", "--> ${x.postalCode}")
             }
         }
+        //loadCities()
+    }
+
+    private fun initFirebase(){
+        mMatchRef = FirebaseDatabase.getInstance().getReference("Match")
+        mMatchRef!!.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot?) {
+                loadMatches(p0!!)
+            }
+
+            override fun onCancelled(p0: DatabaseError?) {
+
+            }
+
+        })
     }
 
     //TODO in background load cities within distance
     private fun loadCities(){
+        /*
+        val applicationKey = "OV3Ep9sFnGnSLc30fL1icVQlCet4T24kVBtH0yNIgguq6ZntbaJccNsV1CVVqS2U"
+        val base = "https://www.zipcodeapi.com/rest/"
+        val detail = "/radius.json/30168/10/mile"
+        val client = OkHttpClient()
+        val request = Request.Builder().url(base+applicationKey+detail).build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call?, e: IOException?) {
 
+            }
+
+            @Throws(IOException::class)
+            override fun onResponse(call: Call, response: Response) {
+                try {
+                    val responseData = response.body()!!.string()
+                    val json = JSONObject(responseData)
+                    val jsonArray = json.getJSONArray("zip_codes")
+                    Log.e("jsonarray", "$jsonArray")
+                    for(x in 0..jsonArray.length()){
+                        val jObject = jsonArray.getJSONObject(x)
+                        val zipCode = jObject.getString("zip_code")
+                        cityHashSet!!.add(zipCode!!)
+                    }
+                } catch (e: JSONException) {
+
+                }
+
+            }
+        })
+        */
+    }
+
+    private fun fakePopulateHashset(){
+        cityHashSet!!.add("70801")
+        cityHashSet!!.add("70805")
+        cityHashSet!!.add("70809")
+        cityHashSet!!.add("70813")
+        cityHashSet!!.add("70819")
+    }
+    private fun loadMatches(dataSnapshot: DataSnapshot){
+        for(x in dataSnapshot.children){
+            val zip = x.child("zipCode").getValue(String::class.java)
+            if(cityHashSet!!.contains(zip)){
+                dataSet?.add(MatchInfo("$zip","1"))
+            }
+        }
+        //todo fix this shit
+        initCardSwipe(rootView!!)
     }
 }

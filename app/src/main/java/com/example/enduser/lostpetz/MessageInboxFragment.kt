@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.message_inbox_fragement.*
 import kotlinx.android.synthetic.main.message_inbox_fragement.view.*
 import kotlin.collections.ArrayList
 
@@ -73,17 +74,19 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     Step 1 get the list of chats
      */
     private fun searchForChats(){
-        val userId = mUser!!.uid
-        mRef!!.child(userId).child("chats").addValueEventListener(object: ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot?) {
-                getListOfChats(p0!!)
-            }
+        val userId: String ?=  mUser?.uid
+        if(userId != null) {
+            mRef!!.child(userId).child("chats").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(p0: DataSnapshot?) {
+                    getListOfChats(p0!!)
+                }
 
-            override fun onCancelled(p0: DatabaseError?) {
+                override fun onCancelled(p0: DatabaseError?) {
 
-            }
+                }
 
-        })
+            })
+        } else rootView?.message_inbox_no_message_textview?.visibility = View.VISIBLE
     }
 
     private fun getListOfChats(dataSnapshot: DataSnapshot){

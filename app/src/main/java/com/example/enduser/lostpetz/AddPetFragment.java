@@ -377,7 +377,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
                 //Case 2
                 if(counter == imageCounter) {
 
-                    UploadTask uploadTask = mStorage.getReference("petImages/"+ UUID.randomUUID().toString()).putFile(imageUriArray[x]);
+                    UploadTask uploadTask = mStorage.getReference("petImages/"+ imageUriArray[x].getLastPathSegment()).putFile(imageUriArray[x]);
                     final int finalCounter = counter;
                     uploadTask.addOnFailureListener(new OnFailureListener() {
                         @Override

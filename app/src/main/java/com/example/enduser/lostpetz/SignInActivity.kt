@@ -132,7 +132,7 @@ class SignInActivity : AppCompatActivity() {
         super.onStart()
         //TODO remove commented code
         if(mUser != null) {
-            startActivity(Intent(this, MainActivity::class.java))
+           startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
     }

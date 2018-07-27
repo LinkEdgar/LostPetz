@@ -72,4 +72,7 @@
     <!-- Message Inbox-->
     <string name="no_inbox_messages_label">No active messages</string>
 
+    <!-- Navigation Drawer -->
+    <string name="sign_out_label"> Sign Out</string>
+
 </resources>

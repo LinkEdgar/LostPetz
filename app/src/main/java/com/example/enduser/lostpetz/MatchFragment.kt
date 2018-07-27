@@ -5,11 +5,14 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.support.design.widget.NavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.DrawerLayout
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -53,7 +56,6 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         fakePopulateHashset()
         initFirebase()
         getUserLocation()
-
         return rootView
     }
 
@@ -142,14 +144,14 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         val longitude = location?.longitude
         val gcd = Geocoder(context)
         val address: List<Address> = gcd!!.getFromLocation(latitude!!, longitude!!,10)
-        Log.e("address", "--> $address")
+        //Log.e("address", "--> $address")
 
         var zipCode: String ?= null
         for(x in address){
             if(x.locality != null && x.postalCode != null){
-                Log.e("state", "--> ${x.adminArea}")
-                Log.e("locality", "${x.locality}")
-                Log.e("zip", "--> ${x.postalCode}")
+               // Log.e("state", "--> ${x.adminArea}")
+                //Log.e("locality", "${x.locality}")
+                //Log.e("zip", "--> ${x.postalCode}")
                 zipCode = x.postalCode
             }
         }
@@ -194,7 +196,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
                     val responseData = response.body()!!.string()
                     val json = JSONObject(responseData)
                     val jsonArray = json.getJSONArray("zip_codes")
-                    Log.e("jsonarray", "$jsonArray")
+                   // Log.e("jsonarray", "$jsonArray")
                     for(x in 0..jsonArray.length()){ //iterates through the json array and extracts all unique zip codes
                         val jObject = jsonArray.getJSONObject(x)
                         val zipCode = jObject.getString("zip_code")
@@ -216,7 +218,6 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         cityHashSet!!.add("70813")
         cityHashSet!!.add("70819")
 
-        Log.e("hashset befo", "--> ${cityHashSet!!.size}")
 
     }
     /*
@@ -229,7 +230,6 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
             if(cityHashSet!!.contains(zip)){
                 val name = x.child("name").getValue(String::class.java)
                 val pictureUrl = x.child("pictureUrl").getValue(String::class.java)
-                Log.e("load info ", "name --> $name  pictureUrl --> $pictureUrl")
                 val match = MatchInfo(name!!, pictureUrl!!)
                 dataSet?.add(match)
             }

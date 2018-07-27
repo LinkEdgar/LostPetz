@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.message_inbox_fragement.*
 import kotlinx.android.synthetic.main.message_inbox_fragement.view.*
 import kotlin.collections.ArrayList
 
@@ -74,9 +74,8 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     Step 1 get the list of chats
      */
     private fun searchForChats(){
-        val userId: String ?=  mUser?.uid
-        if(userId != null) {
-            mRef!!.child(userId).child("chats").addValueEventListener(object : ValueEventListener {
+        val userId = mUser!!.uid
+        mRef!!.child(userId).child("chats").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot?) {
                     getListOfChats(p0!!)
                 }
@@ -84,15 +83,16 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
                 override fun onCancelled(p0: DatabaseError?) {
 
                 }
-
-            })
-        } else rootView?.message_inbox_no_message_textview?.visibility = View.VISIBLE
+        })
     }
 
     private fun getListOfChats(dataSnapshot: DataSnapshot){
         for(x in dataSnapshot.children){
             val chatId = x.getValue(String::class.java)
             retrieveOtherUsersInfo(chatId!!)
+        }
+        if(dataSnapshot.childrenCount < 1){
+            rootView!!.message_inbox_no_message_textview.visibility = View.VISIBLE
         }
     }
 

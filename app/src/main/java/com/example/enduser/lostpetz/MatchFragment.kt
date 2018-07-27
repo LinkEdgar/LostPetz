@@ -39,6 +39,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
     private val MY_PERMISSIONS_REQUEST_LOCATION = 3141
     private var cityHashSet: HashSet<String> ?= null
     private var rootView: View ?= null
+    private val MATCH_LIST_KEY = "match_key"
 
     //firebase
     private var mMatchRef: DatabaseReference ?= null
@@ -49,26 +50,18 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
 
         cityHashSet = HashSet()
         dataSet = ArrayList()
-
         fakePopulateHashset()
         initFirebase()
-
-        //TODO delete fake data
-        /*
-        dataSet = ArrayList<MatchInfo>()
-        dataSet?.add(MatchInfo("1","1"))
-        dataSet?.add(MatchInfo("2","2"))
-        dataSet?.add(MatchInfo("3","3"))
-        dataSet?.add(MatchInfo("4","4"))
-        */
-        //initCardSwipe(rootView)
         getUserLocation()
 
         return rootView
     }
 
-    private fun initCardSwipe(rootView: View){
-        cardSwipe = rootView.swipe_deck
+    /*
+    Sets up the cardswipe and its adapters as well as swipe related callbacks
+     */
+    private fun initCardSwipe(){
+        cardSwipe = rootView!!.swipe_deck
         matchAdapter = MatchAdapter(dataSet!!,context!!, this)
         cardSwipe?.setAdapter(matchAdapter)
 
@@ -88,6 +81,9 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         })
     }
 
+    /*
+    Interface for back button clicked
+     */
     override fun prevClicked() {
         //TODO start intent to switch into detail activity
         val toast = Toast.makeText(context, "Detail Button clicked", Toast.LENGTH_SHORT)
@@ -95,12 +91,18 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         cardSwipe?.unSwipeCard()
     }
 
+    /*
+    Interface for next button clicked
+     */
     override fun nextClicked() {
         cardSwipe!!.swipeTopCardLeft(180)
         //TODO figure out delete options for objects in dataset
 
     }
 
+    /*
+    Interface for favorites button clicked
+     */
     override fun bookmarkClicked() {
         //TETST CODE TODO delete
         val mAuth = FirebaseAuth.getInstance()
@@ -116,6 +118,9 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         //geo fencing might be the best choice as far as I can tell
     }
 
+    /*
+    Tries to access user location if the app has permission otherwise it asks for permission
+     */
     private fun getUserLocation(){
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!)
         if(ContextCompat.checkSelfPermission(context!!, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
@@ -129,6 +134,9 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         }
     }
 
+    /*
+    Gets user location and passes zip code to loadCities()
+     */
     private fun extractZipCode(location: Location?){
         val latitude = location?.latitude
         val longitude = location?.longitude
@@ -136,14 +144,16 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         val address: List<Address> = gcd!!.getFromLocation(latitude!!, longitude!!,10)
         Log.e("address", "--> $address")
 
+        var zipCode: String ?= null
         for(x in address){
             if(x.locality != null && x.postalCode != null){
                 Log.e("state", "--> ${x.adminArea}")
                 Log.e("locality", "${x.locality}")
                 Log.e("zip", "--> ${x.postalCode}")
+                zipCode = x.postalCode
             }
         }
-        //loadCities()
+        //loadCities(zipCode)
     }
 
     private fun initFirebase(){
@@ -160,9 +170,14 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         })
     }
 
-    //TODO in background load cities within distance
-    private fun loadCities(){
-        /*
+    /*
+    Using a distance calculation api and Okhttpclient we load up all zip codes that are within a 'X' amount
+    distance,in miles, from the user's current location zip code. The zip code is added to a hashset to filter
+    pets
+     */
+    private fun loadCities(zipCode: String?){
+        //TODO remove key from this method
+        //TODO add pased in zip to url 
         val applicationKey = "OV3Ep9sFnGnSLc30fL1icVQlCet4T24kVBtH0yNIgguq6ZntbaJccNsV1CVVqS2U"
         val base = "https://www.zipcodeapi.com/rest/"
         val detail = "/radius.json/30168/10/mile"
@@ -180,7 +195,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
                     val json = JSONObject(responseData)
                     val jsonArray = json.getJSONArray("zip_codes")
                     Log.e("jsonarray", "$jsonArray")
-                    for(x in 0..jsonArray.length()){
+                    for(x in 0..jsonArray.length()){ //iterates through the json array and extracts all unique zip codes
                         val jObject = jsonArray.getJSONObject(x)
                         val zipCode = jObject.getString("zip_code")
                         cityHashSet!!.add(zipCode!!)
@@ -191,7 +206,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
 
             }
         })
-        */
+
     }
 
     private fun fakePopulateHashset(){
@@ -200,15 +215,25 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         cityHashSet!!.add("70809")
         cityHashSet!!.add("70813")
         cityHashSet!!.add("70819")
+
+        Log.e("hashset befo", "--> ${cityHashSet!!.size}")
+
     }
+    /*
+    Takes in the datasnapshot and filters out pets via the hashset full of valid zip codes
+    after all the pets are loaded the cardSwipeInit() method is called
+     */
     private fun loadMatches(dataSnapshot: DataSnapshot){
         for(x in dataSnapshot.children){
             val zip = x.child("zipCode").getValue(String::class.java)
             if(cityHashSet!!.contains(zip)){
-                dataSet?.add(MatchInfo("$zip","1"))
+                val name = x.child("name").getValue(String::class.java)
+                val pictureUrl = x.child("pictureUrl").getValue(String::class.java)
+                Log.e("load info ", "name --> $name  pictureUrl --> $pictureUrl")
+                val match = MatchInfo(name!!, pictureUrl!!)
+                dataSet?.add(match)
             }
         }
-        //todo fix this shit
-        initCardSwipe(rootView!!)
+        initCardSwipe()
     }
 }

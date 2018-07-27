@@ -77,6 +77,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private String dateLost;
 
     //TODO add breed for pet
+    //TODO issue with adding pet with two images
 
     @Nullable
     @Override

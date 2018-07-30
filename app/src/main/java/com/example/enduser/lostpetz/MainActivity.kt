@@ -44,10 +44,9 @@ open class MainActivity: AppCompatActivity(){
         val mPagerAdapter = MainActivityPager(supportFragmentManager)
         main_activity_viewpager.adapter = mPagerAdapter
         main_activity_tablayout.setupWithViewPager(main_activity_viewpager)
-        main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_heart)
-        main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_search)
-        main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_add)
-        main_activity_tablayout.getTabAt(3)!!.setIcon(R.drawable.ic_message)
+        main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_search)
+        main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_add)
+        main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_message)
 
     }
 
@@ -58,25 +57,23 @@ open class MainActivity: AppCompatActivity(){
     open class MainActivityPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
         override fun getCount(): Int {
-            return 4
+            return 3
         }
 
         override fun getItem(position: Int): Fragment {
             return when(position){
-                0 -> MatchFragment()
-                1 -> PetQueryFragment()
-                2 -> AddPetFragment()
-                3 -> MessageInboxFragment()
+                0 -> PetQueryFragment()
+                1 -> AddPetFragment()
+                2 -> MessageInboxFragment()
                 else -> MatchFragment()
             }
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
             return when(position){
-                0 -> "Match"
-                1 -> "Search"
-                2 -> "Add"
-                3 -> "Message"
+                0 -> "Search"
+                1 -> "Add"
+                2 -> "Message"
                 else -> null
             }
         }
@@ -94,6 +91,9 @@ open class MainActivity: AppCompatActivity(){
                     startActivity(intent)
                     Toast.makeText(this, "Successfully signed out", Toast.LENGTH_SHORT).show()
                     finish()
+                }
+                R.id.nav_match ->{
+                    startActivity(Intent(this, MatchActivity::class.java))
                 }
             }
 

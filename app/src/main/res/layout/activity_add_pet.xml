@@ -8,6 +8,7 @@
     tools:context="com.example.enduser.lostpetz.AddPetActivity">
 
     <ScrollView
+        android:layout_marginBottom="@dimen/tab_bar_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

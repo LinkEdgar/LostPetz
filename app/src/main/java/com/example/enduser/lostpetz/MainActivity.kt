@@ -6,15 +6,17 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.drawer_header.view.*
 
 open class MainActivity: AppCompatActivity(){
     //Firebase
@@ -27,11 +29,11 @@ open class MainActivity: AppCompatActivity(){
         val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
         setSupportActionBar(toolbar)
         yeet.setOnClickListener{ maint_activity_drawerlayout.openDrawer(GravityCompat.START)}
-
-
-
         initFragments()
         initFirebase()
+
+
+        setUserProfile()
 
         initDrawerLayout()
     }
@@ -108,5 +110,12 @@ open class MainActivity: AppCompatActivity(){
         if(maint_activity_drawerlayout.isDrawerOpen(GravityCompat.START))
             maint_activity_drawerlayout.closeDrawer(GravityCompat.START)
         else super.onBackPressed();
+    }
+
+    private fun setUserProfile(){
+        //TODO get user info and load it
+        //TODO set profile picture configuration
+        val header: View = maint_activity_navigation_view.getHeaderView(0)
+        Glide.with(this).applyDefaultRequestOptions(RequestOptions().error(R.mipmap.ic_launcher_round).circleCrop()).load("").into(header.header_profile_picture)
     }
 }

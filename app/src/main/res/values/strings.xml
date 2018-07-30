@@ -74,5 +74,7 @@
 
     <!-- Navigation Drawer -->
     <string name="sign_out_label"> Sign Out</string>
+    <string name="profile_label">Profile</string>
+    <string name="match_label">Match</string>
 
 </resources>

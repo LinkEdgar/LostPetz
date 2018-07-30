@@ -5,6 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.NavigationView
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
@@ -33,7 +34,8 @@ import java.io.IOException
     or look at detailed information of the current pet
  */
 
-open class MatchFragment: Fragment(), MatchAdapter.onClicked{
+open class MatchFragment: Fragment(), MatchAdapter.onClicked, SwipeDeck.SwipeDeckCallback{
+
 
     private var cardSwipe: SwipeDeck? = null
     private var matchAdapter: MatchAdapter ?= null
@@ -51,11 +53,13 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_match, container, false)
 
-        cityHashSet = HashSet()
-        dataSet = ArrayList()
-        fakePopulateHashset()
-        initFirebase()
-        getUserLocation()
+        if(savedInstanceState == null) {
+            cityHashSet = HashSet()
+            dataSet = ArrayList()
+            fakePopulateHashset()
+            initFirebase()
+            getUserLocation()
+        }
         return rootView
     }
 
@@ -67,20 +71,7 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         matchAdapter = MatchAdapter(dataSet!!,context!!, this)
         cardSwipe?.setAdapter(matchAdapter)
 
-        cardSwipe?.setCallback(object : SwipeDeck.SwipeDeckCallback {
-            override fun cardSwipedLeft(stableId: Long) {
-                //TODO implement left swipe logic
-                val toast = Toast.makeText(context, "Card swiped left", Toast.LENGTH_SHORT)
-                toast.show()
-            }
-
-            override fun cardSwipedRight(stableId: Long) {
-                //TODO implement right swipe logic
-                val toast = Toast.makeText(context, "Card swiped right", Toast.LENGTH_SHORT)
-                toast.show()
-            }
-
-        })
+        cardSwipe?.setCallback(this)
     }
 
     /*
@@ -236,4 +227,40 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked{
         }
         initCardSwipe()
     }
+
+    override fun cardSwipedLeft(stableId: Long) {
+        //TODO implement left swipe logic
+        val toast = Toast.makeText(context, "Card swiped left", Toast.LENGTH_SHORT)
+        toast.show()
+    }
+
+    override fun cardSwipedRight(stableId: Long) {
+        //TODO implement right swipe logic
+        val toast = Toast.makeText(context, "Card swiped right", Toast.LENGTH_SHORT)
+        toast.show()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable("yeet", dataSet)
+        outState.putSerializable("set", cityHashSet)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if(savedInstanceState != null) {
+            if (savedInstanceState!!.containsKey("yeet")) {
+                dataSet = savedInstanceState?.getSerializable("yeet") as ArrayList<MatchInfo>
+                cardSwipe = rootView!!.swipe_deck
+                matchAdapter = MatchAdapter(dataSet!!,context!!, this)
+                cardSwipe?.setAdapter(matchAdapter)
+
+                cardSwipe?.setCallback(this)
+            }
+            if(savedInstanceState.containsKey("set")){
+                cityHashSet = savedInstanceState.get("set") as HashSet<String>
+            }
+        }
+    }
+
 }

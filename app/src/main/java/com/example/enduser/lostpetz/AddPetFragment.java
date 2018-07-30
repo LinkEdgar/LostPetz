@@ -41,6 +41,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private Spinner mDateSpinner;
     private TextInputEditText mPetNameEditText;
     private TextInputEditText mPetZipEditText;
+    private TextInputEditText mPetBreed;
     private TextInputEditText mPetDescriptionEditText;
     private ImageView mImageToUpload;
     private ImageView mImageToUpload2;
@@ -77,7 +78,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private String dateLost;
 
     //TODO add breed for pet
-    //TODO issue with adding pet with two images
+    //TODO issue with adding pet with two images 
 
     @Nullable
     @Override
@@ -140,6 +141,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mImageToUpload3.setOnClickListener(this);
         mPetNameEditText = rootView.findViewById(R.id.add_pet_name);
         mPetZipEditText = rootView.findViewById(R.id.add_pet_zip);
+        mPetBreed = rootView.findViewById(R.id.add_pet_breed);
         mPetDescriptionEditText = rootView.findViewById(R.id.add_pet_description);
         mImageCancel = rootView.findViewById(R.id.add_pet_cancel_image_one);
         mImageCancel.setOnClickListener(this);
@@ -215,7 +217,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     ensures that the imageCounter reflects correct amount of images
      */
     private void addImageToList(Uri uri, int position, boolean isCallFromInstanceState){
-        if(!isCallFromInstanceState)imageCounter++;
+        if(!isCallFromInstanceState) {
+            imageCounter++;
+        }
         imageUriArray[position] = uri;
         switch(position){
             case 0:
@@ -309,6 +313,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             petToAdd.setName(mPetNameEditText.getText().toString().toLowerCase().trim());
             petToAdd.setZip(mPetZipEditText.getText().toString().trim());
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
+            petToAdd.setBreed(mPetBreed.getText().toString().toLowerCase().trim());
             petToAdd.setDateLost(dateLost);
             //Checks if there are pictures to upload to the DB before adding
             //the pet
@@ -343,6 +348,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mPetNameEditText.setText("");
         mPetDescriptionEditText.setText("");
         mPetZipEditText.setText("");
+        mPetBreed.setText("");
         for(int x = 0; x< imageUriArray.length; x++){
             imageUriArray[x] = null;
         }

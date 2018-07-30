@@ -17,6 +17,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <View
+            android:id="@+id/place_holder"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+
         <TextView
             android:gravity="center"
             android:layout_margin="@dimen/horizontal_margin_large"

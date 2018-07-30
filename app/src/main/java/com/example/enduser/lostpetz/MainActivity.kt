@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -21,7 +24,12 @@ open class MainActivity: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //setSupportActionBar(main_activity_toolbar)
+        val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
+        setSupportActionBar(toolbar)
+        yeet.setOnClickListener{ maint_activity_drawerlayout.openDrawer(GravityCompat.START)}
+
+
+
         initFragments()
         initFirebase()
 

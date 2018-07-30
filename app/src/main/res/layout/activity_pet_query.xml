@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PetQueryActivity">
+
+    <View
+        android:id="@+id/place_holder"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
     <SearchView
         android:focusable="false"
         android:layout_below="@+id/pet_query_filter_cardview"
@@ -25,7 +32,7 @@
         android:elevation="8dp"
         android:visibility="gone"
         android:id="@+id/pet_query_filter_cardview"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/place_holder"
         android:layout_marginRight="@dimen/horizontal_margin"
         android:layout_marginLeft="@dimen/horizontal_margin"
         android:layout_marginTop="16dp"

@@ -76,7 +76,7 @@ class SignInActivity : AppCompatActivity() {
                     Toast.makeText(this, R.string.login_fail, Toast.LENGTH_SHORT).show()
                 }
             }
-        } else Toast.makeText(this, R.string.non_null_email, Toast.LENGTH_SHORT).show()
+        } else Toast.makeText(this, R.string.non_null_email, Toast.LENGTH_LONG).show()
 
     }
 
@@ -108,10 +108,10 @@ class SignInActivity : AppCompatActivity() {
             mAuth?.sendPasswordResetEmail(email)?.addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Log.d("Password Reset:", "Successful")
-                    Toast.makeText(this, R.string.reset_password_success, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.reset_password_success, Toast.LENGTH_LONG).show()
                 } else {
                     Log.d("Password Reset:", "Failed")
-                    Toast.makeText(this, R.string.reset_password_fail, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.reset_password_fail, Toast.LENGTH_LONG).show()
                 }
             }
         }else Toast.makeText(this, R.string.non_null_email, Toast.LENGTH_LONG).show()
@@ -179,7 +179,7 @@ class SignInActivity : AppCompatActivity() {
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.d("AuthWithGoogle", "signInWithCredential:failure", task.exception)
-                        Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_LONG).show()
                     }
                 }
     }

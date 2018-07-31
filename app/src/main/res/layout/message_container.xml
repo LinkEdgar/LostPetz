@@ -42,8 +42,6 @@
                 android:id="@+id/messenger_picture_message_option"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
         </FrameLayout>
 
 

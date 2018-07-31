@@ -32,6 +32,7 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
     private var cityHashSet: HashSet<String> ?= null
     private var rootView: View?= null
     private val MATCH_LIST_KEY = "match_key"
+    private val MATCH_HASHSET_KEY = "hash_set"
 
     //firebase
     private var mMatchRef: DatabaseReference?= null
@@ -225,25 +226,29 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
         toast.show()
     }
 
+    //Saves hashset and match data
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable("yeet", dataSet)
-        outState.putSerializable("set", cityHashSet)
+        outState.putSerializable(MATCH_LIST_KEY, dataSet)
+        outState.putSerializable(MATCH_HASHSET_KEY, cityHashSet)
     }
 
+    /*
+    Restores the match dataset as well as the hashset with all of the filtered cities
+     */
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         if(savedInstanceState != null) {
-            if (savedInstanceState!!.containsKey("yeet")) {
-                dataSet = savedInstanceState?.getSerializable("yeet") as ArrayList<MatchInfo>
+            if (savedInstanceState!!.containsKey(MATCH_LIST_KEY)) {
+                dataSet = savedInstanceState?.getSerializable(MATCH_LIST_KEY) as ArrayList<MatchInfo>
                 cardSwipe = rootView!!.swipe_deck
                 matchAdapter = MatchAdapter(dataSet!!,this, this)
                 cardSwipe?.setAdapter(matchAdapter)
 
                 cardSwipe?.setCallback(this)
             }
-            if(savedInstanceState.containsKey("set")){
-                cityHashSet = savedInstanceState.get("set") as HashSet<String>
+            if(savedInstanceState.containsKey(MATCH_HASHSET_KEY)){
+                cityHashSet = savedInstanceState.get(MATCH_HASHSET_KEY) as HashSet<String>
             }
         }
     }

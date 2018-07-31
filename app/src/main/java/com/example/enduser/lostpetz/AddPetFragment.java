@@ -76,9 +76,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
 
     //Pet detail variables
     private String dateLost;
+    private String userSelectedDateLost;
 
-    //TODO add breed for pet
-    //TODO issue with adding pet with two images 
 
     @Nullable
     @Override
@@ -160,7 +159,6 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     Creates an instance of a chooseDialogFragment and sets its onClick listener
      */
 
-    //TODO third option rework
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         int selectPosition = mDateSpinner.getSelectedItemPosition();
@@ -168,6 +166,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             chooseDateDialogFragment = new ChooseDateDialogFragment();
             chooseDateDialogFragment.setOnClicked(this);
             chooseDateDialogFragment.show(getActivity().getFragmentManager(), "chooseDate");
+        }
+        else if(selectPosition == 2){
+            /*
+            Handles case where the user's last saved date is still an option in the spinner
+             */
+            dateLost = userSelectedDateLost;
         }
     }
 
@@ -187,6 +191,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     @Override
     public void onClicked(boolean didUserSelectDate) {
         dateLost = chooseDateDialogFragment.getDateFromPicker();
+        userSelectedDateLost = dateLost;
         if(!didUserSelectDate) {
             mDateSpinner.setSelection(0);
         }else{

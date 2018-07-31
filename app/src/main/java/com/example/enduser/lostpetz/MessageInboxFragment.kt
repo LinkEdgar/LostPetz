@@ -23,7 +23,7 @@ This fragment displays a list of messages that the user has
 open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
 
     private var mRecylerview: RecyclerView? = null
-    private val mInboxData = ArrayList<User>()
+    private var mInboxData = ArrayList<User>()
     private var mAdapter: InboxAdapter? = null
     private var keyHashSet: HashSet<String> ?= null
 
@@ -31,17 +31,25 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
 
     private var rootView: View? = null
 
+    private val INBOX_KEY  = "inbox_key"
+    private val HASH_SET_KEY = "hash_set"
+
     //firebase
     private var mAuth: FirebaseAuth? = null
     private var mRef: DatabaseReference? = null
     private var mUser: FirebaseUser? = null
 
+
+    //TODO don't load all the data at once
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.message_inbox_fragement, container, false)
         keyHashSet = HashSet()
-        initFirebase()
-        searchForChats()
-        //initRecyclerView()
+        if(savedInstanceState == null) {
+            Log.e("loading data", "loading..")
+            initFirebase()
+            searchForChats()
+        }
         return rootView
     }
 
@@ -156,4 +164,26 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
         initRecyclerView()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putSerializable(INBOX_KEY, mInboxData)
+        outState.putSerializable(HASH_SET_KEY, keyHashSet)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if(savedInstanceState != null){
+            if(savedInstanceState.containsKey(INBOX_KEY)){
+                mInboxData = savedInstanceState.get(INBOX_KEY)  as ArrayList<User>
+                mRecylerview = rootView!!.message_inbox_fragment_recyclerview
+                val layoutManager = LinearLayoutManager(context)
+                mRecylerview!!.layoutManager = layoutManager
+                mAdapter = InboxAdapter(mInboxData, context, this)
+                mRecylerview?.adapter = mAdapter
+            }
+            if(savedInstanceState.containsKey(INBOX_KEY)){
+                keyHashSet = savedInstanceState.get(HASH_SET_KEY) as HashSet<String>
+            }
+        }
+    }
 }

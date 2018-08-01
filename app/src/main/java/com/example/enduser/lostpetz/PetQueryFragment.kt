@@ -130,19 +130,18 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
         for(x in snapshot.children){ // iterates through each child in the snapshot to extract info
             val key = x.key
-            //TODO add all information for pets
-            //TODO remove hard coded values
             if(!mPetKeyHashset!!.contains(key)) {
                 mPetKeyHashset!!.add(key)
-                val name = x.child("name").getValue().toString()
-                val zip = x.child("zip").getValue().toString()
-                val breed = x.child("breed").getValue().toString()
-                val description = x.child("description").getValue().toString()
-                val datelost = x.child("dateLost").getValue().toString()
-                val profilePicture = x.child("profileUrlOne").getValue().toString()
-                val url2 = x.child("profileUrlTwo").getValue().toString()
-                val url3 = x.child("profileUrlThree").getValue().toString()
-                val userId = x.child("userID").getValue().toString()
+                val isLost = x.child(PET_FOUND).getValue(Boolean::class.java)
+                val name = x.child(PET_NAME).getValue().toString()
+                val zip = x.child(PET_ZIP).getValue().toString()
+                val breed = x.child(PET_BREED).getValue().toString()
+                val description = x.child(PET_DESC).getValue().toString()
+                val datelost = x.child(PET_DATE_LOST).getValue().toString()
+                val profilePicture = x.child(PET_URL_1).getValue().toString()
+                val url2 = x.child(PET_URL_2).getValue().toString()
+                val url3 = x.child(PET_URL_3).getValue().toString()
+                val userId = x.child(USER_ID).getValue().toString()
                 val pet = Pet()
                 /*
                 Since breed and name are used to filter they are entered into the DB in lowercase forms
@@ -157,6 +156,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 pet.profileUrlTwo = url2
                 pet.profileUrlThree = url3
                 pet.userID = userId
+                pet.setFoundPet(isLost!!)
                 mPetArrrayList!!.add(pet)
                 mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
             }
@@ -304,5 +304,17 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         val SEARCH_FILTER_ZIP = "zip"
         val SEARCH_FILTER_BREED = "breed"
         private val NO_PETS_FOUND = 0
+
+        val PET_ZIP = "zip"
+        val PET_NAME = "name"
+        val PET_FOUND = "isFoundPet"
+        val PET_BREED = "breed"
+        val PET_DESC = "description"
+        val PET_DATE_LOST = "dateLost"
+        val PET_URL_1 = "profileUrlOne"
+        val PET_URL_2 = "profileUrlTwo"
+        val PET_URL_3 = "profileUrlThree"
+        val USER_ID = "userID"
+
     }
 }

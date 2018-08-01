@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pet_search_detail.*
 import android.location.Geocoder
+import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth

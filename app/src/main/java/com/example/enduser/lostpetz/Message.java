@@ -7,8 +7,8 @@ package com.example.enduser.lostpetz;
 public class Message {
     private String userName;
     private String message;
-    private String photoUrl;
-    private String userProfileUrl;
+    private String photoUrl; //pictures sent
+    private String profileUrl;
 
     //firebase requieres empty constructor
     public Message(){
@@ -19,16 +19,16 @@ public class Message {
         this.userName = userName;
         this.message = message;
         this.photoUrl = photoUrl;
-        this.userProfileUrl = userProfileUrl;
+        this.profileUrl = userProfileUrl;
     }
     public void setUserName(String userName){this.userName = userName;}
     public void setMessage(String message){this.message = message;}
     public void setPhotoUrl(String photoUrl){this.photoUrl = photoUrl;}
-    public void setUserProfileUrl(String userProfileUrl){this.userProfileUrl = userProfileUrl;}
+    public void setUserProfileUrl(String userProfileUrl){this.profileUrl = userProfileUrl;}
     public String getUserName(){return userName;}
     public String getMessage(){return message;}
     public String getPhotoUrl(){return photoUrl;}
-    public String getUserProfileUrl(){return userProfileUrl;}
+    public String getUserProfileUrl(){return profileUrl;}
 
 
 

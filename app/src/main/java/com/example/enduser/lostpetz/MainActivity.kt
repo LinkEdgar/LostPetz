@@ -34,7 +34,7 @@ open class MainActivity: AppCompatActivity(){
     var mStorage:FirebaseStorage ?= null
 
     val RC_PROFILE_PICTURE = 24
-
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +100,7 @@ open class MainActivity: AppCompatActivity(){
             item.isChecked
             maint_activity_drawerlayout.closeDrawers()
             when(item.itemId){
-                R.id.nav_sign_out -> { //user signs out user and takes them to login screen  
+                R.id.nav_sign_out -> { //user signs out user and takes them to login screen
                     mAuth?.signOut()
                     val intent = Intent(this@MainActivity, SignInActivity::class.java)
                     startActivity(intent)
@@ -151,9 +151,6 @@ open class MainActivity: AppCompatActivity(){
             override fun onDataChange(p0: DataSnapshot?) {
                 val username = p0?.child("name")?.getValue(String::class.java)
                 val profileUrl = p0?.child("profileUrl")?.getValue(String::class.java)
-
-                Log.e("username", "--> $username")
-                Log.e("profileUrl", "--> $profileUrl")
                 setUserProfile(username,profileUrl)
 
 
@@ -186,7 +183,7 @@ open class MainActivity: AppCompatActivity(){
     is displayed
      */
     private fun uploadProfilePicture(imageUri: Uri){
-        val uploadTask: UploadTask = mStorage?.getReference("ProfilePictures/"+ imageUri.lastPathSegment)!!.putFile(imageUri)
+        val uploadTask: UploadTask = mStorage?.getReference("ProfilePictures/"+ mAuth!!.currentUser!!.uid)!!.putFile(imageUri)
         val profileImage = maint_activity_navigation_view.getHeaderView(0).header_profile_picture
         profileImage.visibility = View.GONE
         val progressbar = maint_activity_navigation_view.getHeaderView(0).header_progressbar

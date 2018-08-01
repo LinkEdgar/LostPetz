@@ -11,13 +11,13 @@ public class Pet implements Parcelable{
     public Pet(String name, String description, boolean foundPet){
         this.name = name;
         this.description = description;
-        this.foundPet = foundPet;
+        this.isFoundPet = foundPet;
     }
 
     public Pet(String name, String description, boolean foundPet, String profileUrlOne, String profileUrlTwo, String profileUrlThree,String breed, String zip){
         this.name = name;
         this.description = description;
-        this.foundPet = foundPet;
+        this.isFoundPet = foundPet;
         this.profileUrlOne = profileUrlOne;
         this.profileUrlTwo = profileUrlTwo;
         this.profileUrlThree = profileUrlThree;
@@ -32,7 +32,7 @@ public class Pet implements Parcelable{
     private String zip;
     private String dateLost;
     private String description;
-    private boolean foundPet;
+    private boolean isFoundPet;
     private String breed;
     private String userID;
     private String userName;
@@ -71,7 +71,7 @@ public class Pet implements Parcelable{
     }
 
     public void setFoundPet(boolean foundPet) {
-        this.foundPet = foundPet;
+        this.isFoundPet = foundPet;
     }
 
     public void setProfileUrl(String profileUrl) {
@@ -101,7 +101,7 @@ public class Pet implements Parcelable{
         return description;
     }
     public boolean getIsFoundPet() {
-        return foundPet;
+        return isFoundPet;
     }
 
     public String getProfileUrlOne() {
@@ -138,7 +138,7 @@ public class Pet implements Parcelable{
         parcel.writeString(zip);
         parcel.writeString(dateLost);
         parcel.writeString(description);
-        parcel.writeByte((byte) (foundPet ? 1 : 0));
+        parcel.writeByte((byte) (isFoundPet ? 1 : 0));
         parcel.writeString(breed);
         parcel.writeString(userID);
         parcel.writeString(userName);
@@ -152,7 +152,7 @@ public class Pet implements Parcelable{
         zip = in.readString();
         dateLost = in.readString();
         description = in.readString();
-        foundPet = in.readByte() != 0;
+        isFoundPet = in.readByte() != 0;
         breed = in.readString();
         userID = in.readString();
         userName = in.readString();

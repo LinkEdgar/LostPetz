@@ -46,7 +46,6 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
         rootView = inflater.inflate(R.layout.message_inbox_fragement, container, false)
         keyHashSet = HashSet()
         if(savedInstanceState == null) {
-            Log.e("loading data", "loading..")
             initFirebase()
             searchForChats()
         }
@@ -112,7 +111,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
         if(split.equals(mUser!!.uid))
             split = chatId.substring((chatId!!.length)/2, chatId.length)
 
-        mRef!!.child(split).child("name").addValueEventListener(object: ValueEventListener{
+        mRef!!.child(split).addValueEventListener(object: ValueEventListener{
             override fun onDataChange(p0: DataSnapshot?) {
                 getOtherUserData(p0!!, chatId)
             }
@@ -126,7 +125,9 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     private fun getOtherUserData(snapShot: DataSnapshot, chatId: String){
         //TODO getProfileUrl
         val user =  User(null, null, null, null, null)
-        val name = snapShot.getValue(String::class.java)
+        val name = snapShot.child("name").getValue(String::class.java)
+        val profileUrl = snapShot.child("profileUrl").getValue(String::class.java)
+        user.profileUrl = profileUrl
         user.userName = name
         user.chatId = chatId
 

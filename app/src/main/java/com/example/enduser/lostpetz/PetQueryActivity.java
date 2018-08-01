@@ -137,7 +137,6 @@ public class PetQueryActivity extends Fragment implements PetAdapter.onViewClick
      */
     @Override
     public void onClick(int position) {
-        //TODO fill with actual logic and remove toast
 
         Toast.makeText(getContext(), "clicked on item " + position, Toast.LENGTH_SHORT).show();
 

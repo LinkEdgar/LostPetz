@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.enduser.lostpetz.AddPetActivity">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_marginBottom="@dimen/tab_bar_margin"
@@ -22,11 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
 
-        <TextView
-            android:layout_margin="@dimen/horizontal_margin_large"
-            android:text="Add your pet to the lost/found database. Please provide as much information as possible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_margin="@dimen/horizontal_margin_large"

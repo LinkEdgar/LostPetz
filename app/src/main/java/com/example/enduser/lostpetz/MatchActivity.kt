@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.daprlabs.aaron.swipedeck.SwipeDeck
@@ -21,6 +22,7 @@ import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import kotlin.math.absoluteValue
 
 open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck.SwipeDeckCallback{
 
@@ -34,19 +36,22 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
     private val MATCH_LIST_KEY = "match_key"
     private val MATCH_HASHSET_KEY = "hash_set"
 
+    private var userZipCode: String ?= null
+
     //firebase
     private var mMatchRef: DatabaseReference?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_match)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if(savedInstanceState == null) {
             cityHashSet = HashSet()
             dataSet = ArrayList()
-            fakePopulateHashset()
-            initFirebase()
+            //fakePopulateHashset()
             getUserLocation()
+            initFirebase()
         }
     }
     /*
@@ -123,13 +128,12 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
         val address: List<Address> = gcd!!.getFromLocation(latitude!!, longitude!!,10)
         //Log.e("address", "--> $address")
 
-        var zipCode: String ?= null
         for(x in address){
             if(x.locality != null && x.postalCode != null){
                 // Log.e("state", "--> ${x.adminArea}")
                 //Log.e("locality", "${x.locality}")
                 //Log.e("zip", "--> ${x.postalCode}")
-                zipCode = x.postalCode
+                userZipCode = x.postalCode
             }
         }
         //loadCities(zipCode)
@@ -201,6 +205,9 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
     Takes in the datasnapshot and filters out pets via the hashset full of valid zip codes
     after all the pets are loaded the cardSwipeInit() method is called
      */
+
+    /*
+    TODO delete comment block
     private fun loadMatches(dataSnapshot: DataSnapshot){
         for(x in dataSnapshot.children){
             val zip = x.child("zipCode").getValue(String::class.java)
@@ -213,6 +220,27 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
         }
         initCardSwipe()
     }
+    */
+
+    //Cheap algorithm
+    private fun loadMatches(dataSnapshot: DataSnapshot){
+        for(x in dataSnapshot.children){
+            val zip = x.child("zipCode").getValue(String::class.java)
+            //TODO zip may be null?
+            val secondDigit = zip?.elementAt(2)?.toInt()?.minus(userZipCode?.elementAt(2)!!.toInt())?.absoluteValue
+            val thirdDigit = zip?.elementAt(3)?.toInt()?.minus(userZipCode?.elementAt(3)!!.toInt())?.absoluteValue
+            Log.e("secondDigit", "--> $thirdDigit")
+
+            if(secondDigit!! <= 2 && thirdDigit!! <= 5){
+                val name = x.child("name").getValue(String::class.java)
+                val pictureUrl = x.child("pictureUrl").getValue(String::class.java)
+                val match = MatchInfo(name!!, pictureUrl!!)
+                dataSet?.add(match)
+            }
+        }
+        initCardSwipe()
+    }
+
 
     override fun cardSwipedLeft(stableId: Long) {
         //TODO implement left swipe logic

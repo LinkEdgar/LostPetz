@@ -34,7 +34,7 @@ open class MainActivity: AppCompatActivity(){
     var mStorage:FirebaseStorage ?= null
 
     val RC_PROFILE_PICTURE = 24
-    
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

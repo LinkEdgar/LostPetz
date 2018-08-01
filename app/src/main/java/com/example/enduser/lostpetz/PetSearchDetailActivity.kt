@@ -29,6 +29,7 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pet_search_detail)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         mAuth = FirebaseAuth.getInstance()
         urlList = ArrayList()
         handleIntentData()

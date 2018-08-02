@@ -40,8 +40,11 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     private var mUser: FirebaseUser? = null
 
 
-    //TODO don't load all the data at once
-
+    /*
+    This fragment loads the 15 latest conversations that the user has in the convo tree
+    TODO add time stamp to messages and when the messages are brought in we can change the order of the
+    messages based most current. Also add a refresh in case user wants to scroll through more of their messages
+     */
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.message_inbox_fragement, container, false)
         keyHashSet = HashSet()
@@ -70,7 +73,6 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     Interface for the adapter to handle onclick of views. Launches intent to switch to MessagingActivity
      */
     override fun onClick(position: Int) {
-        //TODO add extra information
         val intent = Intent(context, MessagingActivity::class.java)
         val jointChat = mInboxData[position].chatId
         intent.putExtra("jointChat", jointChat)
@@ -82,7 +84,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
      */
     private fun searchForChats(){
         val userId = mUser!!.uid
-        mRef!!.child(userId).child("chats").addValueEventListener(object : ValueEventListener {
+        mRef!!.child(userId).child("chats").limitToLast(15).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot?) {
                     getListOfChats(p0!!)
                 }
@@ -123,7 +125,6 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     }
 
     private fun getOtherUserData(snapShot: DataSnapshot, chatId: String){
-        //TODO getProfileUrl
         val user =  User(null, null, null, null, null)
         val name = snapShot.child("name").getValue(String::class.java)
         val profileUrl = snapShot.child("profileUrl").getValue(String::class.java)

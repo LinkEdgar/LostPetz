@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.inbox_container.view.*
 
 
@@ -17,6 +19,9 @@ open class InboxAdapter(val data: ArrayList<User>, val context: Context?, val on
     override fun onBindViewHolder(holder: InboxViewHolder, position: Int) {
         //test data
         holder.profilePictureIv?.setImageResource(R.mipmap.ic_launcher_round)
+        Glide.with(holder.profilePictureIv!!).applyDefaultRequestOptions(RequestOptions().circleCrop()
+                .centerCrop().error(R.drawable.default_profile_picture))
+                .load(data.get(position).profileUrl).into(holder.profilePictureIv)
         holder.senderNameTv?.setText(data[position].userName)
         val lastMessage = data[position].lastMessage
         if(lastMessage.equals("null") || lastMessage == null)

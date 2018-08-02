@@ -36,7 +36,7 @@ open class ImageSlider(val context: Context, val urlList: ArrayList<String>, val
     //inflates view
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val itemView = inflater.inflate(R.layout.image_slider_container, container, false)
-        //TODO add no profile picture drawable
+        //TODO add no profile picture for pets drawable
         if(urlList.size > 0) { //if the pet has pictures to upload we use our urlList to populate the imageview
             Glide.with(context).applyDefaultRequestOptions(RequestOptions().error(R.mipmap.ic_launcher)).load(urlList[position]).into(itemView.image_slider_imageview)
         }else{ //if there are no images we populate the imageview with default image

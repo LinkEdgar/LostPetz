@@ -24,7 +24,7 @@ import org.json.JSONObject
 import java.io.IOException
 import kotlin.math.absoluteValue
 
-open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck.SwipeDeckCallback{
+open class MatchActivity: AppCompatActivity(), SwipeDeck.SwipeDeckCallback{
 
     private var cardSwipe: SwipeDeck? = null
     private var matchAdapter: MatchAdapter ?= null
@@ -46,6 +46,8 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
         setContentView(R.layout.activity_match)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        initUi()
+
         if(savedInstanceState == null) {
             cityHashSet = HashSet()
             dataSet = ArrayList()
@@ -53,12 +55,19 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
             getUserLocation()
         }
     }
+
+    private fun initUi(){
+        match_back_button.setOnClickListener{backClicked()}
+        match_next_button.setOnClickListener{nextClicked()}
+        match_fav_button.setOnClickListener{favClicked()}
+    }
+
     /*
     Sets up the cardswipe and its adapters as well as swipe related callbacks
      */
     private fun initCardSwipe(){
         cardSwipe = swipe_deck
-        matchAdapter = MatchAdapter(dataSet!!,this, this)
+        matchAdapter = MatchAdapter(dataSet!!,this)
         cardSwipe?.setAdapter(matchAdapter)
 
         cardSwipe?.setCallback(this)
@@ -67,7 +76,7 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
     /*
     Interface for back button clicked
      */
-    override fun prevClicked() {
+    private fun backClicked() {
         //TODO start intent to switch into detail activity
         val toast = Toast.makeText(this, "Detail Button clicked", Toast.LENGTH_SHORT)
         toast.show()
@@ -77,7 +86,7 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
     /*
     Interface for next button clicked
      */
-    override fun nextClicked() {
+    private fun nextClicked() {
         cardSwipe!!.swipeTopCardLeft(180)
         //TODO figure out delete options for objects in dataset
 
@@ -86,7 +95,7 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
     /*
     Interface for favorites button clicked
      */
-    override fun bookmarkClicked() {
+    private fun favClicked() {
         //TETST CODE TODO delete
         val mAuth = FirebaseAuth.getInstance()
         mAuth.signOut()
@@ -272,7 +281,7 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
             if (savedInstanceState!!.containsKey(MATCH_LIST_KEY)) {
                 dataSet = savedInstanceState?.getSerializable(MATCH_LIST_KEY) as ArrayList<MatchInfo>
                 cardSwipe = rootView!!.swipe_deck
-                matchAdapter = MatchAdapter(dataSet!!,this, this)
+                matchAdapter = MatchAdapter(dataSet!!,this)
                 cardSwipe?.setAdapter(matchAdapter)
 
                 cardSwipe?.setCallback(this)

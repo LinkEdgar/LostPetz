@@ -68,13 +68,15 @@
         android:layout_width="match_parent"
         android:layout_height="175dp" />
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
+        android:layout_marginRight="@dimen/horizontal_margin_large"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_message_large"
         android:text="@string/lost_pet_button"
         android:layout_marginBottom="@dimen/vertical_margin_large"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:elevation="4dp"
-        android:layout_centerInParent="true"
         tools:text="Lost/Found"
         android:id="@+id/search_detail_lost_button"
         android:layout_alignParentBottom="true"

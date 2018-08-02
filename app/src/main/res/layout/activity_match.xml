@@ -38,6 +38,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:id="@+id/match_back_button"
                 android:layout_marginLeft="@dimen/horizontal_margin"
                 android:src="@mipmap/ic_launcher_round"
                 android:layout_centerVertical="true"
@@ -46,6 +47,7 @@
                 android:layout_height="wrap_content" />
 
             <ImageView
+                android:id="@+id/match_fav_button"
                 android:src="@mipmap/ic_launcher_round"
                 android:layout_centerVertical="true"
                 android:layout_centerInParent="true"
@@ -53,6 +55,7 @@
                 android:layout_height="wrap_content" />
 
             <ImageView
+                android:id="@+id/match_next_button"
                 android:layout_marginRight="@dimen/horizontal_margin"
                 android:src="@mipmap/ic_launcher_round"
                 android:layout_centerVertical="true"

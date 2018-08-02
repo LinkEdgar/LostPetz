@@ -78,7 +78,7 @@ open class MainActivity: AppCompatActivity(){
                 0 -> PetQueryFragment()
                 1 -> AddPetFragment()
                 2 -> MessageInboxFragment()
-                else -> MatchFragment()
+                else -> AddPetFragment()
             }
         }
 

@@ -34,6 +34,8 @@ import java.io.IOException
     or look at detailed information of the current pet
  */
 
+/*
+
 open class MatchFragment: Fragment(), MatchAdapter.onClicked, SwipeDeck.SwipeDeckCallback{
 
 
@@ -265,3 +267,6 @@ open class MatchFragment: Fragment(), MatchAdapter.onClicked, SwipeDeck.SwipeDec
     }
 
 }
+
+
+        */

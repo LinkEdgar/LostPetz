@@ -33,6 +33,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
 
     private val INBOX_KEY  = "inbox_key"
     private val HASH_SET_KEY = "hash_set"
+    private val NO_MESSAGES_KEY = "bool"
 
     //firebase
     private var mAuth: FirebaseAuth? = null
@@ -170,6 +171,9 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
         super.onSaveInstanceState(outState)
         outState.putSerializable(INBOX_KEY, mInboxData)
         outState.putSerializable(HASH_SET_KEY, keyHashSet)
+        if(rootView!!.message_inbox_no_message_textview.visibility == View.VISIBLE){
+            outState.putBoolean(NO_MESSAGES_KEY, true)
+        }
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
@@ -185,6 +189,9 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
             }
             if(savedInstanceState.containsKey(INBOX_KEY)){
                 keyHashSet = savedInstanceState.get(HASH_SET_KEY) as HashSet<String>
+            }
+            if(savedInstanceState.containsKey(NO_MESSAGES_KEY)){
+                rootView!!.message_inbox_no_message_textview.visibility = View.VISIBLE
             }
         }
     }

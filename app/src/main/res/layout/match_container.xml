@@ -32,34 +32,18 @@
             android:layout_height="300dp" />
 
         <LinearLayout
+            android:layout_marginRight="@dimen/horizontal_margin_large"
+            android:layout_marginLeft="@dimen/horizontal_margin_large"
             android:layout_marginTop="32dp"
             android:layout_below="@+id/match_container_imageview"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/match_container_detail"
-                android:layout_marginTop="4dp"
-                android:src="@mipmap/ic_launcher"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content" />
-
-            <ImageView
-                android:id="@+id/match_container_bookmark"
-                android:src="@mipmap/ic_launcher_round"
-                android:layout_weight="2"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_width="0dp"
-                android:layout_height="32dp" />
-
-            <ImageView
-                android:id="@+id/match_container_next"
-                android:src="@mipmap/ic_launcher"
-                android:layout_weight="1"
-                android:layout_width="0dp"
+            <TextView
+                android:text="Pet Name Goes Here"
+                android:id="@+id/match_container_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </RelativeLayout>

@@ -51,7 +51,6 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
             dataSet = ArrayList()
             //fakePopulateHashset()
             getUserLocation()
-            initFirebase()
         }
     }
     /*
@@ -114,7 +113,8 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
         }else{
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 location: Location? ->
-                extractZipCode(location) }
+                extractZipCode(location)
+                initFirebase() }
         }
     }
 
@@ -227,15 +227,17 @@ open class MatchActivity: AppCompatActivity(), MatchAdapter.onClicked, SwipeDeck
         for(x in dataSnapshot.children){
             val zip = x.child("zipCode").getValue(String::class.java)
             //TODO zip may be null?
-            val secondDigit = zip?.elementAt(2)?.toInt()?.minus(userZipCode?.elementAt(2)!!.toInt())?.absoluteValue
-            val thirdDigit = zip?.elementAt(3)?.toInt()?.minus(userZipCode?.elementAt(3)!!.toInt())?.absoluteValue
-            Log.e("secondDigit", "--> $thirdDigit")
+            if(zip != null) {
+                val secondDigit = zip!!.elementAt(2)?.toInt().minus(userZipCode?.elementAt(2)!!.toInt())?.absoluteValue
+                val thirdDigit = zip?.elementAt(3)?.toInt()?.minus(userZipCode?.elementAt(3)!!.toInt())?.absoluteValue
+                Log.e("secondDigit", "--> $thirdDigit")
 
-            if(secondDigit!! <= 2 && thirdDigit!! <= 5){
-                val name = x.child("name").getValue(String::class.java)
-                val pictureUrl = x.child("pictureUrl").getValue(String::class.java)
-                val match = MatchInfo(name!!, pictureUrl!!)
-                dataSet?.add(match)
+                if (secondDigit!! <= 2 && thirdDigit!! <= 5) {
+                    val name = x.child("name").getValue(String::class.java)
+                    val pictureUrl = x.child("pictureUrl").getValue(String::class.java)
+                    val match = MatchInfo(name!!, pictureUrl!!)
+                    dataSet?.add(match)
+                }
             }
         }
         initCardSwipe()

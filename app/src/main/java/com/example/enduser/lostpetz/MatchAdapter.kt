@@ -44,6 +44,7 @@ open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val con
 
         Glide.with(context).applyDefaultRequestOptions(RequestOptions().centerCrop()).load(listOfPotentialMatches[position].url).into(profileImage)
 
+        /*
         val nextImageButton = view!!.findViewById<View>(R.id.match_container_next)
 
         nextImageButton.setOnClickListener({onNextClick()})
@@ -55,6 +56,7 @@ open class MatchAdapter(val listOfPotentialMatches: ArrayList<MatchInfo>,val con
         val bookmarkImageButton = view!!.findViewById<View>(R.id.match_container_bookmark)
 
         bookmarkImageButton.setOnClickListener({onBookmarkClick()})
+        */
 
         //TODO delete this later
         view.test_textview.setText(listOfPotentialMatches[position].name)

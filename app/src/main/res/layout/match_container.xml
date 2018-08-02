@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
@@ -11,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        ,<!--Test  TODO delete later -->
 
         <TextView
             tools:text="Yeet"
@@ -32,9 +32,9 @@
             android:layout_height="300dp" />
 
         <LinearLayout
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/match_container_imageview"
             android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="74dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 

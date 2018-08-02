@@ -90,15 +90,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         }
         searchQuery = string.toLowerCase().trim()
         mNoPetsProgressBar!!.visibility = View.VISIBLE
-        mRef!!.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                checkIfPetsFound()
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
         listener= object : ValueEventListener{
             override fun onCancelled(p0: DatabaseError?) {
             }
@@ -161,6 +152,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 mPetAdapter!!.notifyItemChanged(mPetArrrayList!!.size)
             }
         }
+        checkIfPetsFound()
     }
 
     /*

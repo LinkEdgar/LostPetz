@@ -23,8 +23,10 @@
     <string name="no_messages">No messages</string>
 
     <!-- PetSearchDetail-->
-    <string name="description_label">Description</string>
+    <string name="name_label">Name:</string>
+    <string name="description_label">User description:</string>
     <string name="lost_pet_button">Lost/Found</string>
+    <string name="city_label">City:</string>
 
     <!-- AddPets Strings -->
     <string-array name="date_array">

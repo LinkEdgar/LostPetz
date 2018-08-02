@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".PetSearchDetailActivity">
 
+    <!-- TODO Add more pet info, date lost breed, etc-->
+
     <android.support.v4.view.ViewPager
         android:id="@+id/search_detail_viewpager"
         android:layout_width="match_parent"
@@ -19,30 +21,52 @@
         android:layout_height="32dp" />
 
     <TextView
-        android:textSize="@dimen/heading_text_size"
         android:textStyle="bold"
+        android:id="@+id/name_label"
+        android:layout_below="@+id/search_detail_indicator"
+        android:textSize="@dimen/heading_text_size"
         android:layout_marginTop="@dimen/vertical_margin"
         android:layout_marginLeft="@dimen/horizontal_margin_large"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/search_detail_indicator"
-        tools:text="Name"
-        android:id="@+id/search_detail_name_textview"
+        android:text="@string/name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:textSize="@dimen/default_text_size"
+        android:layout_toRightOf="@+id/name_label"
+        android:textSize="@dimen/heading_text_size"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_below="@+id/search_detail_indicator"
+        tools:text="Pet name"
+        android:id="@+id/search_detail_name_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_marginRight="@dimen/horizontal_margin_large"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_below="@+id/search_detail_name_textview"
+        android:id="@+id/border_1"
+        android:background="#778899"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:textStyle="bold"
+        android:textSize="@dimen/heading_text_size"
         android:text="@string/description_label"
         android:layout_marginTop="@dimen/vertical_margin"
-        android:textStyle="bold"
         android:id="@+id/search_detail_description_textview_label_textview"
         android:layout_marginLeft="@dimen/horizontal_margin_large"
-        android:layout_below="@+id/search_detail_name_textview"
+        android:layout_below="@+id/border_1"
         tools:text="Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
+        android:textSize="@dimen/heading_text_size"
         android:layout_marginLeft="@dimen/horizontal_margin_large"
         tools:text="Description should go here"
         android:layout_below="@+id/search_detail_description_textview_label_textview"
@@ -50,15 +74,39 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:textStyle="bold"
+
+    <View
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_marginRight="@dimen/horizontal_margin_large"
         android:layout_marginTop="@dimen/vertical_margin"
-        tools:text="City goes here"
-        android:layout_marginLeft="@dimen/vertical_margin_large"
         android:layout_below="@+id/search_detail_description_textview"
-        android:id="@+id/search_detail_city_textview"
+        android:id="@+id/border_2"
+        android:background="#778899"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <TextView
+        android:textSize="@dimen/heading_text_size"
+        android:textStyle="bold"
+        android:id="@+id/city_label"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:text="@string/city_label"
+        android:layout_marginLeft="@dimen/vertical_margin_large"
+        android:layout_below="@+id/border_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:textSize="@dimen/heading_text_size"
+
+        android:id="@+id/search_detail_city_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/border_2"
+        android:layout_marginLeft="@dimen/vertical_margin_large"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_toRightOf="@+id/city_label"
+        tools:text="City goes here" />
 
     <ImageView
         android:id="@+id/search_detail_static_map"

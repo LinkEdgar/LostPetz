@@ -10,19 +10,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ImageButton
+        <ImageView
+            android:layout_marginTop="@dimen/vertical_margin"
+            android:layout_marginLeft="@dimen/horizontal_margin"
             android:elevation="4dp"
             android:id="@+id/message_full_cancel_button"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@drawable/ic_back"
             android:layout_width="32dp"
             android:layout_height="32dp" />
         <ImageView
-            android:layout_below="@+id/message_full_cancel_button"
             android:id="@+id/message_full_screen_image"
             android:layout_centerInParent="true"
-            android:src="@mipmap/ic_launcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

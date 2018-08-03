@@ -17,7 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 public class FullScreenDialog extends DialogFragment{
 
     private ImageView mImageView;
-    private ImageButton mCancelButton;
+    private ImageView mCancelButton;
     private String imageUrl;
     @Nullable
     @Override
@@ -52,6 +52,6 @@ public class FullScreenDialog extends DialogFragment{
             }
         });
         mImageView = (ImageView) view.findViewById(R.id.message_full_screen_image);
-        Glide.with(getContext()).applyDefaultRequestOptions(new RequestOptions().error(R.mipmap.ic_launcher)).load(imageUrl).into(mImageView);
+        Glide.with(getContext()).applyDefaultRequestOptions(new RequestOptions().fitCenter().error(R.mipmap.ic_launcher)).load(imageUrl).into(mImageView);
     }
 }

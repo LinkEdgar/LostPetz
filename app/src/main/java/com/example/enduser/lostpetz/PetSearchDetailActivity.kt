@@ -51,6 +51,13 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     private fun setPetData(){
         search_detail_description_textview.setText(pet?.description)
         search_detail_name_textview.setText(pet?.name)
+        if(pet?.dateLost != null)
+        search_detail_date_lost.text = pet?.dateLost
+        else search_detail_date_lost.text = "N/A"
+        if(pet?.breed != null && !pet?.breed.equals("Null"))
+            search_detail_breed.text = pet?.breed
+        else search_detail_breed.text = "N/A"
+
     }
 
     /*
@@ -74,7 +81,8 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
                 Latitude = address.latitude
                 Longitude = address.longitude
                 val city = address.locality
-                search_detail_city_textview.text = city
+                if(city != null && !city.equals("Null")) search_detail_city_textview.text = city
+                else search_detail_city_textview.text = "N/A"
             }
         } catch (e: IOException) {
             e.printStackTrace()

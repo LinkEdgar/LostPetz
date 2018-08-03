@@ -6,8 +6,10 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginLeft="@dimen/horizontal_margin"
         android:id="@+id/register_cancel"
-        android:src="@mipmap/ic_launcher_round"
+        android:src="@drawable/ic_back_black"
         android:layout_width="32dp"
         android:layout_height="32dp" />
 

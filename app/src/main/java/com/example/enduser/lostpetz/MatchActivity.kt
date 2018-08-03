@@ -232,6 +232,7 @@ open class MatchActivity: AppCompatActivity(), SwipeDeck.SwipeDeckCallback{
     */
 
     //Cheap algorithm
+    //TODO make sure the first digit is a match
     private fun loadMatches(dataSnapshot: DataSnapshot){
         for(x in dataSnapshot.children){
             val zip = x.child("zipCode").getValue(String::class.java)

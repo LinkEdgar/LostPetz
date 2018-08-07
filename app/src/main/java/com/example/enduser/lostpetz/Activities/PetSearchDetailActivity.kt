@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz
+package com.example.enduser.lostpetz.Activities
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -6,16 +6,19 @@ import android.os.Bundle
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_pet_search_detail.*
 import android.location.Geocoder
-import android.util.Log
 import android.widget.Toast
 import com.bumptech.glide.request.RequestOptions
+import com.example.enduser.lostpetz.FullScreenDialog
+import com.example.enduser.lostpetz.ImageSlider
+import com.example.enduser.lostpetz.CustomObjectClasses.Pet
+import com.example.enduser.lostpetz.R
 import com.google.firebase.auth.FirebaseAuth
 import java.io.IOException
 
 
 class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
 
-    var pet: Pet ?= null
+    var pet: Pet?= null
     private val GOOGLE_STATIC_MAP_BASE_URL = "https://maps.googleapis.com/maps/api/staticmap?"
     private val GOOGLE_API_KEY = "AIzaSyD5fotiQ4E6IDK56KG5LGwtrkew8v_VIvI"
     private val GOOGLE_STATIC_MAP_ZOOM = "&zoom=12"

@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz
+package com.example.enduser.lostpetz.Activities
 
 import android.content.Context
 import android.content.DialogInterface
@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.activity_sign_in_activty.*
 import android.widget.LinearLayout
 import android.widget.EditText
+import com.example.enduser.lostpetz.R
+import com.example.enduser.lostpetz.DialogFragments.RegisterDialogFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -94,7 +96,7 @@ class SignInActivity : AppCompatActivity() {
         input.layoutParams = lp
         builder.setView(input)
         builder.setPositiveButton(R.string.reset_password_label, DialogInterface.OnClickListener { dialogInterface, i -> passwordRecovery(input.text.toString().trim()) })
-        builder.setNegativeButton(R.string.cancel_label, DialogInterface.OnClickListener{dialogInterface, i -> })
+        builder.setNegativeButton(R.string.cancel_label, DialogInterface.OnClickListener{ dialogInterface, i -> })
         builder.create()
         builder.show()
     }

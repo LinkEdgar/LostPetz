@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz;
+package com.example.enduser.lostpetz.CustomObjectClasses;
 
 import android.os.Parcel;
 import android.os.Parcelable;

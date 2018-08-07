@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz
+package com.example.enduser.lostpetz.Fragments
 
 import android.content.Intent
 import android.support.v4.app.Fragment
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,11 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
+import com.example.enduser.lostpetz.Activities.PetSearchDetailActivity
+import com.example.enduser.lostpetz.Adapters.PetAdapter
+import com.example.enduser.lostpetz.FirebaseValues
+import com.example.enduser.lostpetz.CustomObjectClasses.Pet
+import com.example.enduser.lostpetz.R
 
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -107,7 +110,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     This is the onClick interface from the PetAdapter to allow onClick handling
      */
     override fun onClick(position: Int) {
-        val intent = Intent(activity,PetSearchDetailActivity::class.java)
+        val intent = Intent(activity, PetSearchDetailActivity::class.java)
         intent?.putExtra("pet", mPetArrrayList?.get(position))
         startActivity(intent)
 

@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz
+package com.example.enduser.lostpetz.Activities
 
 import android.content.pm.PackageManager
 import android.location.Address
@@ -12,6 +12,9 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.daprlabs.aaron.swipedeck.SwipeDeck
+import com.example.enduser.lostpetz.Adapters.MatchAdapter
+import com.example.enduser.lostpetz.CustomObjectClasses.MatchInfo
+import com.example.enduser.lostpetz.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +30,7 @@ import kotlin.math.absoluteValue
 open class MatchActivity: AppCompatActivity(), SwipeDeck.SwipeDeckCallback{
 
     private var cardSwipe: SwipeDeck? = null
-    private var matchAdapter: MatchAdapter ?= null
+    private var matchAdapter: MatchAdapter?= null
     private var dataSet: ArrayList<MatchInfo> ?= null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private val MY_PERMISSIONS_REQUEST_LOCATION = 3141
@@ -67,7 +70,7 @@ open class MatchActivity: AppCompatActivity(), SwipeDeck.SwipeDeckCallback{
      */
     private fun initCardSwipe(){
         cardSwipe = swipe_deck
-        matchAdapter = MatchAdapter(dataSet!!,this)
+        matchAdapter = MatchAdapter(dataSet!!, this)
         cardSwipe?.setAdapter(matchAdapter)
 
         cardSwipe?.setCallback(this)
@@ -282,7 +285,7 @@ open class MatchActivity: AppCompatActivity(), SwipeDeck.SwipeDeckCallback{
             if (savedInstanceState!!.containsKey(MATCH_LIST_KEY)) {
                 dataSet = savedInstanceState?.getSerializable(MATCH_LIST_KEY) as ArrayList<MatchInfo>
                 cardSwipe = rootView!!.swipe_deck
-                matchAdapter = MatchAdapter(dataSet!!,this)
+                matchAdapter = MatchAdapter(dataSet!!, this)
                 cardSwipe?.setAdapter(matchAdapter)
 
                 cardSwipe?.setCallback(this)

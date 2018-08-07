@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz;
+package com.example.enduser.lostpetz.Fragments;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -21,6 +21,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.enduser.lostpetz.DialogFragments.ChooseDateDialogFragment;
+import com.example.enduser.lostpetz.CustomObjectClasses.Pet;
+import com.example.enduser.lostpetz.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,9 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
-public class AddPetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked{
+public class AddPetFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener, ChooseDateDialogFragment.onClicked {
     private Spinner mDateSpinner;
     private TextInputEditText mPetNameEditText;
     private TextInputEditText mPetZipEditText;

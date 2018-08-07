@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz;
+package com.example.enduser.lostpetz.DialogFragments;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TextView;
+
+import com.example.enduser.lostpetz.R;
 
 /**
  * Created by EndUser on 6/2/2018.

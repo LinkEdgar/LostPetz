@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz
+package com.example.enduser.lostpetz.Adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.enduser.lostpetz.R
+import com.example.enduser.lostpetz.CustomObjectClasses.User
 import kotlinx.android.synthetic.main.inbox_container.view.*
 
 
@@ -37,7 +39,7 @@ open class InboxAdapter(val data: ArrayList<User>, val context: Context?, val on
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InboxViewHolder {
-        val viewHolder = InboxViewHolder(LayoutInflater.from(context).inflate(R.layout.inbox_container,parent, false))
+        val viewHolder = InboxViewHolder(LayoutInflater.from(context).inflate(R.layout.inbox_container, parent, false))
         return viewHolder
     }
 

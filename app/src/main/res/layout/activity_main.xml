@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:windowSoftInputMode="adjustNothing"
     android:orientation="vertical"
-    tools:context="com.example.enduser.lostpetz.MainActivity">
+    tools:context="com.example.enduser.lostpetz.Activities.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

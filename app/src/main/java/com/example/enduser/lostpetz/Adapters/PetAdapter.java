@@ -1,4 +1,4 @@
-package com.example.enduser.lostpetz;
+package com.example.enduser.lostpetz.Adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.enduser.lostpetz.CustomObjectClasses.Pet;
+import com.example.enduser.lostpetz.R;
 
 import java.util.ArrayList;
 

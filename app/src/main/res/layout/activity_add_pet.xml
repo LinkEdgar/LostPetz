@@ -110,18 +110,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_alignParentLeft="true"
-                    android:visibility="visible"
                     android:id="@+id/add_pet_upload_one"
-                    android:src="@mipmap/ic_launcher_round"
-                    android:layout_width="75dp"
-                    android:layout_height="100dp" />
+                    android:src="@drawable/ic_add_picture"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp" />
 
                 <ImageView
                     android:id="@+id/add_pet_cancel_image_one"
                     android:visibility="gone"
-                    android:src="@mipmap/ic_launcher_round"
+                    android:src="@drawable/ic_cancel"
                     android:layout_toRightOf="@+id/add_pet_upload_one"
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
@@ -130,15 +130,15 @@
                     android:visibility="visible"
                     android:id="@+id/add_pet_upload_two"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/ic_launcher_round"
-                    android:layout_width="75dp"
-                    android:layout_height="100dp" />
+                    android:src="@drawable/ic_add_picture"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp" />
 
                 <ImageView
                     android:layout_alignParentTop="true"
                     android:id="@+id/add_pet_cancel_image_two"
                     android:visibility="gone"
-                    android:src="@mipmap/ic_launcher_round"
+                    android:src="@drawable/ic_cancel"
                     android:layout_toRightOf="@+id/add_pet_upload_two"
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
@@ -148,16 +148,16 @@
                     android:layout_marginRight="16dp"
                     android:id="@+id/add_pet_upload_three"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/ic_launcher_round"
-                    android:layout_width="75dp"
-                    android:layout_height="100dp" />
+                    android:src="@drawable/ic_add_picture"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp" />
 
                 <ImageView
                     android:layout_toLeftOf="@+id/add_pet_upload_three"
                     android:layout_alignParentTop="true"
                     android:id="@+id/add_pet_cancel_image_three"
                     android:visibility="gone"
-                    android:src="@mipmap/ic_launcher_round"
+                    android:src="@drawable/ic_cancel"
                     android:layout_width="32dp"
                     android:layout_height="32dp" />
 

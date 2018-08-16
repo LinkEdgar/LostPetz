@@ -61,12 +61,12 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:layout_gravity="center_vertical"
             android:onClick="selectImageFromGallery"
-            android:src="@mipmap/ic_launcher_round"
+            android:src="@drawable/ic_add_picture"
             android:id="@+id/messenger_image_gallery"
-            tools:src="@mipmap/ic_launcher_round"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
         <FrameLayout
             style="@style/Test1"
             android:layout_weight="1"
@@ -112,12 +112,12 @@
         </FrameLayout>
 
         <ImageView
+            android:layout_gravity="center_vertical"
             android:id="@+id/messenger_send_message_button"
             android:onClick="sendMessage"
-            android:src="@mipmap/ic_launcher_round"
-            tools:src="@mipmap/ic_launcher_round"
-            android:layout_width="48dp"
-            android:layout_height="48dp" />
+            android:src="@drawable/ic_send"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
 
     </LinearLayout>
 

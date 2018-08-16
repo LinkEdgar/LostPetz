@@ -70,7 +70,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private FirebaseAuth mAuth;
 
     private Uri[] imageUriArray; //used to hold the Uri's that will be uploaded
-    private static int DEFAULT_IMAGE_SELECT_RESOURCE = R.mipmap.ic_launcher_round;
+    private static int DEFAULT_IMAGE_SELECT_RESOURCE = R.drawable.ic_add_picture;
 
     private int imageSelectorPosition; //used to keep track of the uri the user is choosing
 

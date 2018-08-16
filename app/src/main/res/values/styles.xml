@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- App theme Test 1 -->
+    <style name="Test1" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="colorPrimary">@color/colorPrime</item>
+        <item name="colorPrimaryDark">@color/colorPrimeDark</item>
+        <item name="colorAccent">@color/colorAccen</item>
+    </style>
+
+    <!-- Main activity required NoActionBar-->
+    <style name="mainTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrime</item>
+        <item name="colorPrimaryDark">@color/colorPrimeDark</item>
+        <item name="colorAccent">@color/colorAccen</item>
+    </style>
+
 </resources>

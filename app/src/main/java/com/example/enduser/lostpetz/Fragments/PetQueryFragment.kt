@@ -166,21 +166,21 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         when (viewId) {
             R.id.pet_query_name_filter -> {
                 searchFilterType = SEARCH_FILTER_NAME
-                view.setBackgroundColor(resources.getColor(R.color.colorAccent))
-                mBreedFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-                mZipFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                view.setBackgroundColor(resources.getColor(R.color.colorAccen))
+                mBreedFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
+                mZipFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
             }
             R.id.pet_query_breed_filter -> {
                 searchFilterType = SEARCH_FILTER_BREED
-                view.setBackgroundColor(resources.getColor(R.color.colorAccent))
-                mZipFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-                mNameFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                view.setBackgroundColor(resources.getColor(R.color.colorAccen))
+                mZipFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
+                mNameFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
             }
             R.id.pet_query_zip_filter -> {
                 searchFilterType = SEARCH_FILTER_ZIP
-                view.setBackgroundColor(resources.getColor(R.color.colorAccent))
-                mBreedFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
-                mNameFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrimary))
+                view.setBackgroundColor(resources.getColor(R.color.colorAccen))
+                mBreedFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
+                mNameFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
             }
         }
     }

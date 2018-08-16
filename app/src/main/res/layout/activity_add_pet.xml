@@ -166,6 +166,8 @@
         </FrameLayout>
 
         <Button
+            android:textColor="@color/white"
+            android:background="@color/colorPrime"
             android:id="@+id/add_pet_submit_button"
             android:layout_marginTop="@dimen/vertical_margin_large"
             android:layout_gravity="center"

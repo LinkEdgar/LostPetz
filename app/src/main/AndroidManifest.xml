@@ -15,13 +15,18 @@
         <activity
             android:launchMode="singleTop"
             android:name=".Activities.MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/mainTheme"
             android:windowSoftInputMode="adjustNothing"></activity>
-        <activity android:name=".Activities.MessagingActivity" />
         <activity
+            android:theme="@style/Test1"
+            android:name=".Activities.MessagingActivity" />
+        <activity
+            android:theme="@style/Test1"
             android:parentActivityName=".Activities.MainActivity"
             android:name=".Activities.PetSearchDetailActivity" />
-        <activity android:name=".Activities.SignInActivity">
+        <activity
+            android:theme="@style/Test1"
+            android:name=".Activities.SignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,6 +34,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/Test1"
             android:parentActivityName=".Activities.MainActivity"
             android:name=".Activities.MatchActivity"></activity>
     </application>

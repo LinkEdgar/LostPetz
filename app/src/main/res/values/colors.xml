@@ -8,4 +8,13 @@
     <color name="black">#000000</color>
     <color name="white">#ffff</color>
     <color name="background_grey">#C2C1C7</color>
+
+    <color name="colorPrime">#80cbc4</color>
+    <color name="colorPrimeDark">#009688</color>
+    <color name="colorAccen">#84cb80</color>
+    <!-- color accent old value --> d1c4E9-->
+
+
+
+    <color name="primeComp">#234099</color>
 </resources>

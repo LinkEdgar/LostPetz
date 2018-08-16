@@ -87,8 +87,9 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     Step 1 get the list of chats
      */
     private fun searchForChats(){
-        val userId = mUser!!.uid
-        mRef!!.child(userId).child("chats").limitToLast(15).addValueEventListener(object : ValueEventListener {
+        val userId = mUser?.uid
+        if(userId != null) {
+            mRef!!.child(userId).child("chats").limitToLast(15).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot?) {
                     getListOfChats(p0!!)
                 }
@@ -96,7 +97,8 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
                 override fun onCancelled(p0: DatabaseError?) {
 
                 }
-        })
+            })
+        }
     }
 
     private fun getListOfChats(dataSnapshot: DataSnapshot){

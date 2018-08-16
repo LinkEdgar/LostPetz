@@ -22,11 +22,11 @@
             android:layout_height="275dp"/>
 
         <me.relex.circleindicator.CircleIndicator
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorPrime"
             android:layout_below="@id/search_detail_viewpager"
             android:id="@+id/search_detail_indicator"
             android:layout_width="match_parent"
-            android:layout_height="32dp" />
+            android:layout_height="20dp" />
 
         <TextView
             android:textStyle="bold"
@@ -200,9 +200,9 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_message_large"
         android:text="@string/lost_pet_button"
+        android:backgroundTint="@color/colorAccen"
         android:layout_marginBottom="@dimen/vertical_margin_large"
         android:textColor="@color/white"
-        android:background="@color/colorPrimary"
         android:elevation="4dp"
         tools:text="Lost/Found"
         android:id="@+id/search_detail_lost_button"

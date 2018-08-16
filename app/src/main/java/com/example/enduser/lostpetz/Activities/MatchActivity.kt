@@ -235,17 +235,14 @@ open class MatchActivity: AppCompatActivity(), SwipeDeck.SwipeDeckCallback{
     */
 
     //Cheap algorithm
-    //TODO make sure the first digit is a match
     private fun loadMatches(dataSnapshot: DataSnapshot){
         for(x in dataSnapshot.children){
             val zip = x.child("zipCode").getValue(String::class.java)
             //TODO zip may be null?
             if(zip != null) {
-                val secondDigit = zip!!.elementAt(2)?.toInt().minus(userZipCode?.elementAt(2)!!.toInt())?.absoluteValue
-                val thirdDigit = zip?.elementAt(3)?.toInt()?.minus(userZipCode?.elementAt(3)!!.toInt())?.absoluteValue
-                Log.e("secondDigit", "--> $thirdDigit")
-
-                if (secondDigit!! <= 2 && thirdDigit!! <= 5) {
+                val secondDigit = zip!!.elementAt(1)?.toInt().minus(userZipCode?.elementAt(1)!!.toInt())?.absoluteValue
+                val thirdDigit = zip?.elementAt(2)?.toInt()?.minus(userZipCode?.elementAt(2)!!.toInt())?.absoluteValue
+                if (secondDigit!! <= 2 && thirdDigit!! <= 5 && zip.elementAt(0).equals(userZipCode?.elementAt(0))) {
                     val name = x.child("name").getValue(String::class.java)
                     val pictureUrl = x.child("pictureUrl").getValue(String::class.java)
                     val match = MatchInfo(name!!, pictureUrl!!)

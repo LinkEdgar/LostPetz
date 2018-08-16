@@ -58,7 +58,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_below="@+id/search_detail_name_textview"
             android:id="@+id/border_1"
-            android:background="#778899"
+            android:background="@color/background_grey"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -91,7 +91,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_below="@+id/search_detail_description_textview"
             android:id="@+id/border_2"
-            android:background="#778899"
+            android:background="@color/background_grey"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -135,7 +135,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_below="@+id/city_label"
             android:id="@+id/border_3"
-            android:background="#778899"
+            android:background="@color/background_grey"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
@@ -159,7 +159,7 @@
             android:layout_marginTop="@dimen/vertical_margin"
             android:layout_below="@+id/breed_label"
             android:id="@+id/border_4"
-            android:background="#778899"
+            android:background="@color/background_grey"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 

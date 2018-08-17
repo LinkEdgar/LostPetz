@@ -15,6 +15,7 @@ import com.example.enduser.lostpetz.CustomObjectClasses.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.message_inbox_fragement.*
 import kotlinx.android.synthetic.main.message_inbox_fragement.view.*
 import kotlin.collections.ArrayList
 
@@ -88,6 +89,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
      */
     private fun searchForChats(){
         val userId = mUser?.uid
+        setProgressbar(true)
         if(userId != null) {
             mRef!!.child(userId).child("chats").limitToLast(15).addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(p0: DataSnapshot?) {
@@ -169,6 +171,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
             rootView!!.message_inbox_no_message_textview.visibility = View.VISIBLE
         else
             rootView!!.message_inbox_no_message_textview.visibility = View.GONE
+        setProgressbar(false)
         initRecyclerView()
     }
 
@@ -199,5 +202,13 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
                 rootView!!.message_inbox_no_message_textview.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun setProgressbar(setOn: Boolean){
+        if(setOn)
+            rootView?.message_inbox_progressbar?.visibility = View.VISIBLE
+        else
+            rootView?.message_inbox_progressbar?.visibility = View.GONE
+
     }
 }

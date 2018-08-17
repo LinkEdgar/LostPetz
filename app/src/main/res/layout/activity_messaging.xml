@@ -82,14 +82,14 @@
                     android:indeterminate="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <ImageButton
+                <ImageView
                     android:visibility="gone"
                     android:layout_toRightOf="@+id/messenger_image_to_send"
                     android:layout_alignParentTop="true"
                     android:id="@+id/messenger_cancel_image_selection"
-                    android:src="@mipmap/ic_launcher_round"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp" />
+                    android:src="@drawable/ic_cancel"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp" />
                 <ImageView
                     android:visibility="gone"
                     android:layout_centerInParent="true"
@@ -126,6 +126,13 @@
         android:text="@string/no_messages"
         android:layout_centerInParent="true"
         android:id="@+id/messenger_activity_no_messages_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/messenger_activity_progressbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

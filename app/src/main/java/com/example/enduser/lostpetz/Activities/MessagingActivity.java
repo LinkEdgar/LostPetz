@@ -26,6 +26,7 @@ import com.example.enduser.lostpetz.FullScreenDialog;
 import com.example.enduser.lostpetz.CustomObjectClasses.Message;
 import com.example.enduser.lostpetz.R;
 import com.example.enduser.lostpetz.CustomObjectClasses.User;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -71,9 +72,12 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     //Message console
     private Uri mImageUri;
     private ImageView mImageToSend;
-    private ImageButton mImageCanceButton;
+    private ImageView mImageCanceButton;
     private boolean isPictureMessage = false;
     private ProgressBar mUploadProgressbar;
+
+
+    private ProgressBar mProgressbar;
 
     //RecyclerView
     private SwipeRefreshLayout mRefreshLayout;
@@ -115,6 +119,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
     private void initUi(){
         //View Referencing
+        mProgressbar = findViewById(R.id.messenger_activity_progressbar);
         mRefreshLayout = findViewById(R.id.messaging_swipe_layout);
         mRefreshLayout.setOnRefreshListener(this);
         mRefreshProgressBar = findViewById(R.id.messenger_refresh_progressbar);
@@ -150,6 +155,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mProgressbar.setVisibility(View.VISIBLE);
                 addMessageToAdapter(dataSnapshot);
             }
 
@@ -241,7 +247,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
             }
         }
         else{
-            mUploadProgressbar.setVisibility(View.VISIBLE);
+            setmUploadProgressbar(true);
             mImageToSend.setVisibility(View.GONE);
             mImageCanceButton.setVisibility(View.GONE);
             uploadSelectedImage(mImageUri);
@@ -324,6 +330,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                setmUploadProgressbar(false);
                 Log.e("Upload Picture Image", "could not properly upload image");
                 Toast.makeText(MessagingActivity.this,
                         getResources().getString(R.string.image_upload_failed)
@@ -332,7 +339,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                mUploadProgressbar.setVisibility(View.GONE);
+                setmUploadProgressbar(false);
                 cancelImageSelection();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -388,6 +395,7 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     it will set that text view to gone
      */
     private void checkIfMessagesEmpty(){
+        mProgressbar.setVisibility(View.GONE);
         if(mMessageArray.size() == 0){
             associateChatWithUsers();
             mNoMessagesTextView.setVisibility(View.VISIBLE);
@@ -466,8 +474,14 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.e("onRefresh", "Refresh couldn't be done");
             }
         });
+    }
+
+    private void setmUploadProgressbar(Boolean setOn){
+        if(setOn)
+            mUploadProgressbar.setVisibility(View.VISIBLE);
+        else mUploadProgressbar.setVisibility(View.GONE);
     }
 }

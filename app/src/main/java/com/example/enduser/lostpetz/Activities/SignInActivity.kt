@@ -67,14 +67,14 @@ class SignInActivity : AppCompatActivity() {
             signin_progressbar.visibility = View.VISIBLE
             signin_button.visibility = View.GONE
             mAuth?.signInWithEmailAndPassword(mUserName!!, mPassword!!)?.addOnCompleteListener(this) { task ->
-                signin_progressbar.visibility = View.GONE
-                signin_button.visibility = View.VISIBLE
+                setProgressBar(true)
                 if (task.isSuccessful) {
                     mUser = mAuth?.currentUser
                     addUserToDB()
                     startActivity(Intent(this, MainActivity::class.java))
                     finish()
                 } else {
+                    setProgressBar(false)
                     Toast.makeText(this, R.string.login_fail, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -160,6 +160,7 @@ class SignInActivity : AppCompatActivity() {
                 firebaseAuthWithGoogle(account)
             } catch (e: ApiException) {
                 Log.w("onActivityResult", "Google sign in falied", e)
+                Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_LONG)
             }
 
 
@@ -168,6 +169,7 @@ class SignInActivity : AppCompatActivity() {
 
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount){
         val credential = GoogleAuthProvider.getCredential(account.getIdToken(), null)
+        setProgressBar(true)
         mAuth!!.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
@@ -178,6 +180,7 @@ class SignInActivity : AppCompatActivity() {
                         addUserToDB()
                         finish()
                     } else {
+                        setProgressBar(false)
                         // If sign in fails, display a message to the user.
                         Log.d("AuthWithGoogle", "signInWithCredential:failure", task.exception)
                         Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_LONG).show()
@@ -201,5 +204,15 @@ class SignInActivity : AppCompatActivity() {
                     userRef.child("name").setValue(mUser!!.displayName)
                 }
             }
+    }
+
+    private fun setProgressBar(setOn: Boolean){
+        if(setOn) {
+            signin_progressbar.visibility = View.VISIBLE
+            signin_button.visibility = View.GONE
+        }else{
+            signin_progressbar.visibility = View.GONE
+            signin_button.visibility = View.VISIBLE
+        }
     }
 }

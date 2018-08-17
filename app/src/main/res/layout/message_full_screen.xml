@@ -18,8 +18,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/ic_back"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:layout_width="16dp"
+            android:layout_height="16dp" />
         <ImageView
             android:id="@+id/message_full_screen_image"
             android:layout_centerInParent="true"

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
@@ -59,6 +60,19 @@ open class MainActivity: AppCompatActivity(){
         main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_search)
         main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_add)
         main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_message)
+        main_activity_viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
+            override fun onPageSelected(position: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+        })
 
     }
 

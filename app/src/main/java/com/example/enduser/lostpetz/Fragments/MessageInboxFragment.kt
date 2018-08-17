@@ -110,6 +110,7 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
         }
         if(dataSnapshot.childrenCount < 1){
             rootView!!.message_inbox_no_message_textview.visibility = View.VISIBLE
+            setProgressbar(false)
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.enduser.lostpetz.Activities
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -11,8 +12,10 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.transition.Explode
 import android.view.MenuItem
 import android.view.View
+import android.view.Window
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -38,6 +41,7 @@ open class MainActivity: AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableTranisitions()
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
         setSupportActionBar(toolbar)
@@ -62,7 +66,6 @@ open class MainActivity: AppCompatActivity(){
         main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_message)
         main_activity_viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageSelected(position: Int) {
-
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -221,5 +224,16 @@ open class MainActivity: AppCompatActivity(){
      */
     private fun addProfileUrlToDB(url:String){
         mRef!!.child(mAuth?.currentUser?.uid).child("profileUrl").setValue(url)
+    }
+
+    private fun enableTranisitions(){
+        with(window) {
+            requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+
+            // set an exit transition
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                exitTransition = Explode()
+            }
+        }
     }
 }

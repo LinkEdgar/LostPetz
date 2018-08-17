@@ -110,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
                     android:layout_alignParentLeft="true"
@@ -119,6 +120,7 @@
                     android:layout_height="64dp" />
 
                 <ImageView
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:id="@+id/add_pet_cancel_image_one"
                     android:visibility="gone"
                     android:src="@drawable/ic_cancel"
@@ -127,6 +129,7 @@
                     android:layout_height="32dp" />
 
                 <ImageView
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:visibility="visible"
                     android:id="@+id/add_pet_upload_two"
                     android:layout_centerInParent="true"
@@ -135,6 +138,7 @@
                     android:layout_height="64dp" />
 
                 <ImageView
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_alignParentTop="true"
                     android:id="@+id/add_pet_cancel_image_two"
                     android:visibility="gone"
@@ -144,6 +148,7 @@
                     android:layout_height="32dp" />
 
                 <ImageView
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp"
                     android:id="@+id/add_pet_upload_three"
@@ -153,6 +158,7 @@
                     android:layout_height="64dp" />
 
                 <ImageView
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:layout_toLeftOf="@+id/add_pet_upload_three"
                     android:layout_alignParentTop="true"
                     android:id="@+id/add_pet_cancel_image_three"
@@ -165,6 +171,7 @@
         </FrameLayout>
 
         <Button
+            android:foreground="?android:attr/selectableItemBackground"
             android:textColor="@color/white"
             android:background="@color/colorPrime"
             android:id="@+id/add_pet_submit_button"

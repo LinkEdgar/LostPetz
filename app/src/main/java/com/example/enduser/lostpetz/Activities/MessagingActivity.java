@@ -114,7 +114,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         initFirebase();
         getUserData();
         initUi();
-
     }
 
     private void initUi(){
@@ -155,7 +154,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
         mChildListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                mProgressbar.setVisibility(View.VISIBLE);
                 addMessageToAdapter(dataSnapshot);
             }
 
@@ -395,7 +393,6 @@ public class MessagingActivity extends AppCompatActivity implements MessageAdapt
     it will set that text view to gone
      */
     private void checkIfMessagesEmpty(){
-        mProgressbar.setVisibility(View.GONE);
         if(mMessageArray.size() == 0){
             associateChatWithUsers();
             mNoMessagesTextView.setVisibility(View.VISIBLE);

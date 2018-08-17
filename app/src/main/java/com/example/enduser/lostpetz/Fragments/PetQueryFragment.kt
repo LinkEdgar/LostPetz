@@ -1,6 +1,8 @@
 package com.example.enduser.lostpetz.Fragments
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import android.support.v4.app.Fragment
 import android.os.Bundle
 import android.support.v7.widget.CardView
@@ -112,7 +114,14 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     override fun onClick(position: Int) {
         val intent = Intent(activity, PetSearchDetailActivity::class.java)
         intent?.putExtra("pet", mPetArrrayList?.get(position))
-        startActivity(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Apply activity transition
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle())
+        } else {
+            // Swap without transition
+            startActivity(intent)
+        }
+
 
     }
 

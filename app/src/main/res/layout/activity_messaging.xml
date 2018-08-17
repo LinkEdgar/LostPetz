@@ -61,6 +61,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
+            android:foreground="?attr/selectableItemBackground"
             android:layout_gravity="center_vertical"
             android:onClick="selectImageFromGallery"
             android:src="@drawable/ic_add_picture"
@@ -83,6 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <ImageView
+                    android:foreground="?attr/selectableItemBackground"
                     android:visibility="gone"
                     android:layout_toRightOf="@+id/messenger_image_to_send"
                     android:layout_alignParentTop="true"
@@ -112,6 +114,7 @@
         </FrameLayout>
 
         <ImageView
+            android:foreground="?attr/selectableItemBackground"
             android:layout_gravity="center_vertical"
             android:id="@+id/messenger_send_message_button"
             android:onClick="sendMessage"

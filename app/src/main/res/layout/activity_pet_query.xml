@@ -3,33 +3,92 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:animateLayoutChanges="true"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PetQueryActivity">
+    >
 
-    <View
-        android:id="@+id/place_holder"
+    <android.support.v7.widget.Toolbar
         android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"/>
-
-    <SearchView
-        android:queryBackground="@color/white"
-        android:focusable="false"
-        android:layout_below="@+id/pet_query_filter_cardview"
-        android:id="@+id/pet_query_searchview"
-        android:iconifiedByDefault="false"
-        android:background="@color/white"
+        app:contentInsetStart="0dp"
+        app:contentInsetEnd="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetRight="0dp"
         android:elevation="8dp"
-        android:queryHint="@string/searchview_hint"
-        android:focusedByDefault="true"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="@dimen/horizontal_margin"
-        android:layout_marginRight="@dimen/horizontal_margin"
-        android:layout_marginBottom="8dp"
+        android:minHeight="?android:attr/actionBarSize"
+        android:background="@color/colorPrime"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:visibility="gone"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/yeet"
+                android:src="@drawable/ic_menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_marginTop="@dimen/horizontal_margin"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_centerVertical="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <SearchView
+                    android:focusable="false"
+                    android:queryHint="@string/searchview_hint"
+                    android:queryBackground="@color/white"
+                    android:id="@+id/pet_query_searchview"
+                    android:background="@color/white"
+                    android:iconifiedByDefault="false"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/yeet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </android.support.v7.widget.CardView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"/>
+
+            <android.support.design.widget.TabLayout
+                android:theme="@style/Test1"
+                android:id="@+id/filter_tab"
+                android:layout_below="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TabItem
+                    android:background="@color/white"
+                    android:text="@string/cardview_filter_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <android.support.design.widget.TabItem
+                    android:text="@string/cardview_filter_zip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <android.support.design.widget.TabItem
+                    android:text="@string/cardview_filter_breed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+
+            </android.support.design.widget.TabLayout>
+
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+
+    <!--
+
     <android.support.v7.widget.CardView
         android:elevation="8dp"
         android:visibility="gone"
@@ -91,6 +150,8 @@
 
     </android.support.v7.widget.CardView>
 
+    -->
+
     <TextView
         android:visibility="gone"
         android:textSize="@dimen/default_text_size"
@@ -112,7 +173,7 @@
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginBottom="80dp"
-        android:layout_below="@id/pet_query_searchview"
+        android:layout_below="@id/toolbar"
         android:layout_centerInParent="true"
         android:id="@+id/pet_query_recyclerview"
         android:layout_width="match_parent"

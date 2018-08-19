@@ -5,16 +5,13 @@ import android.content.Intent
 import android.os.Build
 import android.support.v4.app.Fragment
 import android.os.Bundle
-import android.support.v7.widget.CardView
+import android.support.design.widget.TabLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ProgressBar
-import android.widget.SearchView
-import android.widget.TextView
+import android.widget.*
 import com.example.enduser.lostpetz.Activities.PetSearchDetailActivity
 import com.example.enduser.lostpetz.Adapters.PetAdapter
 import com.example.enduser.lostpetz.FirebaseValues
@@ -27,6 +24,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.activity_pet_query.view.*
 
 import java.util.ArrayList
 import java.util.HashSet
@@ -38,7 +36,7 @@ import java.util.HashSet
     exception.
  */
 
-class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
+class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
     //Firebase
     private var mDatabase: FirebaseDatabase? = null
     private var mRef: DatabaseReference? = null
@@ -54,13 +52,14 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     private var mNoPetsFoundTextView: TextView? = null
     private var mNoPetsProgressBar: ProgressBar? = null
     private var mSearchView: SearchView? = null
-    private var mNameFilterButton: Button? = null
-    private var mZipFilterButton: Button? = null
-    private var mBreedFilterButton: Button? = null
+    //private var mNameFilterButton: Button? = null
+    //private var mZipFilterButton: Button? = null
+    //private var mBreedFilterButton: Button? = null
+
     //this variable check if the user is submitting the same query twice so that
     //we don't perform two network calls
     private var isDoubleSubmit = false
-    private var mCardView: CardView? = null
+    //private var mCardView: CardView? = null
     private var searchFilterType = SEARCH_FILTER_NAME
 
     private var mPetKeyHashset: HashSet<String>? = null
@@ -78,6 +77,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         mDatabase = FirebaseDatabase.getInstance()
         mRef = mDatabase!!.getReference(FirebaseValues.FirebaseDatabaseValues.FIREBASE_PETS_ROOT)
         initUIViewsAndVariables(rootView)
+        setupFilterTab(rootView)
 
         return rootView
     }
@@ -105,7 +105,11 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
 
 
         }
-        mRef!!.limitToFirst(searchQueryLimit!!).orderByChild(searchFilterType).startAt(searchQuery).endAt(searchQuery).addListenerForSingleValueEvent(listener)
+        mRef!!.limitToFirst(searchQueryLimit!!)
+                .orderByChild(searchFilterType)
+                .startAt(searchQuery)
+                .endAt(searchQuery)
+                .addListenerForSingleValueEvent(listener)
     }
 
     /*
@@ -170,6 +174,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
     /*
     This method sets the filter type when the user chooses a filter
      */
+
+    /*
     private fun chooseFilterType(view: View) {
         val viewId = view.id
         when (viewId) {
@@ -193,6 +199,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
             }
         }
     }
+    */
 
     /*
     Initializes all UI elements and variable instances
@@ -201,14 +208,14 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
         //Variable instances
         mNoPetsFoundTextView = rootView.findViewById(R.id.pet_query_no_pets_textview)
         mPetKeyHashset = HashSet()
-        mCardView = rootView.findViewById(R.id.pet_query_filter_cardview)
+        //mCardView = rootView.findViewById(R.id.pet_query_filter_cardview)
         mNoPetsProgressBar = rootView.findViewById(R.id.pet_query_progressbar)
-        mNameFilterButton = rootView.findViewById(R.id.pet_query_name_filter)
-        mNameFilterButton?.setOnClickListener{chooseFilterType(mNameFilterButton!!)}
-        mZipFilterButton = rootView.findViewById(R.id.pet_query_zip_filter)
-        mZipFilterButton?.setOnClickListener{chooseFilterType(mZipFilterButton!!)}
-        mBreedFilterButton = rootView.findViewById(R.id.pet_query_breed_filter)
-        mBreedFilterButton?.setOnClickListener{chooseFilterType(mBreedFilterButton!!)}
+        //mNameFilterButton = rootView.findViewById(R.id.pet_query_name_filter)
+        //mNameFilterButton?.setOnClickListener{chooseFilterType(mNameFilterButton!!)}
+        //mZipFilterButton = rootView.findViewById(R.id.pet_query_zip_filter)
+        //mZipFilterButton?.setOnClickListener{chooseFilterType(mZipFilterButton!!)}
+        //mBreedFilterButton = rootView.findViewById(R.id.pet_query_breed_filter)
+        //mBreedFilterButton?.setOnClickListener{chooseFilterType(mBreedFilterButton!!)}
         mSearchView = rootView.findViewById(R.id.pet_query_searchview)
         mSearchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {
@@ -219,7 +226,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                 if (!isDoubleSubmit && s.length > 0) {
                     submitSearchQuery(s, false)
                     isDoubleSubmit = true
-                    mCardView!!.visibility = View.GONE
+                    //mCardView!!.visibility = View.GONE
                 }
                 return false
             }
@@ -227,7 +234,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
             Sets the flag to ensure the user does not re-submit queries
              */
             override fun onQueryTextChange(s: String): Boolean {
-                mCardView!!.visibility = View.VISIBLE
+                //mCardView!!.visibility = View.VISIBLE
                 isDoubleSubmit = false
                 return false
             }
@@ -297,6 +304,26 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked {
                     submitSearchQuery(searchQuery!!, true)
                 }
             }
+        })
+    }
+
+    /*
+    Sets up the filter tab and on select listener
+     */
+    private fun setupFilterTab(rootView:View){
+        rootView.filter_tab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab?.position){
+                    0 -> searchFilterType = SEARCH_FILTER_NAME
+                    1 -> searchFilterType = SEARCH_FILTER_ZIP
+                    2 -> searchFilterType = SEARCH_FILTER_BREED
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
         })
     }
 

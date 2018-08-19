@@ -16,6 +16,8 @@ import android.transition.Explode
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
+import android.widget.RelativeLayout
+import android.widget.SearchView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -43,9 +45,8 @@ open class MainActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         enableTranisitions()
         setContentView(R.layout.activity_main)
-        val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
-        setSupportActionBar(toolbar)
-        yeet.setOnClickListener{ maint_activity_drawerlayout.openDrawer(GravityCompat.START)}
+        //val toolbar: Toolbar = findViewById(R.id.main_activity_toolbar)
+        //setSupportActionBar(toolbar)
         initFragments()
         initFirebase()
 
@@ -58,14 +59,17 @@ open class MainActivity: AppCompatActivity(){
     This method sets up the tab layout, viewpager, and pager adapter
      */
     private fun initFragments(){
-        val mPagerAdapter = MainActivityPager(supportFragmentManager)
-        main_activity_viewpager.adapter = mPagerAdapter
+        val pagerAdapter = MainActivityPager(supportFragmentManager)
+        main_activity_viewpager.adapter = pagerAdapter
         main_activity_tablayout.setupWithViewPager(main_activity_viewpager)
         main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_search)
         main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_add)
         main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_message)
         main_activity_viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageSelected(position: Int) {
+                when(position){
+
+                }
             }
 
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {

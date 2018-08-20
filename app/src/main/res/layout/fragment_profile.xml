@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_marginTop="@dimen/vertical_margin_extra_large"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:src="@mipmap/ic_launcher_round"
+        android:layout_width="128dp"
+        android:layout_height="128dp" />
+    <ImageView
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_toRightOf="@+id/profile_picture"
+        android:src="@drawable/ic_add_circle"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+
+    <ImageView
+        android:id="@+id/icon_one"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_marginTop="@dimen/vertical_margin_large"
+        android:layout_below="@+id/profile_picture"
+        tools:src="@mipmap/ic_launcher_round"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+    <TextView
+        android:id="@+id/option_one"
+        android:textSize="@dimen/default_text_size"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_marginTop="@dimen/horizontal_margin_large"
+        android:layout_below="@+id/profile_picture"
+        android:layout_toRightOf="@+id/icon_one"
+        tools:text="My Pets"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp" />
+    <View
+        android:id="@+id/place_holder_one"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_below="@+id/icon_one"
+        android:background="@color/background_grey"
+        android:layout_marginRight="@dimen/horizontal_margin_large"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <ImageView
+        android:id="@+id/icon_two"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_below="@+id/place_holder_one"
+        tools:src="@mipmap/ic_launcher_round"
+        android:layout_width="32dp"
+        android:layout_height="32dp" />
+    <TextView
+        android:textSize="@dimen/default_text_size"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_below="@+id/place_holder_one"
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:id="@+id/option_two"
+        android:layout_toRightOf="@+id/icon_two"
+        tools:text="Sign Out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:layout_marginTop="@dimen/vertical_margin"
+        android:background="@color/background_grey"
+        android:layout_below="@+id/icon_two"
+        android:layout_marginRight="@dimen/horizontal_margin_large"
+        android:layout_marginLeft="@dimen/horizontal_margin_large"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</RelativeLayout>

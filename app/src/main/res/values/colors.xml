@@ -12,7 +12,8 @@
     <color name="colorPrime">#80cbc4</color>
     <color name="colorPrimeDark">#009688</color>
     <color name="colorAccen">#84cb80</color>
-    <!-- color accent old value --> d1c4E9-->
+
+    <color name="tabIndicatorColor">#03ae3c</color>
 
 
 

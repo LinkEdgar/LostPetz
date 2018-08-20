@@ -55,7 +55,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private ChooseDateDialogFragment chooseDateDialogFragment;
     private ArrayAdapter<String> adapter;
     private List<String> mSpinnerList;
-    private FloatingActionButton mSubmitButton;
+    private Button mSubmitButton;
     private Pet petToAdd;
     private static String PET_BUNDLE_KEY = "pet";
     private static String IMAGE_COUNTER_KEY = "imageCounter";

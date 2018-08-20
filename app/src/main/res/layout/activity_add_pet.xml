@@ -194,25 +194,31 @@
             </RelativeLayout>
         </FrameLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="90dp"/>
+
 
 
     </LinearLayout>
 
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_alignBaseline="@+id/toolbar"
+    <Button
+        android:padding="12dp"
+        android:drawableRight="@drawable/ic_add_white"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="@dimen/add_pet_tab_fab"
+        android:layout_alignParentBottom="true"
         android:layout_marginRight="@dimen/horizontal_margin_large"
-        android:src="@drawable/ic_add_white"
-        android:layout_alignParentRight="true"
-        android:elevation="4dp"
+        android:elevation="8dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/white"
-        android:background="@color/colorPrime"
+        android:background="@drawable/circle_button"
         android:id="@+id/add_pet_submit_button"
         android:layout_marginTop="26dp"
         android:layout_gravity="center"
-        android:text="@string/submit_button_label"
+        android:text="Add Pet "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

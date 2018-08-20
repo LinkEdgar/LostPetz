@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -54,7 +55,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private ChooseDateDialogFragment chooseDateDialogFragment;
     private ArrayAdapter<String> adapter;
     private List<String> mSpinnerList;
-    private Button mSubmitButton;
+    private FloatingActionButton mSubmitButton;
     private Pet petToAdd;
     private static String PET_BUNDLE_KEY = "pet";
     private static String IMAGE_COUNTER_KEY = "imageCounter";

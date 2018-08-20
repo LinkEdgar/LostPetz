@@ -8,6 +8,7 @@
 
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_alignParentTop="true"
         android:elevation="4dp"
         android:background="@color/colorPrime"
@@ -178,19 +179,26 @@
             </RelativeLayout>
         </FrameLayout>
 
-        <Button
-            android:foreground="?android:attr/selectableItemBackground"
-            android:textColor="@color/white"
-            android:background="@color/colorPrime"
-            android:id="@+id/add_pet_submit_button"
-            android:layout_marginTop="@dimen/vertical_margin_large"
-            android:layout_gravity="center"
-            android:text="@string/submit_button_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+
 
     </LinearLayout>
 
     </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_alignBaseline="@+id/toolbar"
+        android:layout_marginRight="@dimen/horizontal_margin_large"
+        android:src="@drawable/ic_add_white"
+        android:layout_alignParentRight="true"
+        android:elevation="4dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:textColor="@color/white"
+        android:background="@color/colorPrime"
+        android:id="@+id/add_pet_submit_button"
+        android:layout_marginTop="26dp"
+        android:layout_gravity="center"
+        android:text="@string/submit_button_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>

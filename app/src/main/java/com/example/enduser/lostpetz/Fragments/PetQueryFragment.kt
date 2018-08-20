@@ -208,14 +208,16 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
         //Variable instances
         mNoPetsFoundTextView = rootView.findViewById(R.id.pet_query_no_pets_textview)
         mPetKeyHashset = HashSet()
-        //mCardView = rootView.findViewById(R.id.pet_query_filter_cardview)
         mNoPetsProgressBar = rootView.findViewById(R.id.pet_query_progressbar)
+        /*
+        //mCardView = rootView.findViewById(R.id.pet_query_filter_cardview)
         //mNameFilterButton = rootView.findViewById(R.id.pet_query_name_filter)
         //mNameFilterButton?.setOnClickListener{chooseFilterType(mNameFilterButton!!)}
         //mZipFilterButton = rootView.findViewById(R.id.pet_query_zip_filter)
         //mZipFilterButton?.setOnClickListener{chooseFilterType(mZipFilterButton!!)}
         //mBreedFilterButton = rootView.findViewById(R.id.pet_query_breed_filter)
         //mBreedFilterButton?.setOnClickListener{chooseFilterType(mBreedFilterButton!!)}
+        */
         mSearchView = rootView.findViewById(R.id.pet_query_searchview)
         mSearchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {

@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.transition.Explode
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 import android.widget.RelativeLayout
@@ -61,6 +62,12 @@ open class MainActivity: AppCompatActivity(){
     private fun initFragments(){
         val pagerAdapter = MainActivityPager(supportFragmentManager)
         main_activity_viewpager.adapter = pagerAdapter
+        main_activity_viewpager.setOnTouchListener(object: View.OnTouchListener{
+            override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                return true
+            }
+
+        })
         main_activity_tablayout.setupWithViewPager(main_activity_viewpager)
         main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_search)
         main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_add)

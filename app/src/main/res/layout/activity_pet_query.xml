@@ -172,7 +172,7 @@
         android:layout_height="wrap_content" />
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="@dimen/tab_bar_margin"
         android:layout_below="@id/toolbar"
         android:layout_centerInParent="true"
         android:id="@+id/pet_query_recyclerview"

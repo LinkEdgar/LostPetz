@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- View spacing -->
-    <dimen name="tab_bar_margin">74dp</dimen>
+    <dimen name="tab_bar_margin">62dp</dimen>
     <dimen name="vertical_margin">8dp</dimen>
     <dimen name="vertical_margin_large">16dp</dimen>
 

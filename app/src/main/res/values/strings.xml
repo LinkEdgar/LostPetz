@@ -35,6 +35,7 @@
         <item>Today</item>
         <item>Set Date</item>
     </string-array>
+    <string name="add_pet_title_label">Add Pet to Database</string>
     <string name="submit_button_label">Submit</string>
     <string name="select_images_label">Select Images</string>
     <string name="date_label">Date Lost</string>
@@ -75,6 +76,7 @@
     <string name="poster_error">You are the poster of this pet</string>
 
     <!-- Message Inbox-->
+    <string name="messages_title_label">Messages</string>
     <string name="no_inbox_messages_label">No active messages</string>
 
     <!-- Navigation Drawer -->

@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.enduser.lostpetz.Fragments.AddPetFragment
 import com.example.enduser.lostpetz.Fragments.MessageInboxFragment
 import com.example.enduser.lostpetz.Fragments.PetQueryFragment
+import com.example.enduser.lostpetz.ProfileFragment
 import com.example.enduser.lostpetz.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -72,6 +73,7 @@ open class MainActivity: AppCompatActivity(){
         main_activity_tablayout.getTabAt(0)!!.setIcon(R.drawable.ic_search)
         main_activity_tablayout.getTabAt(1)!!.setIcon(R.drawable.ic_add)
         main_activity_tablayout.getTabAt(2)!!.setIcon(R.drawable.ic_message)
+        main_activity_tablayout.getTabAt(3)!!.setIcon(R.drawable.ic_profile)
         main_activity_viewpager.addOnPageChangeListener(object: ViewPager.OnPageChangeListener{
             override fun onPageSelected(position: Int) {
                 when(position){
@@ -97,7 +99,7 @@ open class MainActivity: AppCompatActivity(){
     open class MainActivityPager(fm: FragmentManager?) : FragmentStatePagerAdapter(fm) {
 
         override fun getCount(): Int {
-            return 3
+            return 4
         }
 
         override fun getItem(position: Int): Fragment {
@@ -105,6 +107,7 @@ open class MainActivity: AppCompatActivity(){
                 0 -> PetQueryFragment()
                 1 -> AddPetFragment()
                 2 -> MessageInboxFragment()
+                3 -> ProfileFragment()
                 else -> AddPetFragment()
             }
         }
@@ -114,6 +117,7 @@ open class MainActivity: AppCompatActivity(){
                 0 -> "Search"
                 1 -> "Add"
                 2 -> "Message"
+                3 -> "Profile"
                 else -> null
             }
         }

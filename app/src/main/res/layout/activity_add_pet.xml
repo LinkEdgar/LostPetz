@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
+                android:textStyle="bold"
                 android:layout_marginLeft="@dimen/horizontal_margin_large"
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"

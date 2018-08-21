@@ -22,6 +22,7 @@
             android:layout_height="275dp"/>
 
         <me.relex.circleindicator.CircleIndicator
+            android:layout_marginBottom="@dimen/vertical_margin"
             android:background="@color/colorPrime"
             android:layout_below="@id/search_detail_viewpager"
             android:id="@+id/search_detail_indicator"

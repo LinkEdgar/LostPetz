@@ -20,7 +20,7 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
 
     var pet: Pet?= null
     private val GOOGLE_STATIC_MAP_BASE_URL = "https://maps.googleapis.com/maps/api/staticmap?"
-    private val GOOGLE_API_KEY = "AIzaSyD5fotiQ4E6IDK56KG5LGwtrkew8v_VIvI"
+    private val GOOGLE_API_KEY = "AIzaSyANQ3_5ZqmUERNIkc2rTZaBcyVzBipYEXo"
     private val GOOGLE_STATIC_MAP_ZOOM = "&zoom=12"
     private var Latitude: Double? = null
     private var Longitude: Double ?= null

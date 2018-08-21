@@ -171,35 +171,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
         checkIfPetsFound()
     }
 
-    /*
-    This method sets the filter type when the user chooses a filter
-     */
-
-    /*
-    private fun chooseFilterType(view: View) {
-        val viewId = view.id
-        when (viewId) {
-            R.id.pet_query_name_filter -> {
-                searchFilterType = SEARCH_FILTER_NAME
-                view.setBackgroundColor(resources.getColor(R.color.colorAccen))
-                mBreedFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
-                mZipFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
-            }
-            R.id.pet_query_breed_filter -> {
-                searchFilterType = SEARCH_FILTER_BREED
-                view.setBackgroundColor(resources.getColor(R.color.colorAccen))
-                mZipFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
-                mNameFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
-            }
-            R.id.pet_query_zip_filter -> {
-                searchFilterType = SEARCH_FILTER_ZIP
-                view.setBackgroundColor(resources.getColor(R.color.colorAccen))
-                mBreedFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
-                mNameFilterButton!!.setBackgroundColor(resources.getColor(R.color.colorPrime))
-            }
-        }
-    }
-    */
 
     /*
     Initializes all UI elements and variable instances
@@ -209,15 +180,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
         mNoPetsFoundTextView = rootView.findViewById(R.id.pet_query_no_pets_textview)
         mPetKeyHashset = HashSet()
         mNoPetsProgressBar = rootView.findViewById(R.id.pet_query_progressbar)
-        /*
-        //mCardView = rootView.findViewById(R.id.pet_query_filter_cardview)
-        //mNameFilterButton = rootView.findViewById(R.id.pet_query_name_filter)
-        //mNameFilterButton?.setOnClickListener{chooseFilterType(mNameFilterButton!!)}
-        //mZipFilterButton = rootView.findViewById(R.id.pet_query_zip_filter)
-        //mZipFilterButton?.setOnClickListener{chooseFilterType(mZipFilterButton!!)}
-        //mBreedFilterButton = rootView.findViewById(R.id.pet_query_breed_filter)
-        //mBreedFilterButton?.setOnClickListener{chooseFilterType(mBreedFilterButton!!)}
-        */
         mSearchView = rootView.findViewById(R.id.pet_query_searchview)
         mSearchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(s: String): Boolean {

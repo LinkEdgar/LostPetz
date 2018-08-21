@@ -155,7 +155,8 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
                 so we are converting them back to a more user friendly mode
                  */
                 pet.name = name?.substring(0,1).toUpperCase() + name?.substring(1, name.length)
-                pet.breed = breed?.substring(0,1).toUpperCase() + breed?.substring(1, breed.length)
+                if(pet.breed != null)
+                    pet.breed = breed?.substring(0, 1).toUpperCase() + breed?.substring(1, breed.length)
                 pet.zip = zip
                 pet.description = description
                 pet.dateLost = datelost
@@ -188,9 +189,9 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
                 so the user can clearly see the list
                  */
                 if (!isDoubleSubmit && s.length > 0) {
+                    searchQueryLimit = querySearchOriginalLimit
                     submitSearchQuery(s, false)
                     isDoubleSubmit = true
-                    //mCardView!!.visibility = View.GONE
                 }
                 return false
             }
@@ -198,7 +199,6 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
             Sets the flag to ensure the user does not re-submit queries
              */
             override fun onQueryTextChange(s: String): Boolean {
-                //mCardView!!.visibility = View.VISIBLE
                 isDoubleSubmit = false
                 return false
             }
@@ -216,7 +216,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
 
     /*
     called on after from the single event listener to ensure the UI reflects the
-    query status.
+    query status. Also checks if the size of the array exceeds our threshhold
      */
     private fun checkIfPetsFound() {
         mNoPetsProgressBar!!.visibility = View.GONE
@@ -225,6 +225,14 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
         } else {
             mNoPetsFoundTextView!!.visibility = View.GONE
         }
+
+        if(mPetArrrayList!!.size > 45){
+            for( x in 0..9){
+                mPetArrrayList!!.removeAt(0)
+                mPetAdapter!!.notifyItemRemoved(0)
+            }
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -264,7 +272,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
             override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if(!recyclerView!!.canScrollVertically(1)){
-                    searchQueryLimit = searchQueryLimit!!.plus(12!!)
+                    searchQueryLimit = searchQueryLimit!!.plus(1!!)
                     submitSearchQuery(searchQuery!!, true)
                 }
             }
@@ -277,6 +285,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
     private fun setupFilterTab(rootView:View){
         rootView.filter_tab.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                isDoubleSubmit = false
                 when(tab?.position){
                     0 -> searchFilterType = SEARCH_FILTER_NAME
                     1 -> searchFilterType = SEARCH_FILTER_ZIP
@@ -292,6 +301,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
     }
 
     companion object {
+        val querySearchOriginalLimit = 12
         val PET_SEARCH_QUERY_LIMIT_KEY = "limit"
         val PET_SEARCH_QUERY_KEY = "query"
         val PET_ARRAY_KEY = "arrayList"

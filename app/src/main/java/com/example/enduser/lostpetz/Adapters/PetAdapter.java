@@ -19,8 +19,8 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder>{
     private ArrayList<Pet> mArrayList;
     private onViewClicked mClicked;
     //Displays whether the pet was reported as lost by the poster or found
-    private static String PET_STATUS_LOST = "Lost on ";
-    private static String PET_STATUS_FOUND= "Found on ";
+    private static String PET_STATUS_LOST = "Lost on: ";
+    private static String PET_STATUS_FOUND= "Found on: ";
 
     public PetAdapter(ArrayList<Pet> arrayList){
         mArrayList = arrayList;

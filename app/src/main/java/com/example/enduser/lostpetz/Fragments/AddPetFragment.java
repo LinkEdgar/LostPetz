@@ -366,7 +366,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         mImageCancelTwo.setVisibility(View.GONE);
         mImageToUpload3.setImageResource(DEFAULT_IMAGE_SELECT_RESOURCE);
         mImageCancelThree.setVisibility(View.GONE);
-        dateLost = null;
+        initiateDateLost();
         imageCounter = 0;
         if(mSpinnerList.size() >2)mSpinnerList.remove(2);
 

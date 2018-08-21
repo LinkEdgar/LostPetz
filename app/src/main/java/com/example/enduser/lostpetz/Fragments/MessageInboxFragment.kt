@@ -3,11 +3,13 @@ package com.example.enduser.lostpetz.Fragments
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.enduser.lostpetz.Activities.MessagingActivity
 import com.example.enduser.lostpetz.Adapters.InboxAdapter
 import com.example.enduser.lostpetz.R
@@ -24,12 +26,13 @@ This fragment displays a list of messages that the user has
 */
 
 
-open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
+open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked, SwipeRefreshLayout.OnRefreshListener {
 
     private var mRecylerview: RecyclerView? = null
     private var mInboxData = ArrayList<User>()
     private var mAdapter: InboxAdapter? = null
     private var keyHashSet: HashSet<String> ?= null
+    private var mRefreshLayout: SwipeRefreshLayout ?= null
 
     private var user: User? = null
 
@@ -53,8 +56,10 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.message_inbox_fragement, container, false)
         keyHashSet = HashSet()
+        initFirebase()
+        mRefreshLayout = rootView!!.swipe_refresh_layout
+        mRefreshLayout!!.setOnRefreshListener(this)
         if(savedInstanceState == null) {
-            initFirebase()
             searchForChats()
         }
         return rootView
@@ -172,7 +177,12 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
             rootView!!.message_inbox_no_message_textview.visibility = View.VISIBLE
         else
             rootView!!.message_inbox_no_message_textview.visibility = View.GONE
+
         setProgressbar(false)
+        if(mRefreshLayout!!.isRefreshing){
+            mAdapter!!.notifyDataSetChanged()
+            mRefreshLayout!!.isRefreshing = false
+        }else
         initRecyclerView()
     }
 
@@ -211,5 +221,11 @@ open class MessageInboxFragment: Fragment(), InboxAdapter.onClicked {
         else
             rootView?.message_inbox_progressbar?.visibility = View.GONE
 
+    }
+
+    override fun onRefresh() {
+        keyHashSet!!.clear()
+        mInboxData.clear()
+        searchForChats()
     }
 }

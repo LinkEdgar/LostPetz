@@ -1,10 +1,11 @@
-package com.example.enduser.lostpetz
+package com.example.enduser.lostpetz.Fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.enduser.lostpetz.R
 
 class ProfileFragment : Fragment(){
 

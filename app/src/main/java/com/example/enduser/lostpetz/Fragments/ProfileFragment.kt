@@ -90,7 +90,8 @@ class ProfileFragment : Fragment(), View.OnClickListener{
     */
     private fun setUserProfile(username: String?, profileUrl: String?){
         userProfileUrl = profileUrl
-        Glide.with(this).applyDefaultRequestOptions(RequestOptions().circleCrop().error(R.mipmap.ic_launcher_round))
+        Glide.with(this).applyDefaultRequestOptions(RequestOptions().circleCrop().error(R.drawable.default_profile)
+                .placeholder(R.drawable.default_profile))
                 .load(userProfileUrl).into(mProfilePicture) //loads user's profile picture
         mUserName.setText(username)
     }

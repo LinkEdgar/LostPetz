@@ -22,7 +22,7 @@ open class InboxAdapter(val data: ArrayList<User>, val context: Context?, val on
         //test data
         holder.profilePictureIv?.setImageResource(R.mipmap.ic_launcher_round)
         Glide.with(holder.profilePictureIv!!).applyDefaultRequestOptions(RequestOptions().circleCrop()
-                .error(R.drawable.default_profile_picture))
+                .error(R.drawable.default_profile))
                 .load(data.get(position).profileUrl).into(holder.profilePictureIv)
         holder.senderNameTv?.setText(data[position].userName)
         val lastMessage = data[position].lastMessage

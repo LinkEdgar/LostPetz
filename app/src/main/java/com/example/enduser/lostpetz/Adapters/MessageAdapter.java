@@ -67,7 +67,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         Message message = mMessageList.get(position);
         holder.mUserName.setText(message.getUserName());
-        Glide.with(holder.mProfileImage).applyDefaultRequestOptions(new RequestOptions().circleCrop().error(R.drawable.default_profile_picture))
+        Glide.with(holder.mProfileImage).applyDefaultRequestOptions(new RequestOptions().circleCrop().error(R.drawable.default_profile))
                 .load(mMessageList.get(position).getUserProfileUrl()).into(holder.mProfileImage);
         if(message.getPhotoUrl() == null) {
             holder.mPictureMessage.setVisibility(View.GONE);

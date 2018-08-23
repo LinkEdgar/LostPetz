@@ -40,6 +40,8 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:textColor="@color/white"
+        android:backgroundTint="@color/colorPrime"
         android:id="@+id/signin_button"
         android:text="@string/common_signin_button_text"
         android:layout_margin="@dimen/vertical_margin_large"

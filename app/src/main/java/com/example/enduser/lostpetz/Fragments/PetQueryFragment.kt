@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -155,7 +156,7 @@ class PetQueryFragment : Fragment(), PetAdapter.onViewClicked{
                 so we are converting them back to a more user friendly mode
                  */
                 pet.name = name?.substring(0,1).toUpperCase() + name?.substring(1, name.length)
-                if(pet.breed != null)
+                if(breed != null)
                     pet.breed = breed?.substring(0, 1).toUpperCase() + breed?.substring(1, breed.length)
                 pet.zip = zip
                 pet.description = description

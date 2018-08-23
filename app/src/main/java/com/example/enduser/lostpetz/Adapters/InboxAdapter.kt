@@ -12,6 +12,9 @@ import com.example.enduser.lostpetz.CustomObjectClasses.User
 import kotlinx.android.synthetic.main.inbox_container.view.*
 
 
+/*
+Default picture was downloaded from iconfinder.com
+ */
 open class InboxAdapter(val data: ArrayList<User>, val context: Context?, val onClick: onClicked): RecyclerView.Adapter<InboxAdapter.InboxViewHolder>() {
 
     interface onClicked{

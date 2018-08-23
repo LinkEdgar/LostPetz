@@ -46,6 +46,10 @@ class PetSearchDetailActivity : AppCompatActivity(), ImageSlider.onClick {
     
     private fun handleIntentData(){
         pet = intent.getParcelableExtra("pet")
+        if(pet!!.isFoundPet)
+            date_lost_label.setText(R.string.date_found_status_label)
+        else
+            date_lost_label.setText(R.string.date_lost_status_label)
     }
 
     /*

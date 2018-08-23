@@ -16,175 +16,180 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/search_detail_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="275dp"/>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/search_detail_viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="275dp"/>
 
-        <me.relex.circleindicator.CircleIndicator
-            android:layout_marginBottom="@dimen/vertical_margin"
-            android:background="@color/colorPrime"
-            android:layout_below="@id/search_detail_viewpager"
-            android:id="@+id/search_detail_indicator"
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
+            <me.relex.circleindicator.CircleIndicator
+                android:layout_marginBottom="@dimen/vertical_margin"
+                android:background="@color/colorPrime"
+                android:layout_below="@id/search_detail_viewpager"
+                android:id="@+id/search_detail_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
 
-        <TextView
-            android:textStyle="bold"
-            android:id="@+id/name_label"
-            android:layout_below="@+id/search_detail_indicator"
-            android:textSize="@dimen/heading_text_size"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_alignParentLeft="true"
-            android:text="@string/name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/name_label"
+                android:layout_below="@+id/search_detail_indicator"
+                android:textSize="@dimen/heading_text_size"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_alignParentLeft="true"
+                android:text="@string/name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_toRightOf="@+id/name_label"
-            android:textSize="@dimen/heading_text_size"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_below="@+id/search_detail_indicator"
-            tools:text="Pet name"
-            android:id="@+id/search_detail_name_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:layout_toRightOf="@+id/name_label"
+                android:textSize="@dimen/heading_text_size"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_below="@+id/search_detail_indicator"
+                tools:text="Pet name"
+                android:id="@+id/search_detail_name_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <View
-            android:layout_marginBottom="@dimen/vertical_margin_large"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_below="@+id/search_detail_name_textview"
-            android:id="@+id/border_1"
-            android:background="@color/background_grey"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            <View
+                android:layout_marginBottom="@dimen/vertical_margin_large"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_below="@+id/search_detail_name_textview"
+                android:id="@+id/border_1"
+                android:background="@color/background_grey"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
-        <TextView
-            android:textStyle="bold"
-            android:textSize="@dimen/heading_text_size"
-            android:text="@string/description_label"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:id="@+id/search_detail_description_textview_label_textview"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_below="@+id/border_1"
-            tools:text="Description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:textStyle="bold"
+                android:textSize="@dimen/heading_text_size"
+                android:text="@string/description_label"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:id="@+id/search_detail_description_textview_label_textview"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_below="@+id/border_1"
+                tools:text="Description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:textSize="@dimen/heading_text_size"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            tools:text="Description should go here"
-            android:layout_below="@+id/search_detail_description_textview_label_textview"
-            android:id="@+id/search_detail_description_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-
-        <View
-            android:layout_marginBottom="@dimen/vertical_margin_large"
-
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_below="@+id/search_detail_description_textview"
-            android:id="@+id/border_2"
-            android:background="@color/background_grey"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-
-        <TextView
-            android:textSize="@dimen/heading_text_size"
-            android:textStyle="bold"
-            android:id="@+id/city_label"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:text="@string/city_label"
-            android:layout_marginLeft="@dimen/vertical_margin_large"
-            android:layout_below="@+id/border_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:textSize="@dimen/heading_text_size"
-            android:id="@+id/search_detail_city_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/border_2"
-            android:layout_marginLeft="@dimen/vertical_margin_large"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_toRightOf="@+id/city_label"
-            tools:text="City goes here" />
-
-        <TextView
-            android:textSize="@dimen/heading_text_size"
-            android:textStyle="bold"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_below="@+id/border_3"
-            android:text="@string/breed_label"
-            android:id="@+id/breed_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <View
-            android:layout_marginBottom="@dimen/vertical_margin_large"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_below="@+id/city_label"
-            android:id="@+id/border_3"
-            android:background="@color/background_grey"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-
-        <TextView
-            tools:text="pet breed goes here"
-            android:layout_toRightOf="@+id/breed_label"
-            android:textSize="@dimen/heading_text_size"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_below="@+id/border_3"
-            android:id="@+id/search_detail_breed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/heading_text_size"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                tools:text="Description should go here"
+                android:layout_below="@+id/search_detail_description_textview_label_textview"
+                android:id="@+id/search_detail_description_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
+            <View
+                android:layout_marginBottom="@dimen/vertical_margin_large"
 
-        <View
-            android:layout_marginBottom="@dimen/vertical_margin_large"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_below="@+id/breed_label"
-            android:id="@+id/border_4"
-            android:background="@color/background_grey"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_below="@+id/search_detail_description_textview"
+                android:id="@+id/border_2"
+                android:background="@color/background_grey"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
 
-        <TextView
-            android:textStyle="bold"
-            android:textSize="@dimen/heading_text_size"
-            android:text="@string/date_lost_label"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_below="@+id/border_4"
-            android:id="@+id/date_lost_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/heading_text_size"
+                android:textStyle="bold"
+                android:id="@+id/city_label"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:text="@string/city_label"
+                android:layout_marginLeft="@dimen/vertical_margin_large"
+                android:layout_below="@+id/border_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/search_detail_date_lost"
-            android:textSize="@dimen/heading_text_size"
-            android:layout_marginLeft="@dimen/horizontal_margin_large"
-            android:layout_marginTop="@dimen/vertical_margin"
-            android:layout_toRightOf="@id/date_lost_label"
-            android:layout_below="@id/border_4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:textSize="@dimen/heading_text_size"
+                android:id="@+id/search_detail_city_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/border_2"
+                android:layout_marginLeft="@dimen/vertical_margin_large"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_toRightOf="@+id/city_label"
+                tools:text="City goes here" />
 
-        <ImageView
-            android:id="@+id/search_detail_static_map"
-            android:layout_marginTop="@dimen/vertical_margin_large"
-            android:src="@mipmap/ic_launcher"
-            android:layout_below="@id/date_lost_label"
-            android:layout_width="match_parent"
-            android:layout_height="175dp" />
+            <TextView
+                android:textSize="@dimen/heading_text_size"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_below="@+id/border_3"
+                android:text="@string/breed_label"
+                android:id="@+id/breed_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_marginBottom="@dimen/vertical_margin_large"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_below="@+id/city_label"
+                android:id="@+id/border_3"
+                android:background="@color/background_grey"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <TextView
+                tools:text="pet breed goes here"
+                android:layout_toRightOf="@+id/breed_label"
+                android:textSize="@dimen/heading_text_size"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_below="@+id/border_3"
+                android:id="@+id/search_detail_breed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+
+            <View
+                android:layout_marginBottom="@dimen/vertical_margin_large"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_below="@+id/breed_label"
+                android:id="@+id/border_4"
+                android:background="@color/background_grey"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"/>
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="@dimen/heading_text_size"
+                android:text="@string/date_lost_label"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_below="@+id/border_4"
+                android:id="@+id/date_lost_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/search_detail_date_lost"
+                android:textSize="@dimen/heading_text_size"
+                android:layout_marginLeft="@dimen/horizontal_margin_large"
+                android:layout_marginTop="@dimen/vertical_margin"
+                android:layout_toRightOf="@id/date_lost_label"
+                android:layout_below="@id/border_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:id="@+id/search_detail_static_map"
+                android:layout_marginTop="@dimen/vertical_margin_large"
+                android:src="@mipmap/ic_launcher"
+                android:layout_below="@id/date_lost_label"
+                android:layout_width="match_parent"
+                android:layout_height="175dp" />
+
+            <View
+                android:layout_below="@+id/search_detail_static_map"
+                android:layout_width="match_parent"
+                android:layout_height="50dp" />
 
         </RelativeLayout>
     </ScrollView>

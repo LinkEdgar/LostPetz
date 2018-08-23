@@ -104,7 +104,7 @@
 
         <RelativeLayout
             android:layout_marginTop="@dimen/vertical_margin_large"
-            android:layout_marginBottom="@dimen/vertical_margin_large"
+            android:layout_marginBottom="@dimen/vertical_margin"
             android:layout_marginLeft="@dimen/horizontal_margin_large"
             android:layout_marginRight="@dimen/horizontal_margin_large"
             android:orientation="horizontal"
@@ -122,33 +122,36 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:textSize="@dimen/default_text_size"
-                android:text="Lost Status:"
+                android:text="@string/pet_lost_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
                 <RadioButton
+                    android:checked="true"
                     android:layout_marginTop="@dimen/vertical_margin"
                     android:layout_below="@+id/lostStatus"
-                    android:id="@+id/radio1"
+                    android:id="@+id/lost_radio_button"
                     android:layout_alignParentLeft="true"
                     android:text="Lost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <RadioButton
+                    android:id="@+id/found_radio_button"
                     android:layout_marginTop="@dimen/vertical_margin"
                     android:layout_below="@+id/lostStatus"
                     android:layout_marginLeft="@dimen/horizontal_margin_large"
-                    android:layout_toRightOf="@+id/radio1"
+                    android:layout_toRightOf="@+id/lost_radio_button"
                     android:text="Found"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
             <TextView
+                android:id="@+id/lost_or_found_textview"
                 android:textSize="@dimen/default_text_size"
                 android:layout_toRightOf="@+id/filler_textview"
                 android:layout_marginRight="@dimen/vertical_margin_extra_large"
                 android:layout_alignParentTop="true"
-                android:text="@string/date_label"
+                android:text="@string/date_lost_status_label"
                 android:layout_marginLeft="@dimen/horizontal_margin_large"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />
@@ -198,7 +201,6 @@
         <TextView
             android:layout_marginBottom="@dimen/horizontal_margin_large"
             android:text="@string/select_images_label"
-            android:layout_marginTop="@dimen/horizontal_margin"
             android:layout_marginLeft="@dimen/horizontal_margin_large"
             tools:text="Select Images"
             android:layout_width="wrap_content"
@@ -275,8 +277,6 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"/>
 
-
-
     </LinearLayout>
 
     </ScrollView>
@@ -288,7 +288,7 @@
         android:layout_marginBottom="@dimen/add_pet_tab_fab"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="@dimen/horizontal_margin_large"
-        android:elevation="8dp"
+        android:elevation="10dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/white"
         android:background="@drawable/circle_button"

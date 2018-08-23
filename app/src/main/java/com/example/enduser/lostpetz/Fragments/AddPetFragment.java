@@ -17,7 +17,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -53,6 +55,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private ImageView mImageCancelThree;
     private ChooseDateDialogFragment chooseDateDialogFragment;
     private ArrayAdapter<String> adapter;
+    private RadioButton mLostRadioButton;
+    private RadioButton mFoundRadioButton;
+    private TextView mLostOrFoundTV;
     private List<String> mSpinnerList;
     private Button mSubmitButton;
     private Pet petToAdd;
@@ -61,6 +66,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private static String IMAGE_URI_ONE_KEY = "uri1";
     private static String IMAGE_URI_TWO_KEY = "uri2";
     private static String IMAGE_URI_THREE_KEY = "uri3";
+    private static String LOST_OR_FOUND_KEY = "isLost"; // key to store lost or found textview's value
 
     private int imageCounter = 0;
 
@@ -117,7 +123,12 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             case R.id.add_pet_submit_button:
                 submitPet();
                 break;
-
+            case R.id.lost_radio_button:
+                setPetLostStatus(true);
+                break;
+            case R.id.found_radio_button:
+                setPetLostStatus(false);
+                break;
         }
 
     }
@@ -125,6 +136,11 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     Initializes views and sets on click listeners
      */
     private void initUI(View rootView){
+        mLostRadioButton = rootView.findViewById(R.id.lost_radio_button);
+        mLostRadioButton.setOnClickListener(this);
+        mFoundRadioButton = rootView.findViewById(R.id.found_radio_button);
+        mFoundRadioButton.setOnClickListener(this);
+        mLostOrFoundTV = rootView.findViewById(R.id.lost_or_found_textview);
         mSpinnerList = new ArrayList<>();
         mSpinnerList.add("Today");
         mSpinnerList.add("Set Date");
@@ -307,6 +323,9 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             if(savedInstanceState.containsKey(IMAGE_URI_THREE_KEY)){
                 addImageToList((Uri)savedInstanceState.getParcelable(IMAGE_URI_THREE_KEY),2,true);
             }
+            if(mFoundRadioButton.isChecked())
+                mLostOrFoundTV.setText(R.string.date_found_status_label);
+            else mLostOrFoundTV.setText(R.string.date_lost_status_label);
         }
     }
 
@@ -322,6 +341,7 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
             petToAdd.setDescription(mPetDescriptionEditText.getText().toString().trim());
             petToAdd.setBreed(mPetBreed.getText().toString().toLowerCase().trim());
             petToAdd.setDateLost(dateLost);
+            petToAdd.setFoundPet(mFoundRadioButton.isChecked());
             //Checks if there are pictures to upload to the DB before adding
             //the pet
             initiatePictureUpload();
@@ -474,5 +494,18 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
         dateLost = formatter.format(date);
+    }
+
+    private void setPetLostStatus(boolean isLost){
+        if(isLost) {
+            mFoundRadioButton.setChecked(false);
+            mLostRadioButton.setChecked(true);
+            mLostOrFoundTV.setText(R.string.date_lost_status_label);
+        }
+        else {
+            mLostOrFoundTV.setText(R.string.date_found_status_label);
+            mLostRadioButton.setChecked(false);
+            mFoundRadioButton.setChecked(true);
+        }
     }
 }

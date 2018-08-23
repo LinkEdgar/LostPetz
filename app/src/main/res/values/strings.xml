@@ -35,10 +35,12 @@
         <item>Today</item>
         <item>Set Date</item>
     </string-array>
+    <string name="pet_lost_status">Status:</string>
     <string name="add_pet_title_label">Add Pet to Database</string>
     <string name="submit_button_label">Submit</string>
     <string name="select_images_label">Select Images</string>
-    <string name="date_label">Date Lost:</string>
+    <string name="date_lost_status_label">Date Lost:</string>
+    <string name="date_found_status_label">Date Found:</string>
     <string name="date_picker_cancel">Cancel</string>
     <string name="date_picker_select_image_label">Select Images</string>
     <string name="date_picker_done">Done</string>

@@ -29,13 +29,13 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_marginBottom="@dimen/tab_bar_margin"
         android:layout_below="@+id/place_holder"
         android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <android.support.v7.widget.RecyclerView
-        android:layout_marginBottom="@dimen/tab_bar_margin"
         android:id="@+id/message_inbox_fragment_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

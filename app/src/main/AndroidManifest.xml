@@ -13,20 +13,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:launchMode="singleTop"
             android:name=".Activities.MainActivity"
+            android:launchMode="singleTop"
             android:theme="@style/mainTheme"
-            android:windowSoftInputMode="adjustNothing"></activity>
+            android:windowSoftInputMode="adjustNothing" />
         <activity
-            android:theme="@style/Test1"
-            android:name=".Activities.MessagingActivity" />
+            android:name=".Activities.MessagingActivity"
+            android:theme="@style/Test1" />
         <activity
-            android:theme="@style/Test1"
+            android:name=".Activities.PetSearchDetailActivity"
             android:parentActivityName=".Activities.MainActivity"
-            android:name=".Activities.PetSearchDetailActivity" />
+            android:theme="@style/Test1" />
         <activity
-            android:theme="@style/Test1"
-            android:name=".Activities.SignInActivity">
+            android:name=".Activities.SignInActivity"
+            android:theme="@style/Test1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,9 +34,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/Test1"
+            android:name=".Activities.MatchActivity"
             android:parentActivityName=".Activities.MainActivity"
-            android:name=".Activities.MatchActivity"></activity>
+            android:theme="@style/Test1" />
+        <activity
+            android:parentActivityName=".Activities.MainActivity"
+            android:label="@string/edit_activity_name_label"
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/Test1"
+            android:name=".Activities.EditPetActivity"></activity>
     </application>
 
 </manifest>

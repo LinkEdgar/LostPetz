@@ -218,7 +218,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_alignParentLeft="true"
                     android:id="@+id/add_pet_upload_one"
-                    android:src="@drawable/ic_add_picture"
+                    android:src="@drawable/ic_gallery"
                     android:layout_width="64dp"
                     android:layout_height="64dp" />
 
@@ -236,7 +236,7 @@
                     android:visibility="visible"
                     android:id="@+id/add_pet_upload_two"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_add_picture"
+                    android:src="@drawable/ic_gallery"
                     android:layout_width="64dp"
                     android:layout_height="64dp" />
 
@@ -256,7 +256,7 @@
                     android:layout_marginRight="16dp"
                     android:id="@+id/add_pet_upload_three"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/ic_add_picture"
+                    android:src="@drawable/ic_gallery"
                     android:layout_width="64dp"
                     android:layout_height="64dp" />
 

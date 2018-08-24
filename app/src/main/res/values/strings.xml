@@ -90,4 +90,7 @@
     <string name="user_pets_label">My Pets</string>
     <string name="profile_fragment_label">Profile</string>
 
+    <!-- EditPetActivity -->
+    <string name="edit_activity_name_label">Edit your pets</string>
+
 </resources>

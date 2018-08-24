@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.enduser.lostpetz.Activities.EditPetActivity
 import com.example.enduser.lostpetz.Activities.SignInActivity
 import com.example.enduser.lostpetz.R
 import com.google.firebase.auth.FirebaseAuth
@@ -36,6 +37,8 @@ class ProfileFragment : Fragment(), View.OnClickListener{
     private lateinit var mUserName: TextView
     private lateinit var mSignOutTextView: TextView
     private lateinit var mSignOutIcon: ImageView
+    private lateinit var mMyPetsTextview: TextView
+    private lateinit var mMyPetsIcon: ImageView
 
     //
     private var userProfileUrl: String ?= null
@@ -66,6 +69,10 @@ class ProfileFragment : Fragment(), View.OnClickListener{
         mSignOutTextView.setOnClickListener(this)
         mSignOutIcon = rootView.signout_icon
         mSignOutIcon.setOnClickListener(this)
+        mMyPetsIcon = rootView.my_pets_icon
+        mMyPetsIcon.setOnClickListener(this)
+        mMyPetsTextview = rootView.my_pets_textview
+        mMyPetsTextview.setOnClickListener(this)
 
     }
 
@@ -80,7 +87,8 @@ class ProfileFragment : Fragment(), View.OnClickListener{
             R.id.add_pet -> changeProfilePicture()
             R.id.signout_icon -> signOut()
             R.id.sign_out_textview -> signOut()
-
+            R.id.my_pets_icon -> swithToEditPetActivity()
+            R.id.my_pets_textview -> swithToEditPetActivity()
         }
     }
 
@@ -186,5 +194,10 @@ class ProfileFragment : Fragment(), View.OnClickListener{
                         .load(userProfileUrl).into(mProfilePicture)
             }
         }
+    }
+
+    private fun swithToEditPetActivity(){
+        val intent = Intent(context, EditPetActivity::class.java)
+        startActivity(intent)
     }
 }

@@ -30,7 +30,4 @@ public class Message {
     public String getPhotoUrl(){return photoUrl;}
     public String getUserProfileUrl(){return profileUrl;}
 
-
-
-
 }

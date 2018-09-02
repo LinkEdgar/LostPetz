@@ -94,5 +94,9 @@
 
     <!-- EditPetActivity -->
     <string name="edit_activity_name_label">Edit your pets</string>
+    <string name="edit_pet_update_success">Pet Updated</string>
+    <string name="edit_pet_update_failure">Pet Could not be updated</string>
+    <string name="pet_deleted_success">Successfully Deleted Pet</string>
+    <string name="pet_deleted_failure">Failed to Delete Pet</string>
 
 </resources>

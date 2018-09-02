@@ -9,9 +9,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.enduser.lostpetz.Adapters.EditPetAdapter
@@ -64,16 +62,7 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
         mRecyclerView.layoutManager = mLayout
         imageUriArray = arrayOfNulls(3)
     }
-
-    private fun loadFakeData(){
-
-        //TODO delete
-        for(x in 0..0){
-            mData.add(Pet("$x", "Yeet", false))
-        }
-        mAdapter.notifyDataSetChanged()
-    }
-
+    
     private fun initFirebase(){
         mAuth = FirebaseAuth.getInstance()
         mRef = FirebaseDatabase.getInstance().getReference("Pets")
@@ -149,16 +138,28 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
     }
 
     private fun deletePet(position: Int){
-        Toast.makeText(this, "Delete", Toast.LENGTH_LONG)
         mRef.child(mData[position].petID).removeValue().addOnSuccessListener {
-            Toast.makeText(this, "Pet deleted", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, R.string.pet_deleted_success, Toast.LENGTH_LONG).show()
             mData.removeAt(position)
             mAdapter.notifyItemRemoved(position)
+        }.addOnFailureListener{
+            Toast.makeText(this,R.string.pet_deleted_failure, Toast.LENGTH_LONG).show()
         }
     }
 
-    override fun onSubmitPet() {
+    override fun onSubmitPet(pet: Pet) {
+        //TODO check whether to uploadpictures or not
+        if(isValidPet(pet)){
+            mRef.child(pet.petID).setValue(pet).addOnSuccessListener {
+                Toast.makeText(this,R.string.edit_pet_update_success, Toast.LENGTH_LONG).show()
 
+            }.addOnFailureListener{
+                Toast.makeText(this,R.string.edit_pet_update_success, Toast.LENGTH_LONG).show()
+            }
+        }
+        else{
+            Toast.makeText(this, R.string.required_fields_fail, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun startGalleryIntent(){
@@ -181,5 +182,10 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
             }
 
         }
+    }
+    private fun isValidPet(pet: Pet): Boolean{
+        val zip = pet.zip
+        val name = pet.name
+        return name.isNotEmpty() && name.length >= 1 && zip.isNotEmpty() && zip.length == 5
     }
 }

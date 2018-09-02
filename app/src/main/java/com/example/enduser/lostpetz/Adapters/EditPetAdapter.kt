@@ -23,12 +23,12 @@ class EditPetAdapter(var data: ArrayList<Pet>, var context: Context, var mInterf
         fun onSavedButtonClicked()
         fun onPetImageSelectionSelected(imagePosition:Int, holder:ViewHolder, petPosition: Int)
         fun onCancelImageSelected(urlPosition: Int, position: Int, holder:ViewHolder)
-        fun onSubmitPet()
+        fun onSubmitPet(pet:Pet)
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pet = data[position]
-
-        holder.name.setText(pet.name)
+        val name = pet.name
+        holder.name.setText(name.substring(0,1).toUpperCase() + name.substring(1,name.length))
         holder.breed.setText(pet.breed)
         holder.description.setText(pet.description)
         holder.zip.setText(pet.zip)
@@ -59,6 +59,12 @@ class EditPetAdapter(var data: ArrayList<Pet>, var context: Context, var mInterf
         holder.imageTwo.setOnClickListener{mInterface.onPetImageSelectionSelected(1,holder,position)}
         holder.imageThree.setOnClickListener{mInterface.onPetImageSelectionSelected(2,holder,position)}
         holder.deleteButton.setOnClickListener{mInterface.onDeleteClicked(position)}
+        holder.submitButton.setOnClickListener{
+            pet.name = holder.name.text.toString()
+            pet.zip = holder.zip.text.toString()
+            pet.description = holder.description.text.toString()
+            pet.breed = holder.breed.text.toString()
+            mInterface.onSubmitPet(pet)}
     }
 
     override fun getItemCount(): Int {

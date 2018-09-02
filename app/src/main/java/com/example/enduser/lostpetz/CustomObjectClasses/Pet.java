@@ -36,10 +36,19 @@ public class Pet implements Parcelable{
     private String breed;
     private String userID;
     private String userName;
+    private String petID;
 
 
     // setter methods
 
+
+    public void setPetID(String petID) {
+        this.petID = petID;
+    }
+
+    public String getPetID() {
+        return petID;
+    }
 
     public void setUserName(String userName) {
         this.userName = userName;

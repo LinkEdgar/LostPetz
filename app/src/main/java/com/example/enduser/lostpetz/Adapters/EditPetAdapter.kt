@@ -19,7 +19,7 @@ import com.example.enduser.lostpetz.R
 class EditPetAdapter(var data: ArrayList<Pet>, var context: Context, var mInterface: PetAdapterInterface): RecyclerView.Adapter<EditPetAdapter.ViewHolder>() {
 
     interface PetAdapterInterface{
-        fun onDeleteClicked()
+        fun onDeleteClicked(position: Int)
         fun onSavedButtonClicked()
         fun onPetImageSelectionSelected(imagePosition:Int, holder:ViewHolder, petPosition: Int)
         fun onCancelImageSelected(urlPosition: Int, position: Int, holder:ViewHolder)
@@ -58,6 +58,7 @@ class EditPetAdapter(var data: ArrayList<Pet>, var context: Context, var mInterf
         holder.imageOne.setOnClickListener{mInterface.onPetImageSelectionSelected(0, holder, position)}
         holder.imageTwo.setOnClickListener{mInterface.onPetImageSelectionSelected(1,holder,position)}
         holder.imageThree.setOnClickListener{mInterface.onPetImageSelectionSelected(2,holder,position)}
+        holder.deleteButton.setOnClickListener{mInterface.onDeleteClicked(position)}
     }
 
     override fun getItemCount(): Int {

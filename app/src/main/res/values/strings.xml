@@ -59,8 +59,10 @@
     <string name="register_label">Register</string>
     <string name="login_fail"> Login failed, please check your credentials</string>
     <string name="reset_password_label">Reset Password</string>
+    <string name="confirm_delete_pet">Delete</string>
     <string name="cancel_label">Cancel</string>
     <string name="reset_password_dialog_title">Reset Password</string>
+    <string name="delete_pet_confirmation">Delete pet from Database?</string>
     <string name="reset_password_success">Password reset email sent</string>
     <string name="reset_password_fail"> Failed to send reset password email</string>
     <string name="non_null_email">Email cannot be empty</string>

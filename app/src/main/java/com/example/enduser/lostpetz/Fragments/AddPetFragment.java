@@ -362,6 +362,8 @@ public class AddPetFragment extends Fragment implements View.OnClickListener, Ad
     private void addPetToFirebase(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
         DatabaseReference specificRef = mDatabase.child("Pets").push();
+        String petId = specificRef.getKey();
+        petToAdd.setPetID(petId);
         specificRef.setValue(petToAdd);
         Toast.makeText(getContext(), R.string.pet_added_success, Toast.LENGTH_LONG).show();
     }

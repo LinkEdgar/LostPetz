@@ -167,6 +167,9 @@ class SignInActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    Logs in the user with Google
+     */
     private fun firebaseAuthWithGoogle(account: GoogleSignInAccount){
         val credential = GoogleAuthProvider.getCredential(account.getIdToken(), null)
         setProgressBar(true)
@@ -188,6 +191,10 @@ class SignInActivity : AppCompatActivity() {
                 }
     }
 
+    /*
+    Check is the user's uid is in the user's sharedPreferences, if it's not then it adds it to the DB and
+    shared preference
+     */
     private fun addUserToDB(){
         val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
         val key = getString(R.string.user_name_shared_pref)
@@ -206,6 +213,9 @@ class SignInActivity : AppCompatActivity() {
             }
     }
 
+    /*
+    Takes a boolean that dictates whether or not we should make the progressbar invisible
+     */
     private fun setProgressBar(setOn: Boolean){
         if(setOn) {
             signin_progressbar.visibility = View.VISIBLE

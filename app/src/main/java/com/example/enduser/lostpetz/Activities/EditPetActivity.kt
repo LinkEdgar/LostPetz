@@ -1,6 +1,7 @@
 package com.example.enduser.lostpetz.Activities
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -8,7 +9,10 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.enduser.lostpetz.Adapters.EditPetAdapter
 import com.example.enduser.lostpetz.CustomObjectClasses.Pet
@@ -135,8 +139,22 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
 
     }
 
-    override fun onDeleteClicked() {
+    override fun onDeleteClicked(position: Int) {
+        val builder = android.app.AlertDialog.Builder(this)
+        builder.setTitle(R.string.delete_pet_confirmation)
+        builder.setPositiveButton(R.string.confirm_delete_pet, DialogInterface.OnClickListener { dialogInterface, i -> deletePet(position) })
+        builder.setNegativeButton(R.string.cancel_label, DialogInterface.OnClickListener{ dialogInterface, i -> })
+        builder.create()
+        builder.show()
+    }
 
+    private fun deletePet(position: Int){
+        Toast.makeText(this, "Delete", Toast.LENGTH_LONG)
+        mRef.child(mData[position].petID).removeValue().addOnSuccessListener {
+            Toast.makeText(this, "Pet deleted", Toast.LENGTH_LONG).show()
+            mData.removeAt(position)
+            mAdapter.notifyItemRemoved(position)
+        }
     }
 
     override fun onSubmitPet() {

@@ -1,17 +1,22 @@
 package com.example.enduser.lostpetz.Activities
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.widget.ImageView
+import com.bumptech.glide.Glide
 import com.example.enduser.lostpetz.Adapters.EditPetAdapter
 import com.example.enduser.lostpetz.CustomObjectClasses.Pet
 import com.example.enduser.lostpetz.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_edit_pet.*
-import java.text.FieldPosition
+
 
 class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface {
 
@@ -20,11 +25,18 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
     private lateinit var mData: ArrayList<Pet>
     private lateinit var mLayout: RecyclerView.LayoutManager
 
+    private lateinit var imageUriArray: Array<Uri?>
+    private var imagePosition = 0 //used to keep track of the user's image selection
+    private var mImage: ImageView ?= null
+    private var petPosition = 0
+
 
     //firebase
     private lateinit var mRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mChilListener: ValueEventListener
+
+    private val RC_SELECT_IMAGE = 15
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +58,7 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
         mAdapter = EditPetAdapter(mData,this, this)
         mRecyclerView.adapter = mAdapter
         mRecyclerView.layoutManager = mLayout
+        imageUriArray = arrayOfNulls(3)
     }
 
     private fun loadFakeData(){
@@ -83,32 +96,40 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun onCancelImageSelected(urlPosition: Int, position: Int) {
+    override fun onCancelImageSelected(urlPosition: Int, position: Int, holder: EditPetAdapter.ViewHolder) {
         when(urlPosition){
             0 -> {
                 if(mData[position].profileUrlOne != null) {
                     mData[position].profileUrlOne = null
-                    mAdapter.notifyItemChanged(position)
+                    Glide.with(holder.imageOne).load(R.drawable.ic_gallery).into(holder.imageOne)
                 }
             }
             1 -> {
                 if(mData[position].profileUrlTwo != null){
                     mData[position].profileUrlTwo = null
-                    mAdapter.notifyItemChanged(position)
+                    Glide.with(holder.imageTwo).load(R.drawable.ic_gallery).into(holder.imageTwo)
                 }
             }
             2 -> {
                 if(mData[position].profileUrlThree != null){
                     mData[position].profileUrlThree = null
-                    mAdapter.notifyItemChanged(position)
+                    Glide.with(holder.imageThree).load(R.drawable.ic_gallery).into(holder.imageThree)
                 }
             }
         }
     }
 
-    override fun onPetImageSelectionSelected() {
-
+    override fun onPetImageSelectionSelected(imagePosition: Int, holder: EditPetAdapter.ViewHolder, petPosition: Int) {
+        this.imagePosition = imagePosition
+        this.petPosition = petPosition
+        when(imagePosition){
+            0 -> mImage = holder.imageOne
+            1 -> mImage = holder.imageTwo
+            2 -> mImage = holder.imageThree
+        }
+        startGalleryIntent()
     }
+
 
     override fun onSavedButtonClicked() {
 
@@ -116,5 +137,31 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
 
     override fun onDeleteClicked() {
 
+    }
+
+    override fun onSubmitPet() {
+
+    }
+
+    private fun startGalleryIntent(){
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivityForResult(intent, RC_SELECT_IMAGE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == RC_SELECT_IMAGE && resultCode == Activity.RESULT_OK){
+            val uri = data!!.data
+            Glide.with(mImage!!).load(uri).into(mImage!!)
+            when(imagePosition) {
+                0 -> {mData[petPosition].profileUrlOne = ""}
+                1 -> {mData[petPosition].profileUrlTwo = ""}
+                2 -> {mData[petPosition].profileUrlThree = ""}
+            }
+
+        }
     }
 }

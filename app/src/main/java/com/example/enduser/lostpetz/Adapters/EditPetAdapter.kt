@@ -1,6 +1,7 @@
 package com.example.enduser.lostpetz.Adapters
 
 import android.content.Context
+import android.net.Uri
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputEditText
 import android.support.v7.widget.RecyclerView
@@ -20,8 +21,9 @@ class EditPetAdapter(var data: ArrayList<Pet>, var context: Context, var mInterf
     interface PetAdapterInterface{
         fun onDeleteClicked()
         fun onSavedButtonClicked()
-        fun onPetImageSelectionSelected()
-        fun onCancelImageSelected(urlPosition: Int, position: Int)
+        fun onPetImageSelectionSelected(imagePosition:Int, holder:ViewHolder, petPosition: Int)
+        fun onCancelImageSelected(urlPosition: Int, position: Int, holder:ViewHolder)
+        fun onSubmitPet()
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val pet = data[position]
@@ -50,9 +52,12 @@ class EditPetAdapter(var data: ArrayList<Pet>, var context: Context, var mInterf
                     .into(holder.imageThree)
         else Glide.with(holder.imageTwo).load(R.drawable.ic_gallery).into(holder.imageThree)
 
-        holder.imageCancelOne.setOnClickListener{mInterface.onCancelImageSelected(0, position)}
-        holder.imageCancelTwo.setOnClickListener{mInterface.onCancelImageSelected(1,position)}
-        holder.imageCancelThree.setOnClickListener{mInterface.onCancelImageSelected(2,position)}
+        holder.imageCancelOne.setOnClickListener{mInterface.onCancelImageSelected(0, position,holder)}
+        holder.imageCancelTwo.setOnClickListener{mInterface.onCancelImageSelected(1,position,holder)}
+        holder.imageCancelThree.setOnClickListener{mInterface.onCancelImageSelected(2,position,holder)}
+        holder.imageOne.setOnClickListener{mInterface.onPetImageSelectionSelected(0, holder, position)}
+        holder.imageTwo.setOnClickListener{mInterface.onPetImageSelectionSelected(1,holder,position)}
+        holder.imageThree.setOnClickListener{mInterface.onPetImageSelectionSelected(2,holder,position)}
     }
 
     override fun getItemCount(): Int {

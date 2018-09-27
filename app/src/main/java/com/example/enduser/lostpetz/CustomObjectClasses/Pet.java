@@ -1,5 +1,6 @@
 package com.example.enduser.lostpetz.CustomObjectClasses;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -25,6 +26,9 @@ public class Pet implements Parcelable{
         this.zip = zip;
     }
 
+    private Uri uriOne;
+    private Uri uriTwo;
+    private Uri uriThree;
     private String profileUrlOne;
     private String profileUrlTwo;
     private String profileUrlThree;
@@ -41,6 +45,30 @@ public class Pet implements Parcelable{
 
     // setter methods
 
+
+    public void setUriOne(Uri uriOne) {
+        this.uriOne = uriOne;
+    }
+
+    public void setUriTwo(Uri uriTwo) {
+        this.uriTwo = uriTwo;
+    }
+
+    public void setUriThree(Uri uriThree) {
+        this.uriThree = uriThree;
+    }
+
+    public Uri getUriOne() {
+        return uriOne;
+    }
+
+    public Uri getUriThree() {
+        return uriThree;
+    }
+
+    public Uri getUriTwo() {
+        return uriTwo;
+    }
 
     public void setPetID(String petID) {
         this.petID = petID;

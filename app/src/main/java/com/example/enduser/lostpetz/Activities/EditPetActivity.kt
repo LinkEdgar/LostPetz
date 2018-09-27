@@ -1,6 +1,7 @@
 package com.example.enduser.lostpetz.Activities
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -15,8 +16,14 @@ import com.bumptech.glide.Glide
 import com.example.enduser.lostpetz.Adapters.EditPetAdapter
 import com.example.enduser.lostpetz.CustomObjectClasses.Pet
 import com.example.enduser.lostpetz.R
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_edit_pet.*
 
 
@@ -34,6 +41,7 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
 
 
     //firebase
+    private lateinit var mStorage: FirebaseStorage
     private lateinit var mRef: DatabaseReference
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mChilListener: ValueEventListener
@@ -64,6 +72,7 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
     }
     
     private fun initFirebase(){
+        mStorage = FirebaseStorage.getInstance()
         mAuth = FirebaseAuth.getInstance()
         mRef = FirebaseDatabase.getInstance().getReference("Pets")
         mChilListener = object: ValueEventListener{
@@ -92,20 +101,23 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
     override fun onCancelImageSelected(urlPosition: Int, position: Int, holder: EditPetAdapter.ViewHolder) {
         when(urlPosition){
             0 -> {
-                if(mData[position].profileUrlOne != null) {
+                if(mData[position].profileUrlOne != null || mData[position].uriOne != null) {
                     mData[position].profileUrlOne = null
+                    mData[position].uriOne = null
                     Glide.with(holder.imageOne).load(R.drawable.ic_gallery).into(holder.imageOne)
                 }
             }
             1 -> {
-                if(mData[position].profileUrlTwo != null){
+                if(mData[position].profileUrlTwo != null || mData[position].uriTwo != null){
                     mData[position].profileUrlTwo = null
+                    mData[position].uriTwo = null
                     Glide.with(holder.imageTwo).load(R.drawable.ic_gallery).into(holder.imageTwo)
                 }
             }
             2 -> {
-                if(mData[position].profileUrlThree != null){
+                if(mData[position].profileUrlThree != null || mData[position].uriThree != null){
                     mData[position].profileUrlThree = null
+                    mData[position].uriThree = null
                     Glide.with(holder.imageThree).load(R.drawable.ic_gallery).into(holder.imageThree)
                 }
             }
@@ -148,13 +160,15 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
     }
 
     override fun onSubmitPet(pet: Pet) {
-        //TODO check whether to uploadpictures or not
         if(isValidPet(pet)){
-            mRef.child(pet.petID).setValue(pet).addOnSuccessListener {
-                Toast.makeText(this,R.string.edit_pet_update_success, Toast.LENGTH_LONG).show()
+            val count = imagesToUploadCount(pet)
+            if(count > 0){
+                //Upload pictures
+                uploadPictures(pet, count)
 
-            }.addOnFailureListener{
-                Toast.makeText(this,R.string.edit_pet_update_success, Toast.LENGTH_LONG).show()
+            }else {
+               //submit pet without uploading pictures
+                uploadPet(pet)
             }
         }
         else{
@@ -176,9 +190,18 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
             val uri = data!!.data
             Glide.with(mImage!!).load(uri).into(mImage!!)
             when(imagePosition) {
-                0 -> {mData[petPosition].profileUrlOne = ""}
-                1 -> {mData[petPosition].profileUrlTwo = ""}
-                2 -> {mData[petPosition].profileUrlThree = ""}
+                0 -> {
+                    mData[petPosition].uriOne = uri
+                    mData[petPosition].profileUrlOne = ""
+                }
+                1 -> {
+                    mData[petPosition].uriTwo = uri
+                    mData[petPosition].profileUrlTwo = ""
+                }
+                2 -> {
+                    mData[petPosition].uriThree = uri
+                    mData[petPosition].profileUrlThree = ""
+                }
             }
 
         }
@@ -187,5 +210,93 @@ class EditPetActivity : AppCompatActivity(), EditPetAdapter.PetAdapterInterface 
         val zip = pet.zip
         val name = pet.name
         return name.isNotEmpty() && name.length >= 1 && zip.isNotEmpty() && zip.length == 5
+    }
+
+    //takes a pet object and counts how many images are available to upload
+    private fun imagesToUploadCount(pet:Pet): Int{
+        var count = 0
+        if(pet.uriOne != null){
+            count++
+        }
+        if(pet.uriTwo != null){
+            count++
+        }
+        if(pet.uriThree != null){
+            count++
+        }
+        return count
+    }
+    //uploads pet data to firebase
+    private fun uploadPet(pet: Pet){
+        mRef.child(pet.petID).setValue(pet).addOnSuccessListener {
+            Toast.makeText(this,R.string.edit_pet_update_success, Toast.LENGTH_LONG).show()
+
+        }.addOnFailureListener{
+            Toast.makeText(this,R.string.edit_pet_update_success, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun uploadPictures(pet: Pet, imageCount: Int){
+
+        //TODO --> Test that uploading and changing pet information works properly 
+        var count = 0
+        val uriMap = createUriHashMap(pet)
+        val dialog = ProgressDialog(this)
+        dialog.setTitle("Uploading ...")
+        for (x in 0..uriMap.size) {
+                if(uriMap.containsKey(x)) {
+                    count++
+                    dialog.show()
+                    //Case 2
+                    if (count == imageCount) {
+
+                        val uploadTask = mStorage.getReference("petImages/" + uriMap[x]!!.getLastPathSegment()).putFile(uriMap[x]!!)
+                        uploadTask.addOnFailureListener { Log.d("Upload Image", "failed to upload image") }.addOnCompleteListener {
+                            pet.uriOne = null
+                            pet.uriTwo = null
+                            pet.uriThree = null
+                            dialog.dismiss()
+                            uploadPet(pet)
+
+
+                        }.addOnSuccessListener { taskSnapshot ->
+                            setPetUrl(x, taskSnapshot.downloadUrl!!.toString(), pet)
+                        }
+
+                    } else {
+                        //Case 1
+                        dialog.show()
+                        val uploadTask = mStorage.getReference("petImages/" + uriMap[x]!!.getLastPathSegment()).putFile(uriMap[x]!!)
+                        uploadTask.addOnFailureListener { Log.d("Upload Image", "failed to upload image") }.addOnSuccessListener { taskSnapshot ->
+                            setPetUrl(x, taskSnapshot.downloadUrl!!.toString(), pet)
+                        }
+                    }
+                }
+        }
+    }
+
+    //creates a hashmap of uris
+    private fun createUriHashMap(pet:Pet): HashMap<Int, Uri>{
+        val map: HashMap<Int, Uri> = HashMap()
+        if(pet.uriOne != null){
+            map.put(0, pet.uriOne)
+        }
+        if(pet.uriTwo != null){
+            map.put(1, pet.uriTwo)
+        }
+        if(pet.uriThree != null){
+            map.put(2, pet.uriThree)
+        }
+
+        return map
+
+    }
+    //sets pet url based on position
+    private fun setPetUrl(position:Int, url: String, pet: Pet ){
+        when(position){
+            1 -> {pet.profileUrlOne = url}
+            2 -> {pet.profileUrlTwo = url}
+            3 -> {pet.profileUrlThree = url}
+        }
     }
 }

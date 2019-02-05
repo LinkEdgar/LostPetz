@@ -25,7 +25,21 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : AppCompatActivity(), SignInContract.View {
+    override fun onSuccessfulSignIn() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    override fun onSignInFailure() {
+        Toast.makeText(this, R.string.login_fail, Toast.LENGTH_LONG).show()
+    }
+
+    override fun setProgressBar() {
+        if(signin_progressbar.visibility == View.VISIBLE){
+            signin_progressbar.visibility = View.GONE
+        }else signin_progressbar.visibility = View.VISIBLE
+    }
 
     private var mAuth: FirebaseAuth ?= null
     private var mDatabaseRef: DatabaseReference ?= null
@@ -34,6 +48,9 @@ class SignInActivity : AppCompatActivity() {
     private var mUser: FirebaseUser ?= null
     private var mGoogleSignInClient: GoogleSignInClient ?= null
     val RC_SIGN_IN = 3141
+
+
+    private lateinit var mPresenter: SignInPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +63,15 @@ class SignInActivity : AppCompatActivity() {
         mUser = mAuth?.currentUser
 
         initUi()
+
+
+        mPresenter = SignInPresenter(this, this)
     }
     //sets on click listeners for views
     private fun initUi(){
-        signin_button.setOnClickListener{signInViaAuth()}
+        //signin_button.setOnClickListener{signInViaAuth()}
+        signin_button.setOnClickListener{mPresenter.onSignInClicked(signin_email.text.toString().trim()
+                , signin_password.text.toString())}
         signin_forgot_password.setOnClickListener{recoverPassword()}
         signin_register.setOnClickListener{beginRegister()}
         signin_google.setOnClickListener{googleSignIn()}
@@ -75,7 +97,7 @@ class SignInActivity : AppCompatActivity() {
                     finish()
                 } else {
                     setProgressBar(false)
-                    Toast.makeText(this, R.string.login_fail, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.login_fail, Toast.LENGTH_LONG).show()
                 }
             }
         } else Toast.makeText(this, R.string.non_null_email, Toast.LENGTH_LONG).show()
@@ -95,8 +117,8 @@ class SignInActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT)
         input.layoutParams = lp
         builder.setView(input)
-        builder.setPositiveButton(R.string.reset_password_label, DialogInterface.OnClickListener { dialogInterface, i -> passwordRecovery(input.text.toString().trim()) })
-        builder.setNegativeButton(R.string.cancel_label, DialogInterface.OnClickListener{ dialogInterface, i -> })
+        builder.setPositiveButton(R.string.reset_password_label, { dialogInterface, i -> passwordRecovery(input.text.toString().trim()) })
+        builder.setNegativeButton(R.string.cancel_label, { dialogInterface, i -> })
         builder.create()
         builder.show()
     }
@@ -196,12 +218,12 @@ class SignInActivity : AppCompatActivity() {
     shared preference
      */
     private fun addUserToDB(){
-        val sharedPref = this?.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE)
         val key = getString(R.string.user_name_shared_pref)
             if(!(sharedPref.getString(key, "null").equals(mUser!!.uid))) {
                 with(sharedPref.edit()) {
                     putString(getString(R.string.user_name_shared_pref), mUser?.uid)
-                    commit()
+                    apply()
                 }
                 mDatabaseRef = FirebaseDatabase.getInstance().getReference("Users")
 

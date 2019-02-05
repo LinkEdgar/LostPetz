@@ -7,7 +7,6 @@
     android:animateLayoutChanges="true"
     tools:context="com.example.enduser.lostpetz.Activities.MessagingActivity">
 
-    <!--TODO replace this with a quick summary of the lost pet -->
     <TextView
         android:id="@+id/test_display_textview"
         android:layout_alignParentTop="true"
@@ -40,8 +39,6 @@
             android:layout_height="wrap_content"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-
-    <!--TODO Replace the src of the images for the message console-->
 
     <View
         android:layout_above="@+id/messenger_message_console"

@@ -5,6 +5,8 @@ import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
 import com.example.enduser.lostpetz.R
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 class SignInPresenter(var context: Context, var view:SignInContract.View): SignInContract.Presenter{
 
@@ -13,6 +15,7 @@ class SignInPresenter(var context: Context, var view:SignInContract.View): SignI
 
     init {
         registerBroadcastReceiver()
+        firebaseManager.enableGoogleSignIn(context)
     }
 
     override fun onSignInClicked(email: String, password: String) {
@@ -44,6 +47,13 @@ class SignInPresenter(var context: Context, var view:SignInContract.View): SignI
                 else
                     view.onPasswordResetFailure()
             }
+            "auth_google" -> {
+                view.setProgressBar()
+                if(isSuccess)
+                    view.onSuccessfulSignIn()
+                else
+                    view.onSignInFailure()
+            }
         }
     }
 
@@ -55,7 +65,15 @@ class SignInPresenter(var context: Context, var view:SignInContract.View): SignI
     }
 
     override fun isUserSignedIn(): Boolean {
-        return firebaseManager.user == null
+        return firebaseManager.user != null
+    }
+
+    override fun onGoogleSignInClicked(account:GoogleSignInAccount) {
+        firebaseManager.signInViaGoogle(account, context)
+    }
+
+    override fun getGoogleSignInClient(): GoogleSignInClient {
+        return firebaseManager.getmGoogleSignInClient()
     }
 
 

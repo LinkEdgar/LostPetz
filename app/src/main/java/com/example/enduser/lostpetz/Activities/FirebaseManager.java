@@ -7,11 +7,18 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.example.enduser.lostpetz.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,6 +31,9 @@ public class FirebaseManager {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseRef;
     private FirebaseUser mUser;
+
+    //Google sign in
+    private GoogleSignInClient mGoogleSignInClient;
 
     private FirebaseManager(){
         mAuth = FirebaseAuth.getInstance();
@@ -105,5 +115,27 @@ public class FirebaseManager {
                 setBroadcastReceiver("pass_reset", task.isSuccessful(), context);
             }
         });
+    }
+
+    public void signInViaGoogle(GoogleSignInAccount account, final Context context){
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                setBroadcastReceiver("auth_google",task.isSuccessful(),context);
+            }
+        });
+    }
+
+    public void enableGoogleSignIn(Context context){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
+    }
+
+    public GoogleSignInClient getmGoogleSignInClient() {
+        return mGoogleSignInClient;
     }
 }

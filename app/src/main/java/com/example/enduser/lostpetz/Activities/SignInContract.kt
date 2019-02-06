@@ -1,6 +1,8 @@
 package com.example.enduser.lostpetz.Activities
 
 import android.content.Context
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 
 interface SignInContract{
 
@@ -13,9 +15,11 @@ interface SignInContract{
     }
 
     interface Presenter{
+        fun getGoogleSignInClient():GoogleSignInClient
         fun isUserSignedIn():Boolean
         fun onSignInClicked(email:String, password: String)
         fun onPasswordResetClicked(email:String)
+        fun onGoogleSignInClicked(account:GoogleSignInAccount)
         fun getDataFromReceiver(key: String,isSignInSuccess: Boolean)
     }
 

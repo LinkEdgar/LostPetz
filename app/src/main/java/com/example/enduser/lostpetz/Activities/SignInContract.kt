@@ -8,11 +8,15 @@ interface SignInContract{
         fun setProgressBar()
         fun onSuccessfulSignIn()
         fun onSignInFailure()
+        fun onPasswordResetSuccess()
+        fun onPasswordResetFailure()
     }
 
     interface Presenter{
+        fun isUserSignedIn():Boolean
         fun onSignInClicked(email:String, password: String)
-        fun getDataFromReceiver(isSignInSuccess: Boolean)
+        fun onPasswordResetClicked(email:String)
+        fun getDataFromReceiver(key: String,isSignInSuccess: Boolean)
     }
 
 }

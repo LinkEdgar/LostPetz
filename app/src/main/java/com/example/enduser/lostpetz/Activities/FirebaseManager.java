@@ -53,13 +53,13 @@ public class FirebaseManager {
                     mUser = mAuth.getCurrentUser();
                     //addUserToDb();
                 }
-                setBroadcastReceiver(task.isSuccessful(),context);
+                setBroadcastReceiver("auth",task.isSuccessful(),context);
             }
         });
     }
     //Used as a callback to the user's successful or unsuccessful sign in
-    private void setBroadcastReceiver(boolean isSuccessful, Context context){
-        Intent broadcastIntent = new Intent("yeet").putExtra("value", isSuccessful);
+    private void setBroadcastReceiver(String key, boolean isSuccessful, Context context){
+        Intent broadcastIntent = new Intent("SignIn").putExtra("value", isSuccessful).putExtra("key",key);
         LocalBroadcastManager.getInstance(context).sendBroadcast(broadcastIntent);
     }
 
@@ -96,5 +96,14 @@ public class FirebaseManager {
             }
     }
          */
+    }
+
+    public void passwordRecovery(String email, final Context context){
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                setBroadcastReceiver("pass_reset", task.isSuccessful(), context);
+            }
+        });
     }
 }

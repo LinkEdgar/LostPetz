@@ -1,7 +1,6 @@
 package com.example.enduser.lostpetz.Activities
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -26,6 +25,17 @@ import com.google.firebase.database.FirebaseDatabase
 
 
 class SignInActivity : AppCompatActivity(), SignInContract.View {
+
+    override fun onPasswordResetSuccess() {
+        Log.d("Password Reset:", "Successful")
+        Toast.makeText(this, R.string.reset_password_success, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onPasswordResetFailure() {
+        Log.d("Password Reset:", "Failed")
+        Toast.makeText(this, R.string.reset_password_fail, Toast.LENGTH_LONG).show()
+    }
+
     override fun onSuccessfulSignIn() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
@@ -69,9 +79,8 @@ class SignInActivity : AppCompatActivity(), SignInContract.View {
     }
     //sets on click listeners for views
     private fun initUi(){
-        //signin_button.setOnClickListener{signInViaAuth()}
-        signin_button.setOnClickListener{mPresenter.onSignInClicked(signin_email.text.toString().trim()
-                , signin_password.text.toString())}
+        signin_button.setOnClickListener{
+            mPresenter.onSignInClicked(signin_email.text.toString().trim(), signin_password.text.toString())}
         signin_forgot_password.setOnClickListener{recoverPassword()}
         signin_register.setOnClickListener{beginRegister()}
         signin_google.setOnClickListener{googleSignIn()}
@@ -117,8 +126,8 @@ class SignInActivity : AppCompatActivity(), SignInContract.View {
                 LinearLayout.LayoutParams.MATCH_PARENT)
         input.layoutParams = lp
         builder.setView(input)
-        builder.setPositiveButton(R.string.reset_password_label, { dialogInterface, i -> passwordRecovery(input.text.toString().trim()) })
-        builder.setNegativeButton(R.string.cancel_label, { dialogInterface, i -> })
+        builder.setPositiveButton(R.string.reset_password_label) { dialogInterface, i -> mPresenter.onPasswordResetClicked(input.text.toString().trim())}
+        builder.setNegativeButton(R.string.cancel_label) { dialogInterface, i -> }
         builder.create()
         builder.show()
     }
@@ -158,6 +167,12 @@ class SignInActivity : AppCompatActivity(), SignInContract.View {
            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
+        /*
+        if(mPresenter.isUserSignedIn()){
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+        */
     }
 
     private fun googleSignIn(){

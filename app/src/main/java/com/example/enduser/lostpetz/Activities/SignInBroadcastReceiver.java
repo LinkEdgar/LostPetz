@@ -3,6 +3,7 @@ package com.example.enduser.lostpetz.Activities;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class SignInBroadcastReceiver extends BroadcastReceiver{
 
@@ -13,6 +14,7 @@ public class SignInBroadcastReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
             Boolean isSuccessful = intent.getBooleanExtra("value",false);
-            mSignInCallback.getDataFromReceiver(isSuccessful);
+            String key = intent.getStringExtra("key");
+            mSignInCallback.getDataFromReceiver(key,isSuccessful);
     }
 }

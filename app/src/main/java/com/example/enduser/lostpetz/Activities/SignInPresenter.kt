@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
+import com.example.enduser.lostpetz.R
 
 class SignInPresenter(var context: Context, var view:SignInContract.View): SignInContract.Presenter{
 
@@ -22,16 +23,39 @@ class SignInPresenter(var context: Context, var view:SignInContract.View): SignI
     }
 
     private fun registerBroadcastReceiver(){
-        val intentFilter = IntentFilter("yeet")
+        val intentFilter = IntentFilter("SignIn")
         mBroadcastReceiver = SignInBroadcastReceiver(this)
         LocalBroadcastManager.getInstance(context).registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
-    override fun getDataFromReceiver(isSignInSuccess: Boolean) {
-        view.setProgressBar()
-        if(isSignInSuccess)
-            view.onSuccessfulSignIn()
-        else view.onSignInFailure()
+    override fun getDataFromReceiver(key: String,isSuccess: Boolean) {
+
+        when(key){
+            "auth" -> {
+                view.setProgressBar()
+                if(isSuccess)
+                    view.onSuccessfulSignIn()
+                else
+                    view.onSignInFailure()
+            }
+            "pass_reset" -> {
+                if(isSuccess)
+                    view.onPasswordResetSuccess()
+                else
+                    view.onPasswordResetFailure()
+            }
+        }
+    }
+
+    override fun onPasswordResetClicked(email: String) {
+        if(email != null && email.isNotEmpty())
+            firebaseManager.passwordRecovery(email,context)
+        else
+            Toast.makeText(context, R.string.non_null_email, Toast.LENGTH_LONG).show()
+    }
+
+    override fun isUserSignedIn(): Boolean {
+        return firebaseManager.user == null
     }
 
 

@@ -17,7 +17,7 @@ import com.google.android.gms.common.api.ApiException
 
 class SignInActivity : AppCompatActivity(), SignInContract.View {
 
-    val RC_SIGN_IN = 3141
+    private val RCSIGNIN = 3141
 
 
     private lateinit var mPresenter: SignInPresenter
@@ -51,8 +51,8 @@ class SignInActivity : AppCompatActivity(), SignInContract.View {
                 LinearLayout.LayoutParams.MATCH_PARENT)
         input.layoutParams = lp
         builder.setView(input)
-        builder.setPositiveButton(R.string.reset_password_label) { dialogInterface, i -> mPresenter.onPasswordResetClicked(input.text.toString().trim())}
-        builder.setNegativeButton(R.string.cancel_label) { dialogInterface, i -> }
+        builder.setPositiveButton(R.string.reset_password_label) { _, _ -> mPresenter.onPasswordResetClicked(input.text.toString().trim())}
+        builder.setNegativeButton(R.string.cancel_label) { _, _ -> }
         builder.create()
         builder.show()
     }
@@ -79,20 +79,20 @@ class SignInActivity : AppCompatActivity(), SignInContract.View {
 
     private fun googleSignIn(){
         val signInIntent = mPresenter.getGoogleSignInClient().signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        startActivityForResult(signInIntent, RCSIGNIN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == RC_SIGN_IN){
+        if(requestCode == RCSIGNIN){
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
                 mPresenter.onGoogleSignInClicked(account)
             } catch (e: ApiException) {
                 Log.w("onActivityResult", "Google sign in falied", e)
-                Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_LONG)
+                Toast.makeText(this, R.string.google_signin_fail, Toast.LENGTH_LONG).show()
             }
         }
     }

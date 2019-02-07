@@ -31,7 +31,7 @@ class SignInPresenter(var context: Context, var view:SignInContract.View): SignI
         LocalBroadcastManager.getInstance(context).registerReceiver(mBroadcastReceiver, intentFilter)
     }
 
-    override fun getDataFromReceiver(key: String,isSuccess: Boolean) {
+    override fun getDataFromReceiver(key: String, isSuccess: Boolean) {
 
         when(key){
             "auth" -> {
@@ -58,7 +58,7 @@ class SignInPresenter(var context: Context, var view:SignInContract.View): SignI
     }
 
     override fun onPasswordResetClicked(email: String) {
-        if(email != null && email.isNotEmpty())
+        if(email.isNotEmpty())
             firebaseManager.passwordRecovery(email,context)
         else
             Toast.makeText(context, R.string.non_null_email, Toast.LENGTH_LONG).show()

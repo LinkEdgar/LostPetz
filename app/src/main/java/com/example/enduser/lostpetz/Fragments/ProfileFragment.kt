@@ -146,8 +146,8 @@ class ProfileFragment : Fragment(), View.OnClickListener{
      */
     private fun uploadProfilePicture(imageUri: Uri){
         val uploadTask: UploadTask = mStorage?.getReference("ProfilePictures/"+ mAuth!!.currentUser!!.uid)!!.putFile(imageUri)
-        mProfilePicture!!.visibility = View.GONE
-        mProgressbar!!.visibility = View.VISIBLE
+        mProfilePicture.visibility = View.GONE
+        mProgressbar.visibility = View.VISIBLE
         uploadTask.addOnFailureListener {
             Toast.makeText(context, R.string.image_upload_failed, Toast.LENGTH_LONG).show()
         }.addOnCompleteListener {
@@ -156,7 +156,7 @@ class ProfileFragment : Fragment(), View.OnClickListener{
         }.addOnSuccessListener { taskSnapshot ->
             val url = taskSnapshot.downloadUrl.toString()
           Glide.with(this).applyDefaultRequestOptions(RequestOptions().error(R.mipmap.ic_launcher_round).circleCrop())
-                    .load(url).into(mProfilePicture!!)
+                    .load(url).into(mProfilePicture)
             addProfileUrlToDB(url)
         }
 
